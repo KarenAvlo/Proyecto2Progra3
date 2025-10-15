@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pacientes>
+    <paciente>
+        <telefono>50234567</telefono>
+        <fechaNacimiento>12-07-2000</fechaNacimiento>
+        <cedula>5678</cedula>
+        <nombre>Juan Pérez</nombre>
+    </paciente>
+    <paciente>
+        <telefono>50345678</telefono>
+        <fechaNacimiento>23-11-1999</fechaNacimiento>
+        <cedula>9101</cedula>
+        <nombre>Ana Gómez</nombre>
+    </paciente>
+    <paciente>
+        <telefono>80050016</telefono>
+        <fechaNacimiento>01-03-2005</fechaNacimiento>
+        <cedula>6548</cedula>
+        <nombre>Carlos Sanchez</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60023456</telefono>
+        <fechaNacimiento>20-09-2002</fechaNacimiento>
+        <cedula>2222</cedula>
+        <nombre>David Rodríguez</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60034567</telefono>
+        <fechaNacimiento>03-12-1997</fechaNacimiento>
+        <cedula>3333</cedula>
+        <nombre>María Fernández</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60045678</telefono>
+        <fechaNacimiento>28-06-2004</fechaNacimiento>
+        <cedula>4444</cedula>
+        <nombre>José Ramírez</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60056789</telefono>
+        <fechaNacimiento>07-01-1995</fechaNacimiento>
+        <cedula>5555</cedula>
+        <nombre>Sofía Morales</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60067890</telefono>
+        <fechaNacimiento>19-10-2001</fechaNacimiento>
+        <cedula>6666</cedula>
+        <nombre>Andrés López</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60078901</telefono>
+        <fechaNacimiento>11-02-1996</fechaNacimiento>
+        <cedula>7777</cedula>
+        <nombre>Camila Vargas</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60089012</telefono>
+        <fechaNacimiento>30-04-2000</fechaNacimiento>
+        <cedula>8888</cedula>
+        <nombre>Felipe Castro</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60090123</telefono>
+        <fechaNacimiento>05-08-1999</fechaNacimiento>
+        <cedula>9999</cedula>
+        <nombre>Isabel Herrera</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60101234</telefono>
+        <fechaNacimiento>22-03-2003</fechaNacimiento>
+        <cedula>1010</cedula>
+        <nombre>Ricardo Torres</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60112345</telefono>
+        <fechaNacimiento>14-07-1994</fechaNacimiento>
+        <cedula>1212</cedula>
+        <nombre>Valeria Soto</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60123456</telefono>
+        <fechaNacimiento>09-11-2002</fechaNacimiento>
+        <cedula>1313</cedula>
+        <nombre>Diego Méndez</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60134567</telefono>
+        <fechaNacimiento>17-06-1998</fechaNacimiento>
+        <cedula>1414</cedula>
+        <nombre>Gabriela Ruiz</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60145678</telefono>
+        <fechaNacimiento>25-12-1997</fechaNacimiento>
+        <cedula>1515</cedula>
+        <nombre>Héctor Vargas</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60156789</telefono>
+        <fechaNacimiento>02-05-2005</fechaNacimiento>
+        <cedula>1616</cedula>
+        <nombre>Paola Castillo</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60167890</telefono>
+        <fechaNacimiento>27-08-1996</fechaNacimiento>
+        <cedula>1717</cedula>
+        <nombre>Sebastián Navarro</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60178901</telefono>
+        <fechaNacimiento>13-01-2000</fechaNacimiento>
+        <cedula>1818</cedula>
+        <nombre>Carolina Pineda</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60189012</telefono>
+        <fechaNacimiento>21-09-1999</fechaNacimiento>
+        <cedula>1919</cedula>
+        <nombre>Martín Chacón</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60190123</telefono>
+        <fechaNacimiento>06-02-2004</fechaNacimiento>
+        <cedula>2020</cedula>
+        <nombre>Daniela Cordero</nombre>
+    </paciente>
+    <paciente>
+        <telefono>60201234</telefono>
+        <fechaNacimiento>10-10-1995</fechaNacimiento>
+        <cedula>2121</cedula>
+        <nombre>Tomás Esquivel</nombre>
+    </paciente>
+    <paciente>
+        <telefono>7734nfdgdf</telefono>
+        <fechaNacimiento>Pérez</fechaNacimiento>
+        <cedula>1111</cedula>
+        <nombre>José</nombre>
+    </paciente>
+</pacientes>
+

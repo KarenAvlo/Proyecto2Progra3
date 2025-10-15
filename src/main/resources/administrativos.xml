@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<administrativos>
+    <administrativo>
+        <cedula>123</cedula>
+        <nombre>Ana Morales</nombre>
+        <clave>1</clave>
+    </administrativo>
+    <administrativo>
+        <cedula>204560789</cedula>
+        <nombre>Carlos Vega</nombre>
+        <clave>cvega456</clave>
+    </administrativo>
+    <administrativo>
+        <cedula>305670123</cedula>
+        <nombre>María López</nombre>
+        <clave>mlopez789</clave>
+    </administrativo>
+    <administrativo>
+        <cedula>407890234</cedula>
+        <nombre>Jorge Rojas</nombre>
+        <clave>jrojas321</clave>
+    </administrativo>
+    <administrativo>
+        <cedula>509012345</cedula>
+        <nombre>Lucía Fernández</nombre>
+        <clave>lfernandez654</clave>
+    </administrativo>
+    <administrativo>
+        <cedula>601234567</cedula>
+        <nombre>Diego Hernández</nombre>
+        <clave>dhernandez987</clave>
+    </administrativo>
+</administrativos>
+

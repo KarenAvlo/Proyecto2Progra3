@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<medicamentos>
+    <medicamento>
+        <codigo>M001</codigo>
+        <nombre>Paracetamol</nombre>
+        <presentacion>500 mg</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M002</codigo>
+        <nombre>Ibuprofeno</nombre>
+        <presentacion>400 mg</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M003</codigo>
+        <nombre>Amoxicilina</nombre>
+        <presentacion>250 mg cápsulas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M004</codigo>
+        <nombre>Loratadina</nombre>
+        <presentacion>10 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M005</codigo>
+        <nombre>Omeprazol</nombre>
+        <presentacion>20 mg cápsulas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M006</codigo>
+        <nombre>Metformina</nombre>
+        <presentacion>850 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M007</codigo>
+        <nombre>Losartán</nombre>
+        <presentacion>50 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M008</codigo>
+        <nombre>Enalapril</nombre>
+        <presentacion>10 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M009</codigo>
+        <nombre>Claritromicina</nombre>
+        <presentacion>500 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M010</codigo>
+        <nombre>Diclofenaco</nombre>
+        <presentacion>50 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M011</codigo>
+        <nombre>Cefalexina</nombre>
+        <presentacion>500 mg cápsulas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M012</codigo>
+        <nombre>Azitromicina</nombre>
+        <presentacion>500 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M013</codigo>
+        <nombre>Prednisona</nombre>
+        <presentacion>5 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M014</codigo>
+        <nombre>Hidroclorotiazida</nombre>
+        <presentacion>25 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M015</codigo>
+        <nombre>Furosemida</nombre>
+        <presentacion>40 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M016</codigo>
+        <nombre>Salbutamol</nombre>
+        <presentacion>Inhalador 100 mcg/dosis</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M017</codigo>
+        <nombre>Insulina Glargina</nombre>
+        <presentacion>100 UI/ml solución inyectable</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M018</codigo>
+        <nombre>Ranitidina</nombre>
+        <presentacion>150 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M019</codigo>
+        <nombre>Clopidogrel</nombre>
+        <presentacion>75 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M020</codigo>
+        <nombre>Aspirina</nombre>
+        <presentacion>100 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M021</codigo>
+        <nombre>Atorvastatina</nombre>
+        <presentacion>20 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M022</codigo>
+        <nombre>Simvastatina</nombre>
+        <presentacion>20 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M023</codigo>
+        <nombre>Levotiroxina</nombre>
+        <presentacion>50 mcg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M024</codigo>
+        <nombre>Diazepam</nombre>
+        <presentacion>10 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M025</codigo>
+        <nombre>Alprazolam</nombre>
+        <presentacion>0.5 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M026</codigo>
+        <nombre>Sertralina</nombre>
+        <presentacion>50 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M027</codigo>
+        <nombre>Escitalopram</nombre>
+        <presentacion>10 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M028</codigo>
+        <nombre>Fluoxetina</nombre>
+        <presentacion>20 mg cápsulas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M029</codigo>
+        <nombre>Quetiapina</nombre>
+        <presentacion>100 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M030</codigo>
+        <nombre>Olanzapina</nombre>
+        <presentacion>10 mg tabletas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M031</codigo>
+        <nombre>Gabapentina</nombre>
+        <presentacion>300 mg cápsulas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M032</codigo>
+        <nombre>Tramadol</nombre>
+        <presentacion>100 mg cápsulas</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M033</codigo>
+        <nombre>Morfina</nombre>
+        <presentacion>10 mg/ml solución inyectable</presentacion>
+    </medicamento>
+    <medicamento>
+        <codigo>M034</codigo>
+        <nombre>Ketorolaco</nombre>
+        <presentacion>10 mg tabletas</presentacion>
+    </medicamento>
+</medicamentos>
+

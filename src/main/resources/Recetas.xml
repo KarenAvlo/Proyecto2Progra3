@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<recetas>
+    <receta>
+        <codReceta>R01</codReceta>
+        <paciente>
+            <telefono>88885555</telefono>
+            <cedula>12345678</cedula>
+            <nombre>Juan Pérez</nombre>
+        </paciente>
+        <medico>
+            <cedula>87654321</cedula>
+            <nombre>Dr. Ana Gómez</nombre>
+            <clave>ana123</clave>
+            <especialidad>Cardiología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED003</codigo>
+                <nombre>Ibuprofeno</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Después del desayuno</indicaciones>
+            <duracion>3</duracion>
+        </indicaciones>
+        <fechaEmision>2025-08-27</fechaEmision>
+        <fechaRetiro>2025-08-30</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R02</codReceta>
+        <paciente>
+            <telefono>89997777</telefono>
+            <cedula>23456789</cedula>
+            <nombre>María López</nombre>
+        </paciente>
+        <medico>
+            <cedula>99887766</cedula>
+            <nombre>Dr. Carlos Ramírez</nombre>
+            <clave>carlos456</clave>
+            <especialidad>Pediatría</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED003</codigo>
+                <nombre>Ibuprofeno</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Después del desayuno</indicaciones>
+            <duracion>3</duracion>
+        </indicaciones>
+        <fechaEmision>2025-08-28</fechaEmision>
+        <fechaRetiro>2025-09-01</fechaRetiro>
+        <estado>PROCESO</estado>
+    </receta>
+    <receta>
+        <codReceta>R03</codReceta>
+        <paciente>
+            <telefono>87776666</telefono>
+            <cedula>34567890</cedula>
+            <nombre>Carlos Sánchez</nombre>
+        </paciente>
+        <medico>
+            <cedula>11223344</cedula>
+            <nombre>Dra. Sofía Martínez</nombre>
+            <clave>sofia789</clave>
+            <especialidad>Dermatología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED004</codigo>
+                <nombre>Crema antibiótica</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Aplicar en la zona afectada</indicaciones>
+            <duracion>10</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-01</fechaEmision>
+        <fechaRetiro>2025-09-05</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R04</codReceta>
+        <paciente>
+            <telefono>85554444</telefono>
+            <cedula>45678901</cedula>
+            <nombre>Laura Fernández</nombre>
+        </paciente>
+        <medico>
+            <cedula>22334455</cedula>
+            <nombre>Dr. Miguel Torres</nombre>
+            <clave>miguel321</clave>
+            <especialidad>Neurología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED005</codigo>
+                <nombre>Paracetamol</nombre>
+            </medicamento>
+            <cantidad>2</cantidad>
+            <indicaciones>Cada 8 horas</indicaciones>
+            <duracion>5</duracion>
+        </indicaciones>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED006</codigo>
+                <nombre>Omeprazol</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Antes del desayuno</indicaciones>
+            <duracion>14</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-02</fechaEmision>
+        <fechaRetiro>2025-09-06</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R05</codReceta>
+        <paciente>
+            <telefono>84443322</telefono>
+            <cedula>56789012</cedula>
+            <nombre>Pedro Morales</nombre>
+        </paciente>
+        <medico>
+            <cedula>33445566</cedula>
+            <nombre>Dra. Elena Ruiz</nombre>
+            <clave>elena987</clave>
+            <especialidad>Gastroenterología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED007</codigo>
+                <nombre>Metformina</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Después de la cena</indicaciones>
+            <duracion>30</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-03</fechaEmision>
+        <fechaRetiro>2025-09-10</fechaRetiro>
+        <estado>CONFECCIONADA</estado>
+    </receta>
+    <receta>
+        <codReceta>R06</codReceta>
+        <paciente>
+            <telefono>83332211</telefono>
+            <cedula>67890123</cedula>
+            <nombre>Ana Torres</nombre>
+        </paciente>
+        <medico>
+            <cedula>44556677</cedula>
+            <nombre>Dr. Luis Hernández</nombre>
+            <clave>luis654</clave>
+            <especialidad>Oftalmología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED008</codigo>
+                <nombre>Loratadina</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Una vez al día</indicaciones>
+            <duracion>14</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-04</fechaEmision>
+        <fechaRetiro>2025-09-08</fechaRetiro>
+        <estado>ENTREGADA</estado>
+    </receta>
+    <receta>
+        <codReceta>R07</codReceta>
+        <paciente>
+            <telefono>82221100</telefono>
+            <cedula>78901234</cedula>
+            <nombre>Lucía Méndez</nombre>
+        </paciente>
+        <medico>
+            <cedula>55667788</cedula>
+            <nombre>Dr. Juan Castillo</nombre>
+            <clave>juan321</clave>
+            <especialidad>Cardiología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED009</codigo>
+                <nombre>Amoxicilina</nombre>
+            </medicamento>
+            <cantidad>3</cantidad>
+            <indicaciones>Cada 12 horas</indicaciones>
+            <duracion>10</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-05</fechaEmision>
+        <fechaRetiro>2025-09-15</fechaRetiro>
+        <estado>PROCESO</estado>
+    </receta>
+    <receta>
+        <codReceta>R08</codReceta>
+        <paciente>
+            <telefono>81110099</telefono>
+            <cedula>89012345</cedula>
+            <nombre>Miguel Álvarez</nombre>
+        </paciente>
+        <medico>
+            <cedula>66778899</cedula>
+            <nombre>Dra. Carla Jiménez</nombre>
+            <clave>carla654</clave>
+            <especialidad>Endocrinología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED010</codigo>
+                <nombre>Insulina</nombre>
+            </medicamento>
+            <cantidad>2</cantidad>
+            <indicaciones>Antes del desayuno y cena</indicaciones>
+            <duracion>20</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-06</fechaEmision>
+        <fechaRetiro>2025-09-20</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R09</codReceta>
+        <paciente>
+            <telefono>80009988</telefono>
+            <cedula>90123456</cedula>
+            <nombre>Sofía Campos</nombre>
+        </paciente>
+        <medico>
+            <cedula>77889900</cedula>
+            <nombre>Dr. Ricardo Vega</nombre>
+            <clave>ricardo987</clave>
+            <especialidad>Neurología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED011</codigo>
+                <nombre>Diclofenaco</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Después del almuerzo</indicaciones>
+            <duracion>7</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-07</fechaEmision>
+        <fechaRetiro>2025-09-14</fechaRetiro>
+        <estado>PROCESO</estado>
+    </receta>
+    <receta>
+        <codReceta>R10</codReceta>
+        <paciente>
+            <telefono>79998877</telefono>
+            <cedula>01234567</cedula>
+            <nombre>Andrés Morales</nombre>
+        </paciente>
+        <medico>
+            <cedula>88990011</cedula>
+            <nombre>Dra. Patricia Soto</nombre>
+            <clave>patricia321</clave>
+            <especialidad>Pediatría</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED012</codigo>
+                <nombre>Paracetamol</nombre>
+            </medicamento>
+            <cantidad>2</cantidad>
+            <indicaciones>Cada 6 horas</indicaciones>
+            <duracion>5</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-08</fechaEmision>
+        <fechaRetiro>2025-09-12</fechaRetiro>
+        <estado>ENTREGADA</estado>
+    </receta>
+    <receta>
+        <codReceta>R11</codReceta>
+        <paciente>
+            <telefono>78887766</telefono>
+            <cedula>12345012</cedula>
+            <nombre>Valeria Jiménez</nombre>
+        </paciente>
+        <medico>
+            <cedula>99001122</cedula>
+            <nombre>Dr. Esteban Rojas</nombre>
+            <clave>esteban654</clave>
+            <especialidad>Cardiología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED013</codigo>
+                <nombre>Salbutamol</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Inhalar 2 veces al día</indicaciones>
+            <duracion>15</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-09</fechaEmision>
+        <fechaRetiro>2025-09-24</fechaRetiro>
+        <estado>PROCESO</estado>
+    </receta>
+    <receta>
+        <codReceta>R12</codReceta>
+        <paciente>
+            <telefono>77776655</telefono>
+            <cedula>23456123</cedula>
+            <nombre>Diego Fernández</nombre>
+        </paciente>
+        <medico>
+            <cedula>10111213</cedula>
+            <nombre>Dra. Gabriela León</nombre>
+            <clave>gabriela987</clave>
+            <especialidad>Dermatología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED014</codigo>
+                <nombre>Hidrocortisona</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Aplicar 2 veces al día</indicaciones>
+            <duracion>10</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-10</fechaEmision>
+        <fechaRetiro>2025-09-20</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R13</codReceta>
+        <paciente>
+            <telefono>76665544</telefono>
+            <cedula>34561234</cedula>
+            <nombre>Camila Rojas</nombre>
+        </paciente>
+        <medico>
+            <cedula>12131415</cedula>
+            <nombre>Dr. Javier Molina</nombre>
+            <clave>javier321</clave>
+            <especialidad>Neurología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED015</codigo>
+                <nombre>Clonazepam</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Antes de dormir</indicaciones>
+            <duracion>7</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-11</fechaEmision>
+        <fechaRetiro>2025-09-18</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R14</codReceta>
+        <paciente>
+            <telefono>75554433</telefono>
+            <cedula>45612345</cedula>
+            <nombre>José Martínez</nombre>
+        </paciente>
+        <medico>
+            <cedula>13141516</cedula>
+            <nombre>Dra. Natalia Cruz</nombre>
+            <clave>natalia654</clave>
+            <especialidad>Oftalmología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED016</codigo>
+                <nombre>Lágrimas artificiales</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>3 veces al día</indicaciones>
+            <duracion>20</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-12</fechaEmision>
+        <fechaRetiro>2025-09-30</fechaRetiro>
+        <estado>PROCESO</estado>
+    </receta>
+    <receta>
+        <codReceta>R15</codReceta>
+        <paciente>
+            <telefono>74443322</telefono>
+            <cedula>56723456</cedula>
+            <nombre>Isabel Castillo</nombre>
+        </paciente>
+        <medico>
+            <cedula>14151617</cedula>
+            <nombre>Dr. Ricardo Mendoza</nombre>
+            <clave>ricardo321</clave>
+            <especialidad>Pediatría</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>MED017</codigo>
+                <nombre>Vitamina C</nombre>
+            </medicamento>
+            <cantidad>1</cantidad>
+            <indicaciones>Diaria después del desayuno</indicaciones>
+            <duracion>30</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-13</fechaEmision>
+        <fechaRetiro>2025-10-13</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+    <receta>
+        <codReceta>R16</codReceta>
+        <paciente>
+            <telefono>60023456</telefono>
+            <fechaNacimiento>20-09-2002</fechaNacimiento>
+            <cedula>2222</cedula>
+            <nombre>David Rodríguez</nombre>
+        </paciente>
+        <medico>
+            <cedula>123</cedula>
+            <nombre>Juan Pérez</nombre>
+            <clave>2</clave>
+            <especialidad>Cardiología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>M002</codigo>
+                <nombre>Ibuprofeno</nombre>
+                <presentacion>400 mg</presentacion>
+            </medicamento>
+            <cantidad>5</cantidad>
+            <indicaciones>Cada 2 horas</indicaciones>
+            <duracion>3</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-11</fechaEmision>
+        <fechaRetiro>2025-09-10</fechaRetiro>
+        <estado>CONFECCIONADA</estado>
+    </receta>
+    <receta>
+        <codReceta>R17</codReceta>
+        <paciente>
+            <telefono>60045678</telefono>
+            <fechaNacimiento>28-06-2004</fechaNacimiento>
+            <cedula>4444</cedula>
+            <nombre>José Ramírez</nombre>
+        </paciente>
+        <medico>
+            <cedula>123</cedula>
+            <nombre>Juan Pérez</nombre>
+            <clave>2</clave>
+            <especialidad>Cardiología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>M001</codigo>
+                <nombre>Paracetamol</nombre>
+                <presentacion>500 mg</presentacion>
+            </medicamento>
+            <cantidad>5</cantidad>
+            <indicaciones>Antes de acostarse a dormir</indicaciones>
+            <duracion>3</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-11</fechaEmision>
+        <fechaRetiro>2025-09-11</fechaRetiro>
+        <estado>CONFECCIONADA</estado>
+    </receta>
+    <receta>
+        <codReceta>R18</codReceta>
+        <paciente>
+            <telefono>60178901</telefono>
+            <fechaNacimiento>13-01-2000</fechaNacimiento>
+            <cedula>1818</cedula>
+            <nombre>Carolina Pineda</nombre>
+        </paciente>
+        <medico>
+            <cedula>123</cedula>
+            <nombre>Juan Pérez</nombre>
+            <clave>2</clave>
+            <especialidad>Cardiología</especialidad>
+        </medico>
+        <indicaciones>
+            <medicamento>
+                <codigo>M015</codigo>
+                <nombre>Furosemida</nombre>
+                <presentacion>40 mg tabletas</presentacion>
+            </medicamento>
+            <cantidad>10</cantidad>
+            <indicaciones>Mañana y noche 1 tba</indicaciones>
+            <duracion>3</duracion>
+        </indicaciones>
+        <fechaEmision>2025-09-14</fechaEmision>
+        <fechaRetiro>2025-09-14</fechaRetiro>
+        <estado>LISTA</estado>
+    </receta>
+</recetas>
+
