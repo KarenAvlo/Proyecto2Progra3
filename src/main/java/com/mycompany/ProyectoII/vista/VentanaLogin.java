@@ -4,6 +4,7 @@ import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.control.TipoUsuario;
 import com.mycompany.ProyectoII.control.Control;
+import java.sql.SQLException;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -33,7 +34,7 @@ public class VentanaLogin extends javax.swing.JFrame {
      * Creates new form VentanaLogin
      */
     public VentanaLogin(Control ControlPrincipal) {
-        this.controlador = ControlPrincipal;
+        this.control = ControlPrincipal;
         initComponents();
         this.setLocationRelativeTo(null);
         init();
@@ -184,22 +185,27 @@ public class VentanaLogin extends javax.swing.JFrame {
 
     private void BotonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLoginActionPerformed
         // TODO add your handling code here:
-//        String cedula = textCedula.getText().trim();
-//        String clave = new String(txtclave.getPassword()).trim();
-//
-//        Persona persona = controlador.validarUsuario(cedula, clave); // usa el login del GestorPersonas
-//        TipoUsuario tipo = controlador.tipoDeUsuario(persona);
-//
-//        if (persona != null && tipo == TipoUsuario.MEDICO) {
-//            controlador.abrirVentanaMedico((Medico) persona); // abre la ventana correcta
-//            this.dispose(); // cierra la ventana de login
-//        }
-//        if (tipo != null) {
-//            controlador.abrirVentanaSegunUsuario(tipo);
-//            this.dispose();
-//        } else {
-//            lblmensaje.setText("Usuario o clave incorrectos");
-//        }
+       String cedula = textCedula.getText().trim();
+       String clave = new String(txtclave.getPassword()).trim();
+
+       Persona persona = null;
+        try {
+            persona = control.validarUsuario(cedula, clave);
+        } catch (SQLException ex) {
+            System.getLogger(VentanaLogin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+       TipoUsuario tipo = control.tipoDeUsuario(persona);
+        System.out.println(tipo);
+       if (persona != null && tipo == TipoUsuario.MEDICO) {
+           control.abrirVentanaMedico((Medico) persona); // abre la ventana correcta
+           this.dispose(); // cierra la ventana de login
+       }
+       if (tipo != null) {
+           control.abrirVentanaSegunUsuario(tipo);
+           this.dispose();
+       } else {
+          lblmensaje.setText("Usuario o clave incorrectos");
+       }
     }//GEN-LAST:event_BotonLoginActionPerformed
 
     private void BotonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVolverActionPerformed
@@ -241,5 +247,5 @@ public class VentanaLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtclave;
     // End of variables declaration//GEN-END:variables
 
-private final Control controlador;
+private final Control control;
 }

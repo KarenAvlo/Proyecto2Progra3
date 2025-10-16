@@ -6,7 +6,7 @@ import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Paciente;
 import com.mycompany.ProyectoII.Receta;
 import com.mycompany.ProyectoII.control.Control;
-import com.mycompany.ProyectoII.modelo.modelo;
+import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -54,7 +54,7 @@ public class VentanaMedico extends javax.swing.JFrame {
         if (controlador == null) {
             throw new IllegalArgumentException("El controlador no puede ser null");
         }
-        this.controlador = controlador;
+        this.control = controlador;
         this.estado = new FormHandler();
         this.medicoActual = med;
         initComponents();
@@ -879,9 +879,9 @@ public class VentanaMedico extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            modelo modelo = null;
+            Modelo modelo = null;
             try {
-                modelo = new modelo();
+                modelo = new Modelo();
             } catch (SQLException ex) {
                 Logger.getLogger(VentanaMedico.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -901,7 +901,7 @@ public class VentanaMedico extends javax.swing.JFrame {
     private Indicaciones nuevasIndicaciones; //instancia local
     private final List<String> medicamentosSeleccionados = new ArrayList<>();
     private void abrirBuscarPaciente() {
-        buscarPaciente ventana = new buscarPaciente(controlador, this);
+        buscarPaciente ventana = new buscarPaciente(control, this);
         ventana.setVisible(true);
     }
 
@@ -916,7 +916,7 @@ public class VentanaMedico extends javax.swing.JFrame {
     }
 
     private void abrirBuscarMedicamento() {
-        buscarMedicamento ventana = new buscarMedicamento(controlador, this);
+        buscarMedicamento ventana = new buscarMedicamento(control, this);
         ventana.setVisible(true);
     }
 
@@ -1393,7 +1393,7 @@ public class VentanaMedico extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    private final Control controlador; 
+    private final Control control; 
     private FormHandler estado;
 
 };

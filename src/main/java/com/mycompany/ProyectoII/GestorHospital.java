@@ -63,7 +63,7 @@ public class GestorHospital {
     }
 
     // --------------------------
-    // Funcionalidades específicas de Medico
+    // Funcionalidades específicas de Paciente
     // --------------------------
     public boolean inclusionPaciente(String id, String nombre, String nacimiento, String numero) throws SQLException {
         if (buscarPorCedula(id) == null) {
@@ -427,6 +427,36 @@ public class GestorHospital {
     public List<Receta> buscarRecetasPorMedico(String cedulaMedico) throws SQLException {
         return recetaDAO.getDao().queryForEq("medico_cedula", cedulaMedico);
     }
+    
+    
+    //Funcionalidades Extra del Sistema Hospitalario
+    
+    public Persona validarUsuario(String cedula, String clave) throws SQLException {
+        // Buscar en Médicos
+        Medico medico = medicoDAO.findById(cedula);
+        if (medico != null && medico.getClave().equals(clave)) {
+            return medico;
+        }
+
+        // Buscar en Farmaceutas
+        Farmaceuta farmaceuta = farmaceutaDAO.findById(cedula);
+        if (farmaceuta != null && farmaceuta.getClave().equals(clave)) {
+            return farmaceuta;
+        }
+
+        // Buscar en Administrativos
+        Administrativo administrativo = administrativoDAO.findById(cedula);
+        if (administrativo != null && administrativo.getClave().equals(clave)) {
+            return administrativo;
+        }
+
+        // Si no se encuentra en ninguna tabla
+        return null;
+    }
+
+
+    
+    
 
     // --------------------------
     // Cierre de conexión

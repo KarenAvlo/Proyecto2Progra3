@@ -6,6 +6,7 @@ import com.mycompany.ProyectoII.Hospital;
 import com.mycompany.ProyectoII.Medicamento;
 import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Paciente;
+import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.Receta;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -28,33 +29,40 @@ import org.jfree.chart.JFreeChart;
 * --------------------------------------------------------------------+
 */
 
-public class modelo {
+public class Modelo {
 
-    public modelo() throws SQLException {
+    public Modelo() throws SQLException {
         gestor = new GestorHospital();
     }
-
+    
     public GestorHospital getModelo() {
         return gestor;
     }
+    
+    public Persona validarUsuario(String cedula, String clave) throws SQLException {
+        return gestor.validarUsuario(cedula, clave);
+    }
 
-//    //========MEDICOS==========
-//    public void agregarMedico(String cedula, String nombre, String especialidad) {
-//        return gestor.agregarMedico(cedula, nombre, especialidad);
-//    }
-//
-//    public boolean eliminarMedico(String cedula) {
-//        return gestor.BorrarMedico(cedula);
-//    }
-//
-//    public Medico buscarMedico(String cedula) throws SQLException {
-//        return gestor.buscarMedico(cedula);
-//    }
-//
-//    public List<Medico> listarMedicos() {
-//        return gestor.getListaMedicos();
-//    }
-//
+    //========MEDICOS==========
+    public void agregarMedico(Medico m) throws SQLException {
+        gestor.agregarMedico(m);
+    }
+
+    public void eliminarMedico(String cedula) throws SQLException {
+        gestor.eliminarMedico(cedula);
+    }
+    public void actualizarMedico(Medico medico) throws SQLException {
+        gestor.actualizarMedico(medico);
+    }
+
+    public Medico buscarMedico(String cedula) throws SQLException {
+        return gestor.buscarMedico(cedula);
+    }
+
+    public List<Medico> obtenerTodosMedicos() throws SQLException {
+        return gestor.obtenerTodosMedicos();
+    }
+
 //    //----Farmaceutas---
 //    public boolean agregarFarmaceuta(String cedula, String nombre) {
 //        return gestor.getGestorFarmaceutas().InclusionFarmaceuta(cedula, nombre);

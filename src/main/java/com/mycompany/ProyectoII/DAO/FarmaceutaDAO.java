@@ -13,7 +13,7 @@ import lombok.Getter;
 
 public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/BDHospital";
+    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 

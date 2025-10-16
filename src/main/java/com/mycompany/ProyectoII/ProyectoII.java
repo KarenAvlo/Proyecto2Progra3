@@ -2,7 +2,7 @@ package com.mycompany.ProyectoII;
 
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.vista.VentanaPrincipal;
-import com.mycompany.ProyectoII.modelo.modelo;
+import com.mycompany.ProyectoII.modelo.Modelo;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -65,7 +65,7 @@ public class ProyectoII {
         System.out.println("Iniciando interfaz..");
 
         // 1️⃣ Crear modelo
-        modelo modelo = new modelo();
+        Modelo modelo = new Modelo();
 
         // 2️⃣ Cargar personas desde XML
         //modelo.obtenerModelo().cargarDatos();

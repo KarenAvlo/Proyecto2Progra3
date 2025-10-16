@@ -3,7 +3,7 @@ package com.mycompany.ProyectoII.vista;
 import com.mycompany.ProyectoII.Medicamento;
 import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.control.Control;
-import com.mycompany.ProyectoII.modelo.modelo;
+import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
 import java.sql.SQLException;
 
@@ -361,9 +361,9 @@ public class buscarMedicamento extends javax.swing.JFrame {
         /* Create and display the form */
  
         java.awt.EventQueue.invokeLater(() -> {
-            modelo modelo = null;
+            Modelo modelo = null;
             try {
-                modelo = new modelo();
+                modelo = new Modelo();
             } catch (SQLException ex) {
                 Logger.getLogger(buscarMedicamento.class.getName()).log(Level.SEVERE, null, ex);
             }

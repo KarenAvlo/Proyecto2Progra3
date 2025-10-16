@@ -3,7 +3,7 @@ package com.mycompany.ProyectoII.vista;
 import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Paciente;
 import com.mycompany.ProyectoII.control.Control;
-import com.mycompany.ProyectoII.modelo.modelo;
+import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
 import java.sql.SQLException;
 import java.util.List;
@@ -48,7 +48,7 @@ public class buscarPaciente extends javax.swing.JFrame {
         this.control = control;
         this.ventanaMedico = ventanaMedico;
         this.estado = new FormHandler();
-        modelo modelo = control.getModel();
+        Modelo modelo = control.getModelo();
         if (modelo != null) {
 //            listaPacientes = modelo.listarPacientes();
         }
@@ -276,9 +276,9 @@ public class buscarPaciente extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            modelo modelo = null;
+            Modelo modelo = null;
             try {
-                modelo = new modelo();
+                modelo = new Modelo();
             } catch (SQLException ex) {
                 Logger.getLogger(buscarPaciente.class.getName()).log(Level.SEVERE, null, ex);
             }

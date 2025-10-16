@@ -12,14 +12,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public abstract class Persona { // no necesita el database, pues no haytabla para esto
-
-//    @DatabaseField(id = true, columnName = "cedula")
+public abstract class Persona {
+@DatabaseField(id = true, columnName = "Cedula")
     private String cedula;
 
-//    @DatabaseField(columnName = "nombre")
+    @DatabaseField(columnName = "Nombre")
     private String nombre;
 
-//    @DatabaseField(columnName = "clave")
+    @DatabaseField(columnName = "Clave")
     private String clave;
 }
+//👉 Ojo: aunque no tengas tabla persona, sí puedes usar @DatabaseField en la clase base para que las subclases hereden correctamente esos campos.

@@ -5,7 +5,7 @@ import com.mycompany.ProyectoII.Medicamento;
 
 import com.mycompany.ProyectoII.Receta;
 import com.mycompany.ProyectoII.control.Control;
-import com.mycompany.ProyectoII.modelo.modelo;
+import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -1155,7 +1155,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        modelo modelo = new modelo();
+        Modelo modelo = new Modelo();
         Control control = new Control(modelo);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new VentanaFarmaceuta(control).setVisible(true));

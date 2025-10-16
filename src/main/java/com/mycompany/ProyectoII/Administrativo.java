@@ -3,7 +3,6 @@ package com.mycompany.ProyectoII;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,21 +24,12 @@ import lombok.ToString;
 * --------------------------------------------------------------------+
  */
 @DatabaseTable(tableName = "administrativo")
-//@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString(callSuper = true)
+@ToString
 public class Administrativo extends Persona {
 
-    @DatabaseField(id = true, columnName = "Cedula")
-    private String cedula;
-
-    @DatabaseField(columnName = "Nombre")
-    private String nombre;
-
-    @DatabaseField(columnName = "Clave")
-    private String clave;
 
     public Administrativo(String cedula, String nombre, String clave) {
         super(cedula, nombre, clave);

@@ -9,7 +9,7 @@ import com.mycompany.ProyectoII.Paciente;
 import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.Receta;
 import com.mycompany.ProyectoII.control.Control;
-import com.mycompany.ProyectoII.modelo.modelo;
+import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -57,7 +57,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
         if (controlador == null) {
             throw new IllegalArgumentException("El controlador no puede ser null");
         }
-        this.controlador = controlador;
+        this.control = controlador;
         this.estado = new FormHandler();
         initComponents();
         this.setLocationRelativeTo(null); // aparece en el centro
@@ -427,41 +427,52 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     //----------------Medicos----------------
 
     private void guardarMedico() {
-//        try {
-//            String cedula = campoId.getText().trim();
-//            String nombre = campoId1.getText().trim();
-//            String especialidad = campoId2.getText().trim();
-//
-//            if (cedula.isEmpty() || nombre.isEmpty() || especialidad.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            boolean exito;
-//            if (estado.isAdding()) {
-//                exito = controlador.agregarMedico(cedula, nombre, especialidad);
-//            } else if (estado.isEditing()) {
-//                // Para edición, primero eliminamos y luego agregamos )
-//                controlador.eliminarMedico(((Medico) estado.getModel()).getCedula());
-//                exito = controlador.agregarMedico(cedula, nombre, especialidad);
-//            } else {
-//                exito = false;
-//            }
-//
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Médico guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                estado.setModel(null);     // Establece el modelo como nulo para indicar un nuevo registro
-//                estado.changeToAddMode();
-//                limpiarCampos();
-//                actualizarComponentes();
-//                actualizarTablaMedicos();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al guardar médico, ya existe esa cédula,", "Error", JOptionPane.WARNING_MESSAGE);
-//            }
-//        } catch (HeadlessException ex) {
-//            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//            logger.log(java.util.logging.Level.SEVERE, "Error al guardar médico", ex);
-//        }
+        try {
+            String cedula = campoId.getText().trim();
+            String nombre = campoId1.getText().trim();
+            String especialidad = campoId2.getText().trim();
+            
+            if (cedula.isEmpty() || nombre.isEmpty() || especialidad.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Crear un objeto médico con los datos del formulario
+            Medico medico = new Medico(cedula, nombre, cedula, especialidad, true);
+
+            boolean exito = false;
+
+            if (estado.isAdding()) {
+                // Si estamos agregando, solo agregamos si no existe
+                if (control.buscarMedico(cedula) == null) {
+                    control.agregarMedico(medico);
+                    exito = true;
+                }
+            } else if (estado.isEditing()) {
+                // Si estamos editando, actualizamos el registro existente
+                control.actualizarMedico(medico);
+                exito = true;
+            }
+
+            // Mostrar mensajes al usuario
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Médico guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                estado.setModel(null);
+                estado.changeToAddMode();
+                limpiarCampos();
+                actualizarComponentes();
+                actualizarTablaMedicos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error: Ya existe un médico con esa cédula.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al acceder a la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            logger.log(java.util.logging.Level.SEVERE, "Error al guardar médico", ex);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            logger.log(java.util.logging.Level.SEVERE, "Error inesperado al guardar médico", ex);
+        }
     }
 
     private void buscarMedico() {
@@ -2819,9 +2830,9 @@ private void guardarFarmaceuta() {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            modelo modelo = null;
+            Modelo modelo = null;
             try {
-                modelo = new modelo();
+                modelo = new Modelo();
             } catch (SQLException ex) {
                 Logger.getLogger(VentanaAdministrador.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2976,7 +2987,7 @@ private void guardarFarmaceuta() {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaAdministrador.class.getName());
 
-    private final Control controlador;
+    private final Control control;
     private FormHandler estado;
 
 };

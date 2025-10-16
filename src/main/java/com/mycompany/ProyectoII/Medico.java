@@ -3,10 +3,6 @@ package com.mycompany.ProyectoII;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.mycompany.ProyectoII.Paciente;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,20 +10,10 @@ import lombok.ToString;
 
 @DatabaseTable(tableName = "medico")
 @NoArgsConstructor
-//@AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Medico {
-
-    @DatabaseField(id = true, columnName = "Cedula")
-    private String cedula;
-
-    @DatabaseField(columnName = "Nombre")
-    private String nombre;
-
-    @DatabaseField(columnName = "Clave")
-    private String clave;
+public class Medico extends Persona{
 
     @DatabaseField(columnName = "Especialidad")
     private String especialidad;
@@ -37,12 +23,11 @@ public class Medico {
 
     // Constructor completo
     public Medico(String cedula, String nombre, String clave, String especialidad, boolean estado) {
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.clave = clave;
+        super(cedula, nombre, clave);
         this.especialidad = especialidad;
-        this.estado = true;
+        this.estado = estado;
     }
+
 }
 
 /*

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MedicoDAO implements AbstractDAO<String, Medico> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/BDHospital";
+    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 

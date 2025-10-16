@@ -5,7 +5,6 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.mycompany.ProyectoII.Paciente;
-import com.mycompany.ProyectoII.Paciente;
 import java.sql.SQLException;
 import java.util.List;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.Getter;
 @Getter
 public class PacienteDAO implements AbstractDAO<String, Paciente> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/BDHospital";
+    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
