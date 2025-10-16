@@ -70,8 +70,8 @@ public class ProyectoII {
         // 2️⃣ Cargar personas desde XML
         //modelo.obtenerModelo().cargarDatos();
         
-        modelo.cargarDatos();
-        
+//        modelo.cargarDatos();
+//        
         // 3️⃣ Crear controlador con modelo
         Control gestorPrincipal = new Control(modelo);
         

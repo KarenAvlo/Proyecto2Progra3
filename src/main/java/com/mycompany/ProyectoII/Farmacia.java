@@ -26,32 +26,32 @@ import lombok.ToString;
 @ToString
 
 public class Farmacia {
-
-    public Farmacia(GestorFarmaceutas gestorFarmaceutas) {
-        this.gestorFarmaceutas = gestorFarmaceutas; // usa el mismo que Hospital
-        this.gestorMedicamentos = new GestorMedicamentos();
-        this.gestorRecetas = new GestorRecetas();
-    }
-
-    public void cargarDatos() throws Exception {
-        gestorMedicamentos = GestorMedicamentos.cargarDesdeXML();
-        gestorRecetas = GestorRecetas.cargarDesdeXML();
-    }
-
-    public boolean guardarDatos() throws Exception {
-        try {
-            gestorFarmaceutas.guardar();
-            gestorMedicamentos.guardar(); // Asumiendo que GestorPacientes tiene método guardar()
-            gestorRecetas.guardar(); // Asumiendo que Farmacia tiene método guardarDatos()
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error al guardar datos: " + e.getMessage());
-            return false;
-        }
-    }
-
-    private GestorFarmaceutas gestorFarmaceutas;
-    private GestorMedicamentos gestorMedicamentos; 
-    private GestorRecetas gestorRecetas;           
+//
+//    public Farmacia(GestorFarmaceutas gestorFarmaceutas) {
+//        this.gestorFarmaceutas = gestorFarmaceutas; // usa el mismo que Hospital
+//        this.gestorMedicamentos = new GestorMedicamentos();
+//        this.gestorRecetas = new GestorRecetas();
+//    }
+//
+//    public void cargarDatos() throws Exception {
+//        gestorMedicamentos = GestorMedicamentos.cargarDesdeXML();
+//        gestorRecetas = GestorRecetas.cargarDesdeXML();
+//    }
+//
+//    public boolean guardarDatos() throws Exception {
+//        try {
+//            gestorFarmaceutas.guardar();
+//            gestorMedicamentos.guardar(); // Asumiendo que GestorPacientes tiene método guardar()
+//            gestorRecetas.guardar(); // Asumiendo que Farmacia tiene método guardarDatos()
+//            return true;
+//        } catch (Exception e) {
+//            System.err.println("Error al guardar datos: " + e.getMessage());
+//            return false;
+//        }
+//    }
+//
+//    private GestorFarmaceutas gestorFarmaceutas;
+//    private GestorMedicamentos gestorMedicamentos; 
+//    private GestorRecetas gestorRecetas;           
 
 }
