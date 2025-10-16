@@ -39,7 +39,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 * EIF206 - Programación 3                                             |
 * 2do ciclo 2025                                                      |
 * NRC 51189 – Grupo 05                                                |
-* Proyecto 1                                                          |
+* Proyecto 2                                                          |
 *                                                                     |
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
@@ -335,136 +335,136 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
     // =========================== Recetas ================================
     private void actualizarTablaRecetas() {
-//        try {
-//            List<Receta> recetas = control.listarRecetas();
-//            DefaultTableModel modelo = (DefaultTableModel) tblRecetas.getModel();
-//            modelo.setRowCount(0);
-//            
-//            if (recetas != null) {
-//                for (Receta r : recetas) {
-//                    modelo.addRow(new Object[]{
-//                        r.getCodReceta(),
-//                        r.getPaciente().getNombre(),
-//                        r.getMedico().getNombre(),
-//                        r.getFechaEmision(),
-//                        r.getFechaRetiro(),
-//                        r.getEstado()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar tabla de recetas", ex);
-//            JOptionPane.showMessageDialog(this, "Error al cargar las recetas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Receta> recetas = control.listarRecetas();
+            DefaultTableModel modelo = (DefaultTableModel) tblRecetas.getModel();
+            modelo.setRowCount(0);
+            
+            if (recetas != null) {
+                for (Receta r : recetas) {
+                    modelo.addRow(new Object[]{
+                        r.getCodReceta(),
+                        r.getPaciente().getNombre(),
+                        r.getMedico().getNombre(),
+                        r.getFechaEmision(),
+                        r.getFechaRetiro(),
+                        r.getEstado()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar tabla de recetas", ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar las recetas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void actualizarTablaRecetas2() {
-//        try {
-//            List<Receta> recetas = control.listarRecetas();
-//            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
-//            modelo.setRowCount(0);
-//            
-//            if (recetas != null) {
-//                for (Receta r : recetas) {
-//                    modelo.addRow(new Object[]{
-//                        r.getCodReceta(),
-//                        r.getPaciente().getNombre(),
-//                        r.getMedico().getNombre(),
-//                        r.getFechaEmision(),
-//                        r.getFechaRetiro(),
-//                        r.getEstado()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar tabla de recetas", ex);
-//            JOptionPane.showMessageDialog(this, "Error al cargar las recetas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Receta> recetas = control.listarRecetas();
+            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
+            modelo.setRowCount(0);
+            
+            if (recetas != null) {
+                for (Receta r : recetas) {
+                    modelo.addRow(new Object[]{
+                        r.getCodReceta(),
+                        r.getPaciente().getNombre(),
+                        r.getMedico().getNombre(),
+                        r.getFechaEmision(),
+                        r.getFechaRetiro(),
+                        r.getEstado()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar tabla de recetas", ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar las recetas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void cargarRecetaDesdeTabla() {
-//        int fila = TablaRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
-//            Receta receta = control.buscarReceta(codigo);
-//            
-//            if (receta != null) {
-//                estado.setModel(receta);      // guardamos en el estado actual
-//                cambiarModoVista();           // cambiamos a modo vista (como haces en otros módulos)
-//                actualizarComponentes();      // actualiza botones/campos
-//
-//                // Además: limpiar tabla de indicaciones y llenarla con esta receta
-//                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
-//                modelo.setRowCount(0);
-//                
-//                for (Indicaciones ind : receta.getIndicaciones()) {
-//                    modelo.addRow(new Object[]{
-//                        ind.getMedicamento().getNombre(),
-//                        ind.getCantidad(),
-//                        ind.getIndicaciones(),
-//                        ind.getDuracion()
-//                    });
-//                }
-//            }
-//        }
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo);
+            
+            if (receta != null) {
+                estado.setModel(receta);      // guardamos en el estado actual
+                cambiarModoVista();           // cambiamos a modo vista (como haces en otros módulos)
+                actualizarComponentes();      // actualiza botones/campos
+
+                // Además: limpiar tabla de indicaciones y llenarla con esta receta
+                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
+                modelo.setRowCount(0);
+                
+                for (Indicaciones ind : receta.getIndicaciones()) {
+                    modelo.addRow(new Object[]{
+                        ind.getMedicamento().getNombre(),
+                        ind.getCantidad(),
+                        ind.getIndicaciones(),
+                        ind.getDuracion()
+                    });
+                }
+            }
+        }
     }
     
     private void cargarRecetaParaCambiarEstado() {
-//        int fila = tblRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = tblRecetas.getValueAt(fila, 0).toString();
-//            Receta receta = control.buscarReceta(codigo);
-//            
-//            if (receta != null) {
-//                estado.setModel(receta);      // guardamos en el estado actual
-//                cambiarModoVista();           // cambiamos a modo vista 
-//                actualizarComponentes();      // actualiza botones/campos
-//
-//                DefaultTableModel modelo = (DefaultTableModel) tblRecetaSelec.getModel();
-//                
-//                modelo.addRow(new Object[]{
-//                    receta.getCodReceta(),
-//                    receta.getPaciente().getNombre(),
-//                    receta.getMedico().getNombre(),
-//                    receta.getFechaEmision(),
-//                    receta.getFechaRetiro(),
-//                    receta.getEstado()});
-//            }
-//        }
+        int fila = tblRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = tblRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo);
+            
+            if (receta != null) {
+                estado.setModel(receta);      // guardamos en el estado actual
+                cambiarModoVista();           // cambiamos a modo vista 
+                actualizarComponentes();      // actualiza botones/campos
+
+                DefaultTableModel modelo = (DefaultTableModel) tblRecetaSelec.getModel();
+                
+                modelo.addRow(new Object[]{
+                    receta.getCodReceta(),
+                    receta.getPaciente().getNombre(),
+                    receta.getMedico().getNombre(),
+                    receta.getFechaEmision(),
+                    receta.getFechaRetiro(),
+                    receta.getEstado()});
+            }
+        }
     }
     
     private void filtrarReceta() {
-//        String texto = areaTxtBusCodigo.getText().trim().toLowerCase();
-//        
-//        try {
-//            // Obtén todas las recetas desde el control
-//            List<Receta> recetas = control.listarRecetas();
-//            DefaultTableModel modelo = (DefaultTableModel) tblRecetas.getModel();
-//            modelo.setRowCount(0); // limpiar tabla antes de insertar
-//
-//            if (recetas != null) {
-//                // Filtrar por código si el texto no está vacío
-//                List<Receta> recetasFiltradas = recetas.stream()
-//                        .filter(r -> r.getCodReceta().toLowerCase().contains(texto))
-//                        .collect(Collectors.toList());
-//
-//                // Rellenar tabla con los resultados
-//                for (Receta r : recetasFiltradas) {
-//                    modelo.addRow(new Object[]{
-//                        r.getCodReceta(),
-//                        r.getPaciente().getNombre(),
-//                        r.getMedico().getNombre(),
-//                        r.getFechaEmision(),
-//                        r.getFechaRetiro(),
-//                        r.getEstado()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            logger.log(java.util.logging.Level.SEVERE, "Error al filtrar recetas", ex);
-//            JOptionPane.showMessageDialog(this, "Error al filtrar recetas: " + ex.getMessage(),
-//                    "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        String texto = areaTxtBusCodigo.getText().trim().toLowerCase();
+        
+        try {
+            // Obtén todas las recetas desde el control
+            List<Receta> recetas = control.listarRecetas();
+            DefaultTableModel modelo = (DefaultTableModel) tblRecetas.getModel();
+            modelo.setRowCount(0); // limpiar tabla antes de insertar
+
+            if (recetas != null) {
+                // Filtrar por código si el texto no está vacío
+                List<Receta> recetasFiltradas = recetas.stream()
+                        .filter(r -> r.getCodReceta().toLowerCase().contains(texto))
+                        .collect(Collectors.toList());
+
+                // Rellenar tabla con los resultados
+                for (Receta r : recetasFiltradas) {
+                    modelo.addRow(new Object[]{
+                        r.getCodReceta(),
+                        r.getPaciente().getNombre(),
+                        r.getMedico().getNombre(),
+                        r.getFechaEmision(),
+                        r.getFechaRetiro(),
+                        r.getEstado()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al filtrar recetas", ex);
+            JOptionPane.showMessageDialog(this, "Error al filtrar recetas: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void mostrarIndicacionesReceta(Receta receta) {
@@ -1098,14 +1098,14 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
     private void BotonGuardarCambioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarCambioActionPerformed
         // TODO add your handling code here:
-//        try {
+        try {
 //            control.guardarRecetas();
-//            // control.actualizarReceta(receta);
-//        } catch (Exception ex) {
-//            System.getLogger(VentanaFarmaceuta.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-//        }
-//        limpiarCampos();
-//        actualizarTablaRecetas();
+            control.actualizarReceta(receta);
+        } catch (Exception ex) {
+            System.getLogger(VentanaFarmaceuta.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        limpiarCampos();
+        actualizarTablaRecetas();
         
     }//GEN-LAST:event_BotonGuardarCambioActionPerformed
 
@@ -1115,24 +1115,24 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonCancelarCambioActionPerformed
 
     private void BotonVerIndicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVerIndicacionesActionPerformed
-//        int fila = TablaRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaRecetas.getValueAt(fila, 0).toString(); // código de la receta
-//            Receta receta = control.buscarReceta(codigo); // debes tener este método en tu controlador
-//            if (receta != null) {
-//                mostrarIndicacionesReceta(receta);
-//            } else {
-//                JOptionPane.showMessageDialog(this,
-//                        "No se encontró la receta seleccionada.",
-//                        "Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this,
-//                    "Seleccione una receta de la tabla.",
-//                    "Aviso",
-//                    JOptionPane.WARNING_MESSAGE);
-//        }
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString(); // código de la receta
+            Receta receta = control.buscarReceta(codigo); // debes tener este método en tu controlador
+            if (receta != null) {
+                mostrarIndicacionesReceta(receta);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró la receta seleccionada.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una receta de la tabla.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
 
     /**
@@ -1341,10 +1341,10 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 //    }
     
     private void cargarMedicamentosComboBox() {
-//        jComboBoxMedicamentos.removeAllItems();
-//        for (Medicamento m : control.ListarMedicamentos()) {
-//            jComboBoxMedicamentos.addItem(m.getNombre());
-//        }
+        jComboBoxMedicamentos.removeAllItems();
+        for (Medicamento m : control.ListarMedicamentos()) {
+            jComboBoxMedicamentos.addItem(m.getNombre());
+        }
     }
 
     // Acción del botón "Agregar medicamento"
@@ -1380,7 +1380,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 //                inicio,
 //                fin,
 //                medicamentosSeleccionados,
-//                control.ListarRecetas()
+//                control.listarRecetas()
 //        );
 //        tblMedicamentosGrafico.setModel(modelo);
     }

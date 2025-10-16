@@ -7,11 +7,12 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Medico;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MedicoDAO implements AbstractDAO<String, Medico> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -30,12 +31,26 @@ public class MedicoDAO implements AbstractDAO<String, Medico> {
 
     @Override
     public Medico findById(String cedula) throws SQLException {
-        return dao.queryForId(cedula);
+        //porfavor no cambiar
+        Medico med = dao.queryForId(cedula);
+        if (med != null && med.isEstado()) {
+            return med;
+        }
+        return null;
     }
 
     @Override
     public List<Medico> findAll() throws SQLException {
-        return dao.queryForAll();
+        //solo busque los que tienen estado 1
+        List<Medico> meds;
+        meds = new ArrayList<>();
+
+        for (Medico med : dao.queryForAll()) {
+            if (med.isEstado()) {
+                meds.add(med);
+            }
+        }
+        return meds;
     }
 
     @Override
@@ -45,7 +60,16 @@ public class MedicoDAO implements AbstractDAO<String, Medico> {
 
     @Override
     public void delete(String cedula) throws SQLException {
-        dao.deleteById(cedula);
+        //esto es para borrados lógicos
+
+        Medico med = this.findById(cedula);
+        if (med != null) {
+            med.setEstado(false);
+            dao.update(med);
+        } else {
+            System.out.println("No se encontro el medico con la cedula: " + cedula);
+        }
+
     }
 
     public void close() throws Exception {

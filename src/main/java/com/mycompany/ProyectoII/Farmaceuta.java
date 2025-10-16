@@ -19,9 +19,9 @@ public class Farmaceuta extends Persona {
     @DatabaseField(columnName = "Estado")
     private boolean estado;
 
-    public Farmaceuta(String cedula, String nombre, String clave, boolean estado) {
+    public Farmaceuta(String cedula, String nombre, String clave) {
         super(cedula, nombre, clave);
-        this.estado = estado;
+        this.estado = true;
     }
 
 

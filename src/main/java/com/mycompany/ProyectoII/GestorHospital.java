@@ -74,15 +74,13 @@ public class GestorHospital {
         return false;
     }
 
-    public boolean existePaciente(String ced) throws SQLException {
-        return buscarPorCedula(ced) != null;
-    }
-
-    // Buscar por nombre (pueden haber varios)
-    public List<Paciente> buscarPorNombre(String nombre) throws SQLException {
-        return pacienteDAO.getDao().queryForEq("nombre", nombre);
-    }
-
+//    public boolean existePaciente(String ced) throws SQLException {
+//        return buscarPorCedula(ced) != null;
+//    }
+    // Buscar por nombre (pueden haber varios), nunca buscamos por nombre
+//    public List<Paciente> buscarPorNombre(String nombre) throws SQLException {
+//        return pacienteDAO.getDao().queryForEq("nombre", nombre);
+//    }
     // Consultar paciente (solo imprime información)
     public void consultaPaciente(String cedula) throws SQLException {
         Paciente p = buscarPorCedula(cedula);
@@ -427,10 +425,8 @@ public class GestorHospital {
     public List<Receta> buscarRecetasPorMedico(String cedulaMedico) throws SQLException {
         return recetaDAO.getDao().queryForEq("medico_cedula", cedulaMedico);
     }
-    
-    
+
     //Funcionalidades Extra del Sistema Hospitalario
-    
     public Persona validarUsuario(String cedula, String clave) throws SQLException {
         // Buscar en Médicos
         Medico medico = medicoDAO.findById(cedula);
@@ -453,10 +449,6 @@ public class GestorHospital {
         // Si no se encuentra en ninguna tabla
         return null;
     }
-
-
-    
-    
 
     // --------------------------
     // Cierre de conexión

@@ -1,4 +1,3 @@
-
 package com.mycompany.ProyectoII.DAO;
 
 import com.j256.ormlite.dao.Dao;
@@ -7,12 +6,12 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.mycompany.ProyectoII.Medicamento;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-
 
 public class MedicamentoDAO implements AbstractDAO<String, Medicamento> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -43,26 +42,44 @@ public class MedicamentoDAO implements AbstractDAO<String, Medicamento> {
 
     @Override
     public void delete(String codigo) throws SQLException {
+        //borrado lógico
         Medicamento m = dao.queryForId(codigo);
         if (m != null) {
-            dao.delete(m);
+            m.setEstado(false);
+            dao.update(m);
+        } else {
+            System.out.println("No se encontro el medicamento con codigo" + codigo);
         }
     }
 
     @Override
     public Medicamento findById(String codigo) throws SQLException {
-        return dao.queryForId(codigo);
+                  //Buscar solo los que tienen estado 1
+        Medicamento medi = dao.queryForId(codigo);
+        if (medi != null && medi.isEstado()) {
+            return medi;
+        }
+        return null;
     }
 
     @Override
     public List<Medicamento> findAll() throws SQLException {
-        return dao.queryForAll();
+                 //solo busque los que tienen estado 1
+        List<Medicamento> far;
+        far = new ArrayList<>();
+
+        for (Medicamento medi : dao.queryForAll()) {
+            if (medi.isEstado()) {
+                far.add(medi);
+            }
+        }
+        return far;
     }
 
     public Dao<Medicamento, String> getDao() {
         return dao;
     }
-    
+
     public void close() throws Exception {
         conexion.close();
     }

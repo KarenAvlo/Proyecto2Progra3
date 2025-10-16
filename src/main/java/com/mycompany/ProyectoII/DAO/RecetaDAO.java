@@ -16,7 +16,7 @@ import lombok.Getter;
 
 public class RecetaDAO implements AbstractDAO<Integer, Receta> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -64,7 +64,7 @@ public class RecetaDAO implements AbstractDAO<Integer, Receta> {
         conexion.close();
     }
 
-    // 🔹 Buscar receta por código (codReceta)
+    // Buscar receta por código (codReceta)
     public Receta findByCodigo(String codReceta) throws SQLException {
         List<Receta> lista = dao.queryForEq("Codigo", codReceta);
         if (lista != null && !lista.isEmpty()) {
@@ -73,7 +73,7 @@ public class RecetaDAO implements AbstractDAO<Integer, Receta> {
         return null; // no encontrado
     }
 
-    // 🔹 Opcional: eliminar receta por código
+    //  eliminar receta por código
     public void deleteByCodigo(String codReceta) throws SQLException {
         Receta r = findByCodigo(codReceta);
         if (r != null) {

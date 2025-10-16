@@ -6,6 +6,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.mycompany.ProyectoII.Farmaceuta;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
@@ -13,7 +14,7 @@ import lombok.Getter;
 
 public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -32,12 +33,26 @@ public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
 
     @Override
     public Farmaceuta findById(String cedula) throws SQLException {
-        return dao.queryForId(cedula);
+               //Buscar solo los que tienen estado 1
+        Farmaceuta farma = dao.queryForId(cedula);
+        if (farma != null && farma.isEstado()) {
+            return farma;
+        }
+        return null;
     }
 
     @Override
     public List<Farmaceuta> findAll() throws SQLException {
-        return dao.queryForAll();
+            //solo busque los que tienen estado 1
+        List<Farmaceuta> far;
+        far = new ArrayList<>();
+
+        for (Farmaceuta fa : dao.queryForAll()) {
+            if (fa.isEstado()) {
+                far.add(fa);
+            }
+        }
+        return far;
     }
 
     @Override
@@ -47,13 +62,17 @@ public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
 
     @Override
     public void delete(String cedula) throws SQLException {
-        dao.deleteById(cedula);
+        Farmaceuta farma = this.findById(cedula);
+
+        if (farma != null) {
+            farma.setEstado(false);
+            dao.update(farma);
+        } else {
+            System.out.println("No se encontro farmaceuta con la cedula: " + cedula);
+        }
     }
 
     public void close() throws Exception {
         conexion.close();
     }
 }
-
-
-

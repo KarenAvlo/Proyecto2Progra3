@@ -49,8 +49,7 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 * versión 1.0.0 13-09-2005                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
-*/
-
+ */
 public class VentanaAdministrador extends javax.swing.JFrame {
 
     public VentanaAdministrador(Control controlador) {
@@ -262,7 +261,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                 BotonEliminarMedico.setEnabled(!NohaytextoMedicoid);
                 BotonBuscarMedico.setEnabled(!NohaytextoMedico2);
 
-                BotonLimpiarMedico.setText((!NohaytextoMedicoid || !NohaytextoMedicoid1 || !NohaytextoMedicoid2|| !NohaytextoMedicoid2 || !NohaytextoM3) ? "Limpiar" : "Cancelar");
+                BotonLimpiarMedico.setText((!NohaytextoMedicoid || !NohaytextoMedicoid1 || !NohaytextoMedicoid2 || !NohaytextoMedicoid2 || !NohaytextoM3) ? "Limpiar" : "Cancelar");
             }
 
             case 1 -> {
@@ -271,13 +270,13 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                 boolean noHayTextoFarma2 = NombreFtxt.getText().trim().isEmpty();
                 boolean noHayTextoFarma3 = CedulaFtxt2.getText().trim().isEmpty();
                 boolean noHayTextoFarma4 = ResultadoFtxt.getText().trim().isEmpty();
-                
+
                 // Botones habilitados según estado.isModified y contenido de los campos
                 BotonGuardarF1.setEnabled(!estado.isViewing() && estado.isModified() || estado.isViewing());
-                BotonLimpiarF.setEnabled(!noHayTextoFarma || !noHayTextoFarma2 || !noHayTextoFarma3||!noHayTextoFarma4);
+                BotonLimpiarF.setEnabled(!noHayTextoFarma || !noHayTextoFarma2 || !noHayTextoFarma3 || !noHayTextoFarma4);
                 BotonEliminarF.setEnabled(!noHayTextoFarma);
                 BotonBuscarF.setEnabled(!noHayTextoFarma3);
-                BotonLimpiarF.setText((!noHayTextoFarma || !noHayTextoFarma2|| !noHayTextoFarma3||!noHayTextoFarma4) ? "Limpiar" : "Cancelar");
+                BotonLimpiarF.setText((!noHayTextoFarma || !noHayTextoFarma2 || !noHayTextoFarma3 || !noHayTextoFarma4) ? "Limpiar" : "Cancelar");
             }
 
             case 2 -> {
@@ -287,12 +286,12 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                 boolean NohayTextoPac3 = FechaNacPtxt.getText().trim().isEmpty();
                 boolean NohaytextoPac4 = TelefonoPtxt.getText().trim().isEmpty();
                 boolean NohaytextoPac5 = CedulaPtxt2.getText().trim().isEmpty();
-                boolean NohaytextoPac6 = ResultadoPtxt.getText().trim().isEmpty();             
+                boolean NohaytextoPac6 = ResultadoPtxt.getText().trim().isEmpty();
                 BotonBuscarP.setEnabled(!NohaytextoPac5);
                 BotonEliminarP.setEnabled(!NohayTextoPac);
                 BotonGuardarP.setEnabled(!estado.isViewing() && estado.isModified() || estado.isViewing());
                 BotonLimpiarP.setEnabled(!NohayTextoPac || !NohaytextoPac2
-                        || !NohayTextoPac3 || !NohaytextoPac4 ||!NohaytextoPac5||! NohaytextoPac6);
+                        || !NohayTextoPac3 || !NohaytextoPac4 || !NohaytextoPac5 || !NohaytextoPac6);
             }
 
             case 3 -> {
@@ -303,13 +302,13 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                 boolean noHayTextoMedicBusqueda = CodigoMtxt2.getText().trim().isEmpty();
                 boolean noHayTextoResuBusqueda = ResultadoMedicamentotxt.getText().trim().isEmpty();
                 BotonGuardarMedicamento.setEnabled(!estado.isViewing() && estado.isModified() || estado.isViewing());
-                BotonLimpiarMedicamento.setEnabled(!noHayTextoMedic || !noHayTextoMedic2 || !noHayTextoMedic3||
-                        !noHayTextoMedicBusqueda||!noHayTextoResuBusqueda);
+                BotonLimpiarMedicamento.setEnabled(!noHayTextoMedic || !noHayTextoMedic2 || !noHayTextoMedic3
+                        || !noHayTextoMedicBusqueda || !noHayTextoResuBusqueda);
                 BotonEliminarMedicamento.setEnabled(!noHayTextoMedic);
                 BotonBuscarMedicamento.setEnabled(!noHayTextoMedicBusqueda);
 
                 BotonLimpiarMedicamento.setText((!noHayTextoMedic || !noHayTextoMedic2 || !noHayTextoMedic3
-                        ||!noHayTextoMedicBusqueda||!noHayTextoResuBusqueda) ? "Limpiar" : "Cancelar");
+                        || !noHayTextoMedicBusqueda || !noHayTextoResuBusqueda) ? "Limpiar" : "Cancelar");
             }
         }
     }
@@ -431,14 +430,14 @@ public class VentanaAdministrador extends javax.swing.JFrame {
             String cedula = campoId.getText().trim();
             String nombre = campoId1.getText().trim();
             String especialidad = campoId2.getText().trim();
-            
+
             if (cedula.isEmpty() || nombre.isEmpty() || especialidad.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Crear un objeto médico con los datos del formulario
-            Medico medico = new Medico(cedula, nombre, cedula, especialidad, true);
+            Medico medico = new Medico(cedula, nombre, cedula, especialidad);
 
             boolean exito = false;
 
@@ -476,49 +475,51 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     }
 
     private void buscarMedico() {
-//        if (!estado.isSearching()) {
-//            String cedula = cedulatxt1.getText().trim();
-//            if (cedula.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Ingrese una cédula para buscar", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//            Medico medico = controlador.buscarMedico(cedula);
-//            if (medico != null) {
-//                ResultadoMtxt.setText(medico.getNombre());
-//                estado.setModel(null);
-//                cambiarModoVista();
-//                actualizarComponentes();
-//                JOptionPane.showMessageDialog(this, "Médico encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//            } else {
-//                JOptionPane.showMessageDialog(this, "No se encontró el médico con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            cambiarModoBuscar();
-//        }
+        if (!estado.isSearching()) {
+            String cedula = cedulatxt1.getText().trim();
+            if (cedula.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese una cédula para buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Medico medico = control.buscarMedico(cedula);
+            if (medico != null) {
+                ResultadoMtxt.setText(medico.getNombre());
+                estado.setModel(null);
+                cambiarModoVista();
+                actualizarComponentes();
+                JOptionPane.showMessageDialog(this, "Médico encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el médico con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            cambiarModoBuscar();
+        }
     }
 
     private void eliminarMedico() {
-//        String cedula = campoId.getText().trim();
-//        Medico medico = controlador.buscarMedico(cedula);
-//        if (medico == null) {
-//            JOptionPane.showMessageDialog(this, "No hay médico seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//        int confirmacion = JOptionPane.showConfirmDialog(this,
-//                "¿Está seguro de eliminar al médico " + medico.getNombre() + "?",
-//                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-//        if (confirmacion == JOptionPane.YES_OPTION) {
-//            boolean exito = controlador.eliminarMedico(medico.getCedula());
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Médico eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                estado.setModel(null);
-//                cambiarModoVista();
-//                actualizarControles();
-//                actualizarTablaMedicos();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al eliminar el médico", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+        String cedula = campoId.getText().trim();
+        Medico medico = control.buscarMedico(cedula);
+        if (medico == null) {
+            JOptionPane.showMessageDialog(this, "No hay médico seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar al médico " + medico.getNombre() + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                control.eliminarMedico(medico.getCedula());
+                JOptionPane.showMessageDialog(this, "Médico eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                estado.setModel(null);
+                cambiarModoVista();
+                actualizarControles();
+                actualizarTablaMedicos();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el médico: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
     }
 
     private void cancelarOperacion() {
@@ -526,446 +527,505 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     }
 
     private void actualizarTablaMedicos() {
-//        try {
-//            List<Medico> medicos = controlador.listarMedicos();
-//            DefaultTableModel modelo = (DefaultTableModel) TablaMedicos.getModel();
-//            modelo.setRowCount(0);
-//            if (medicos != null) {
-//                for (Medico m : medicos) {
-//                    modelo.addRow(new Object[]{
-//                        m.getCedula(),
-//                        m.getNombre(),
-//                        m.getEspecialidad()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar tabla de médicos", ex);
-//            JOptionPane.showMessageDialog(this, "Error al cargar los médicos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Medico> medicos = control.obtenerTodosMedicos();
+            DefaultTableModel modelo = (DefaultTableModel) TablaMedicos.getModel();
+            modelo.setRowCount(0);
+            if (medicos != null) {
+                for (Medico m : medicos) {
+                    modelo.addRow(new Object[]{
+                        m.getCedula(),
+                        m.getNombre(),
+                        m.getEspecialidad()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar tabla de médicos", ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar los médicos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void cargarMedicoDesdeTabla() {
-//        int selectedRow = TablaMedicos.getSelectedRow();
-//        if (selectedRow >= 0 && estado.isViewing()) {
-//            String cedula = TablaMedicos.getValueAt(selectedRow, 0).toString();
-//            Medico medico = controlador.buscarMedico(cedula);
-//            if (medico != null) {
-//                estado.setModel(medico);
-//                actualizarComponentes();
-//            }
-//        }
+        int selectedRow = TablaMedicos.getSelectedRow();
+        if (selectedRow >= 0 && estado.isViewing()) {
+            String cedula = TablaMedicos.getValueAt(selectedRow, 0).toString();
+            Medico medico = control.buscarMedico(cedula);
+            if (medico != null) {
+                estado.setModel(medico);
+                actualizarComponentes();
+            }
+        }
     }
 
     //================Fin Medicos===============
     ////--------------Farmaceutas----------------
 
 private void guardarFarmaceuta() {
-//        try {
-//            String cedula = CedulaFtxt.getText().trim();
-//            String nombre = NombreFtxt.getText().trim();
-//
-//            if (cedula.isEmpty() || nombre.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Nombre y cédula son obligatorios");
-//                return;
-//            }
-//            boolean exito;
-//            if (estado.isAdding()) {
-//                exito = controlador.agregarFarmaceuta(cedula, nombre);
-//            } else if (estado.isEditing()) {
-//                controlador.eliminarFarmaceuta(((Farmaceuta) estado.getModel()).getCedula());
-//                exito = controlador.agregarFarmaceuta(cedula, nombre);
-//            } else {
-//                exito = false;
-//            }
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Farmaceuta guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                estado.setModel(null);
-//                estado.changeToAddMode();
-//                limpiarCampos();
-//                actualizarComponentes();
-//                actualizarTablaFarmaceutas();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al guardar Farmaceuta, ya existe cédula", "Error", JOptionPane.WARNING_MESSAGE);
-//            }
-//        } catch (HeadlessException ex) {
-//            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            String cedula = CedulaFtxt.getText().trim();
+            String nombre = NombreFtxt.getText().trim();
+
+            if (cedula.isEmpty() || nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nombre y cédula son obligatorios");
+                return;
+            }
+            Farmaceuta farma = new Farmaceuta(cedula, nombre, cedula);
+            
+             Farmaceuta existente = control.buscarFarmaceuta(cedula);
+            if (estado.isAdding() && existente != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Ya existe un farmaceuta con esa cédula",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (estado.isAdding()) {
+                control.agregarFarmaceuta(farma);
+                JOptionPane.showMessageDialog(this, "Farmaceuta agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } else if (estado.isEditing()) {
+                // eliminar el antiguo
+                control.eliminarFarmaceuta(((Farmaceuta) estado.getModel()).getCedula());
+                // agregar el nuevo
+                control.agregarFarmaceuta(farma);
+                JOptionPane.showMessageDialog(this, "Farmaceuta editado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Modo desconocido", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Refrescar la interfaz
+            estado.setModel(null);
+            estado.changeToAddMode();
+            limpiarCampos();
+            actualizarComponentes();
+            actualizarTablaFarmaceutas();
+
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void actualizarTablaFarmaceutas() {
-//        try {
-//            List<Farmaceuta> farmaceutas = controlador.ListarFarmaceutas();
-//            DefaultTableModel modelo = (DefaultTableModel) TablaFarmaceutas.getModel();
-//            modelo.setRowCount(0);
-//            if (farmaceutas != null) {
-//                for (Farmaceuta f : farmaceutas) {
-//                    modelo.addRow(new Object[]{
-//                        f.getCedula(),
-//                        f.getNombre()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this, "Error al cargar los farmaceutas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Farmaceuta> farmaceutas = control.ListarFarmaceutas();
+            DefaultTableModel modelo = (DefaultTableModel) TablaFarmaceutas.getModel();
+            modelo.setRowCount(0);
+            if (farmaceutas != null) {
+                for (Farmaceuta f : farmaceutas) {
+                    modelo.addRow(new Object[]{
+                        f.getCedula(),
+                        f.getNombre()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los farmaceutas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void cargarFarmaceutaDesdeTabla() {
-//        int selectedRow = TablaFarmaceutas.getSelectedRow();
-//        if (selectedRow >= 0) {
-//            String cedula = TablaFarmaceutas.getValueAt(selectedRow, 0).toString();
-//            Farmaceuta farmaceuta = controlador.buscarFarmaceuta(cedula);
-//            if (farmaceuta != null) {
-//                estado.setModel(farmaceuta);
-//                actualizarComponentes();
-//            }
-//        }
+        int selectedRow = TablaFarmaceutas.getSelectedRow();
+        if (selectedRow >= 0) {
+            String cedula = TablaFarmaceutas.getValueAt(selectedRow, 0).toString();
+            Farmaceuta farmaceuta = control.buscarFarmaceuta(cedula);
+            if (farmaceuta != null) {
+                estado.setModel(farmaceuta);
+                actualizarComponentes();
+            }
+        }
     }
 
     private void eliminarFarmaceuta() {
-//        String cedula = CedulaFtxt.getText().trim();
-//        if (cedula.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Ingrese una cédula para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//        Farmaceuta farma = controlador.buscarFarmaceuta(cedula);
-//        if (farma == null) {
-//            JOptionPane.showMessageDialog(this, "No se encontró el farmaceuta", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//        int confirmacion = JOptionPane.showConfirmDialog(this,
-//                "¿Está seguro de eliminar al farmaceuta con cédula " + cedula + "?",
-//                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-//        if (confirmacion == JOptionPane.YES_OPTION) {
-//            boolean exito = controlador.eliminarFarmaceuta(cedula);
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Farmaceuta eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                estado.setModel(null);
-//                estado.changeToAddMode();
-//                limpiarCampos();
-//                actualizarComponentes();
-//                actualizarTablaFarmaceutas();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al eliminar el farmaceuta. No se encontró la cédula.", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+        String cedula = CedulaFtxt.getText().trim();
+        if (cedula.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese una cédula para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Farmaceuta farma = control.buscarFarmaceuta(cedula);
+        if (farma == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el farmaceuta", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar al farmaceuta con cédula " + cedula + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            control.eliminarFarmaceuta(cedula);
+            JOptionPane.showMessageDialog(this, "Farmaceuta eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            estado.setModel(null);
+            estado.changeToAddMode();
+            limpiarCampos();
+            actualizarComponentes();
+            actualizarTablaFarmaceutas();
+
+        }
+
     }
 
     public void buscarFarmaceuta() {
-//        if (!estado.isSearching()) {
-//            String cedula = CedulaFtxt2.getText().trim();
-//            if (cedula.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Ingrese una cédula para buscar");
-//                return;
-//            }
-//            Farmaceuta farma = controlador.buscarFarmaceuta(cedula);
-//            if (farma != null) {
-//                ResultadoFtxt.setText(farma.getNombre());
-//                estado.setModel(farma);
-//                cambiarModoVista();
-//                actualizarComponentes();
-//                JOptionPane.showMessageDialog(this, "Farmaceuta encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//            } else {
-//                JOptionPane.showMessageDialog(this, "No se encontró el farmaceuta con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
-//                ResultadoFtxt.setText("No se encontró.");
-//            }
-//        } else {
-//            cambiarModoBuscar();
-//        }
+        if (!estado.isSearching()) {
+            String cedula = CedulaFtxt2.getText().trim();
+            if (cedula.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese una cédula para buscar");
+                return;
+            }
+            Farmaceuta farma = control.buscarFarmaceuta(cedula);
+            if (farma != null) {
+                ResultadoFtxt.setText(farma.getNombre());
+                estado.setModel(farma);
+                cambiarModoVista();
+                actualizarComponentes();
+                JOptionPane.showMessageDialog(this, "Farmaceuta encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el farmaceuta con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
+                ResultadoFtxt.setText("No se encontró.");
+            }
+        } else {
+            cambiarModoBuscar();
+        }
     }
 
     //=========Pacientes=========
     private void guardarPaciente() {
-//        try {
-//            String cedula = CedulaPtxt.getText().trim();
-//            String nombre = NombrePtxt.getText().trim();
-//            String numeroTel = TelefonoPtxt.getText().trim();
-//            String fechaNac = FechaNacPtxt.getText().trim();
-//            if (cedula.isEmpty() || nombre.isEmpty()
-//                    || numeroTel.isEmpty() || fechaNac.isEmpty()) { //verificacion que no sean vacios
-//                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios");
-//                return;
-//            }
-//            boolean exito;
-//            if (estado.isAdding()) { //si esta añadiendo en el field,entonces añadalo
-//                exito = controlador.agregarPaciente(cedula, nombre, fechaNac, numeroTel);
-//            } else if (estado.isEditing()) { // si está editando los espacios
-//                //eliminamos lo que está en proceso
-//                controlador.EliminarPaciente(((Paciente) estado.getModel()).getCedula());
-//                //luego añadimos
-//                exito = controlador.agregarPaciente(cedula, nombre, fechaNac, numeroTel);
-//            } else {
-//                exito = false;
-//            }
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Paciente guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                cambiarModoVista();
-//                estado.setModel(null);     // Establece el modelo como nulo para indicar un nuevo registro
-//                estado.changeToAddMode();
-//                limpiarCampos();
-//                actualizarComponentes();
-//                actualizarTablaPacientes();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al guardar al Paciente, ya existe esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (HeadlessException ex) {
-//            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            String cedula = CedulaPtxt.getText().trim();
+            String nombre = NombrePtxt.getText().trim();
+            String numeroTel = TelefonoPtxt.getText().trim();
+            String fechaNacStr = FechaNacPtxt.getText().trim();
+
+            // Verificación de campos vacíos
+            if (cedula.isEmpty() || nombre.isEmpty() || numeroTel.isEmpty() || fechaNacStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios");
+                return;
+            }
+
+            // Validar y convertir la fecha
+            java.sql.Date fechaNac;
+            try {
+                // Verifica que tenga el formato yyyy-MM-dd
+                fechaNac = java.sql.Date.valueOf(fechaNacStr);
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(this, "La fecha debe tener el formato YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Crear objeto Paciente
+            Paciente pa = new Paciente(cedula, nombre, numeroTel, fechaNac);
+
+            Paciente existente = control.buscarPaciente(cedula);
+            if (estado.isAdding() && existente != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Ya existe un paciente con esa cédula",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Guardar paciente
+            if (estado.isAdding()) {
+                control.agregarPaciente(pa); // ajusta tu método para recibir Paciente si es necesario
+                JOptionPane.showMessageDialog(this, "Paciente agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } else if (estado.isEditing()) {
+
+                control.EliminarPaciente(((Paciente) estado.getModel()).getCedula());
+                control.agregarPaciente(pa);
+                JOptionPane.showMessageDialog(this, "Paciente editado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Modo desconocido", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            cambiarModoVista();
+            estado.setModel(null);
+            estado.changeToAddMode();
+            limpiarCampos();
+            actualizarComponentes();
+            actualizarTablaPacientes();
+
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void actualizarTablaPacientes() {
-//        try {
-//            List<Paciente> Pacientes = controlador.ListarPacientes();
-//            DefaultTableModel modelo = (DefaultTableModel) TablaPacientes.getModel();
-//            modelo.setRowCount(0);
-//            if (Pacientes != null) {
-//                for (Paciente P : Pacientes) {
-//                    modelo.addRow(new Object[]{
-//                        P.getCedula(),
-//                        P.getNombre(),
-//                        P.getFechaNacimiento(),
-//                        P.getTelefono()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Error al cargar los Pacientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Paciente> Pacientes = control.ListarPacientes();
+            DefaultTableModel modelo = (DefaultTableModel) TablaPacientes.getModel();
+            modelo.setRowCount(0);
+            if (Pacientes != null) {
+                for (Paciente P : Pacientes) {
+                    modelo.addRow(new Object[]{
+                        P.getCedula(),
+                        P.getNombre(),
+                        P.getFechaNacimiento(),
+                        P.getTelefono()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar los Pacientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void cargarPacientesDesdeTabla() {
-//        int selectedRow = TablaPacientes.getSelectedRow();
-//        if (selectedRow >= 0) {
-//            String cedula = TablaPacientes.getValueAt(selectedRow, 0).toString();
-//            Paciente Pacx = controlador.buscarPaciente(cedula);
-//            if (Pacx != null) {
-//                estado.setModel(Pacx);
-//                actualizarComponentes();
-//
-//            }
-//        }
+        int selectedRow = TablaPacientes.getSelectedRow();
+        if (selectedRow >= 0) {
+            String cedula = TablaPacientes.getValueAt(selectedRow, 0).toString();
+            Paciente Pacx = control.buscarPaciente(cedula);
+            if (Pacx != null) {
+                estado.setModel(Pacx);
+                actualizarComponentes();
+
+            }
+        }
     }
 
     private void EliminarPaciente() {
-//        String cedula = CedulaPtxt.getText().trim();
-//        Paciente Pacx = controlador.buscarPaciente(cedula);
-//        if (Pacx == null) {
-//            JOptionPane.showMessageDialog(this, "No hay Paciente seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//        if (cedula.isEmpty()) {
-//            JOptionPane.showMessageDialog(null, "Ingrese una cedula a eliminar", "Error", JOptionPane.OK_OPTION);
-//            return;
-//        }
-//        int confirmacion = JOptionPane.showConfirmDialog(null,
-//                "¿Está seguro de eliminar al paciente con cédula " + cedula + "?",
-//                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-//        if (confirmacion == JOptionPane.YES_OPTION) {
-//            boolean exito = controlador.EliminarPaciente(cedula);
-//            if (exito) {
-//                JOptionPane.showMessageDialog(null, "Paciente eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                // Opcional: limpiar los campos y actualizar la tabla
-//                cambiarModoVista();
-//                actualizarComponentes();
-//                limpiarCampos();
-//                actualizarTablaPacientes();
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Error al eliminar el Paciente. No se encontró la cédula.", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+        String cedula = CedulaPtxt.getText().trim();
+        Paciente Pacx = control.buscarPaciente(cedula);
+        if (Pacx == null) {
+            JOptionPane.showMessageDialog(this, "No hay Paciente seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (cedula.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese una cedula a eliminar", "Error", JOptionPane.OK_OPTION);
+            return;
+        }
+        int confirmacion = JOptionPane.showConfirmDialog(null,
+                "¿Está seguro de eliminar al paciente con cédula " + cedula + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            control.EliminarPaciente(cedula);
+
+            JOptionPane.showMessageDialog(null, "Paciente eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            // Opcional: limpiar los campos y actualizar la tabla
+            cambiarModoVista();
+            actualizarComponentes();
+            limpiarCampos();
+            actualizarTablaPacientes();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el Paciente. No se encontró la cédula.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     public void buscarPaciente() {
-//        if (!estado.isSearching()) {
-//            String Cedula = CedulaPtxt2.getText().trim();
-//
-//            if (Cedula.isEmpty()) {
-//                JOptionPane.showMessageDialog(null, "Ingrese una cedula para buscar");
-//                return;
-//            }
-//            Paciente Pacx = controlador.buscarPaciente(Cedula);
-//            if (Pacx != null) {
-//                ResultadoPtxt.setText(Pacx.getNombre());
-//                estado.setModel(null);
-//                cambiarModoVista();
-//                actualizarComponentes();
-//                JOptionPane.showMessageDialog(null, "Paciente encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//            } else {
-//                JOptionPane.showMessageDialog(null, "No se encontró el Paciente con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
-//                ResultadoPtxt.setText("No se encontró.");
-//            }
-//        } else {
-//            cambiarModoBuscar();
-//        }
+        if (!estado.isSearching()) {
+            String Cedula = CedulaPtxt2.getText().trim();
+
+            if (Cedula.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese una cedula para buscar");
+                return;
+            }
+            Paciente Pacx = control.buscarPaciente(Cedula);
+            if (Pacx != null) {
+                ResultadoPtxt.setText(Pacx.getNombre());
+                estado.setModel(null);
+                cambiarModoVista();
+                actualizarComponentes();
+                JOptionPane.showMessageDialog(null, "Paciente encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el Paciente con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
+                ResultadoPtxt.setText("No se encontró.");
+            }
+        } else {
+            cambiarModoBuscar();
+        }
 
     }
     //==============Medicamentos================
 
     private void guardarMedicamento() {
-//        try {
-//            String codigo = CodigoMtxt.getText().trim();
-//            String nombre = NombreMedicamentotxt.getText().trim();
-//            String presentacion = PresentacionMedicamentotxt.getText().trim();
-//            if (codigo.isEmpty() || nombre.isEmpty() || presentacion.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//            boolean exito;
-//            if (estado.isAdding()) {
-//                exito = controlador.agregarMedicamento(codigo, nombre, presentacion);
-//            } else if (estado.isEditing()) {
-//                controlador.EliminarMedicamento(((Medicamento) estado.getModel()).getCodigo());
-//                exito = controlador.agregarMedicamento(codigo, nombre, presentacion);
-//            } else {
-//                exito = false;
-//            }
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Medicamento guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                estado.setModel(null);
-//                estado.changeToAddMode(); 
-//                limpiarCampos();
-//                actualizarComponentes();
-//                actualizarTablaMedicamentos();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al guardar medicamento", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//
-//        } catch (HeadlessException ex) {
-//            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            String codigo = CodigoMtxt.getText().trim();
+            String nombre = NombreMedicamentotxt.getText().trim();
+            String presentacion = PresentacionMedicamentotxt.getText().trim();
+
+            // Verificación de campos vacíos
+            if (codigo.isEmpty() || nombre.isEmpty() || presentacion.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios");
+                return;
+            }
+
+            // Crear objeto Medicamento
+            Medicamento med = new Medicamento(codigo, nombre, presentacion);
+
+            // Verificar si ya existe el medicamento antes de agregar
+            Medicamento existente = control.buscarMedicamento(codigo);
+            if (estado.isAdding() && existente != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Ya existe un medicamento con ese código",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Guardar medicamento según el modo
+            if (estado.isAdding()) {
+                control.agregarMedicamento(med);
+                JOptionPane.showMessageDialog(this,
+                        "Medicamento agregado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else if (estado.isEditing()) {
+                control.EliminarMedicamento(((Medicamento) estado.getModel()).getCodigo());
+                control.agregarMedicamento(med);
+                JOptionPane.showMessageDialog(this,
+                        "Medicamento editado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Modo desconocido",
+                        "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Restablecer estado y actualizar interfaz
+            cambiarModoVista();
+            estado.setModel(null);
+            estado.changeToAddMode();
+            limpiarCampos();
+            actualizarComponentes();
+            actualizarTablaMedicamentos();
+
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void EliminarMedicamento() {
-//        String codigo = CodigoMtxt.getText().trim(); // usar campo de búsqueda para eliminar
-//
-//        if (codigo.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Ingrese un código a eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//
-//        Medicamento med = controlador.buscarMedicamento(codigo);
-//        if (med == null) {
-//            JOptionPane.showMessageDialog(this, "No se encontró el medicamento", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//
-//        int confirm = JOptionPane.showConfirmDialog(this,
-//                "¿Está seguro de eliminar el medicamento con código " + codigo + "?",
-//                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-//
-//        if (confirm == JOptionPane.YES_OPTION) {
-//            boolean exito = controlador.EliminarMedicamento(codigo);
-//            if (exito) {
-//                JOptionPane.showMessageDialog(this, "Medicamento eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-//                estado.setModel(null);
-//                estado.changeToAddMode();    
-//                limpiarCampos();
-//                actualizarComponentes();
-//                actualizarTablaMedicamentos();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al eliminar medicamento", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+        String codigo = CodigoMtxt.getText().trim(); // usar campo de búsqueda para eliminar
+
+        if (codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un código a eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Medicamento med = control.buscarMedicamento(codigo);
+        if (med == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el medicamento", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar el medicamento con código " + codigo + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            control.EliminarMedicamento(codigo);
+
+            JOptionPane.showMessageDialog(this, "Medicamento eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            estado.setModel(null);
+            estado.changeToAddMode();
+            limpiarCampos();
+            actualizarComponentes();
+            actualizarTablaMedicamentos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al eliminar medicamento", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void buscarMedicamento() {
-//        if (!estado.isSearching()) {
-//            String codigo = CodigoMtxt2.getText().trim();
-//            if (codigo.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Ingrese un código para buscar", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//            Medicamento med = controlador.buscarMedicamento(codigo);
-//            if (med != null) {
-//                ResultadoMedicamentotxt.setText(med.getNombre());
-//                cambiarModoVista();           // mostrar datos en modo vista
-//                actualizarComponentes();
-//            } else {
-//                ResultadoMedicamentotxt.setText("No se encontró.");
-//                JOptionPane.showMessageDialog(this, "No se encontró el medicamento", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            cambiarModoBuscar();
-//        }
+        if (!estado.isSearching()) {
+            String codigo = CodigoMtxt2.getText().trim();
+            if (codigo.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un código para buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Medicamento med = control.buscarMedicamento(codigo);
+            if (med != null) {
+                ResultadoMedicamentotxt.setText(med.getNombre());
+                cambiarModoVista();           // mostrar datos en modo vista
+                actualizarComponentes();
+            } else {
+                ResultadoMedicamentotxt.setText("No se encontró.");
+                JOptionPane.showMessageDialog(this, "No se encontró el medicamento", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            cambiarModoBuscar();
+        }
     }
 
     private void actualizarTablaMedicamentos() {
-//        try {
-//            List<Medicamento> lista = controlador.ListarMedicamentos();
-//            DefaultTableModel modelo = (DefaultTableModel) TablaMedicamentos.getModel();
-//            modelo.setRowCount(0);
-//            if (lista != null) {
-//                for (Medicamento m : lista) {
-//                    modelo.addRow(new Object[]{m.getCodigo(), m.getNombre(), m.getPresentacion()});
-//                }
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this, "Error al cargar los medicamentos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Medicamento> lista = control.ListarMedicamentos();
+            DefaultTableModel modelo = (DefaultTableModel) TablaMedicamentos.getModel();
+            modelo.setRowCount(0);
+            if (lista != null) {
+                for (Medicamento m : lista) {
+                    modelo.addRow(new Object[]{m.getCodigo(), m.getNombre(), m.getPresentacion()});
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los medicamentos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void cargarMedicamentoDesdeTabla() {
-//        int fila = TablaMedicamentos.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaMedicamentos.getValueAt(fila, 0).toString();
-//            Medicamento med = controlador.buscarMedicamento(codigo);
-//            if (med != null) {
-//                estado.setModel(med);
-//                cambiarModoVista();
-//                actualizarComponentes();
-//            }
-//        }
+        int fila = TablaMedicamentos.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaMedicamentos.getValueAt(fila, 0).toString();
+            Medicamento med = control.buscarMedicamento(codigo);
+            if (med != null) {
+                estado.setModel(med);
+                cambiarModoVista();
+                actualizarComponentes();
+            }
+        }
     }
 
 //=====================RECETAS====================
     private void cargarRecetaDesdeTabla() {
-//        int fila = TablaRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
-//            Receta receta = controlador.buscarReceta(codigo);
-//
-//            if (receta != null) {
-//                estado.setModel(receta);  
-//                cambiarModoVista();         
-//                actualizarComponentes();  
-//                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
-//                modelo.setRowCount(0);
-//                for (Indicaciones ind : receta.getIndicaciones()) {
-//                    modelo.addRow(new Object[]{
-//                        ind.getMedicamento().getNombre(),
-//                        ind.getCantidad(),
-//                        ind.getIndicaciones(),
-//                        ind.getDuracion()
-//                    });
-//                }
-//            }
-//        }
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo);
+
+            if (receta != null) {
+                estado.setModel(receta);  
+                cambiarModoVista();         
+                actualizarComponentes();  
+                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
+                modelo.setRowCount(0);
+                for (Indicaciones ind : receta.getIndicaciones()) {
+                    modelo.addRow(new Object[]{
+                        ind.getMedicamento().getNombre(),
+                        ind.getCantidad(),
+                        ind.getIndicaciones(),
+                        ind.getDuracion()
+                    });
+                }
+            }
+        }
     }
 
     private void actualizarTablaRecetas() {
-//        try {
-//            List<Receta> recetas = controlador.ListarRecetas();
-//            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
-//            modelo.setRowCount(0); 
-//            if (recetas != null) {
-//                for (Receta r : recetas) {
-//                    modelo.addRow(new Object[]{
-//                        r.getCodReceta(),
-//                        r.getPaciente() != null ? r.getPaciente().getNombre() : "Sin paciente",
-//                        r.getMedico() != null ? r.getMedico().getNombre() : "Sin médico",
-//                        r.getFechaEmision(),
-//                        r.getFechaRetiro() != null ? r.getFechaRetiro() : "No retirado",
-//                        r.getEstado()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this,
-//                    "Error al cargar las recetas: " + ex.getMessage(),
-//                    "Error",
-//                    JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Receta> recetas = control.listarRecetas();
+            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
+            modelo.setRowCount(0); 
+            if (recetas != null) {
+                for (Receta r : recetas) {
+                    modelo.addRow(new Object[]{
+                        r.getCodReceta(),
+                        r.getPaciente() != null ? r.getPaciente().getNombre() : "Sin paciente",
+                        r.getMedico() != null ? r.getMedico().getNombre() : "Sin médico",
+                        r.getFechaEmision(),
+                        r.getFechaRetiro() != null ? r.getFechaRetiro() : "No retirado",
+                        r.getEstado()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar las recetas: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void mostrarIndicacionesReceta(Receta receta) {
@@ -2398,13 +2458,13 @@ private void guardarFarmaceuta() {
 
 
     private void BotonLimpiarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarMedicoActionPerformed
-      limpiarCampos();
-       cambiarModoVista();
+        limpiarCampos();
+        cambiarModoVista();
     }//GEN-LAST:event_BotonLimpiarMedicoActionPerformed
 
     private void BotonLimpiarFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarFActionPerformed
-    limpiarCampos();
-       cambiarModoVista();
+        limpiarCampos();
+        cambiarModoVista();
     }//GEN-LAST:event_BotonLimpiarFActionPerformed
 
     private void BotonBuscarFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarFActionPerformed
@@ -2440,8 +2500,8 @@ private void guardarFarmaceuta() {
     }//GEN-LAST:event_BotonGuardarPActionPerformed
 
     private void BotonLimpiarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarPActionPerformed
-       limpiarCampos();
-       cambiarModoVista();
+        limpiarCampos();
+        cambiarModoVista();
     }//GEN-LAST:event_BotonLimpiarPActionPerformed
 
     private void BotonEliminarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarPActionPerformed
@@ -2457,8 +2517,8 @@ private void guardarFarmaceuta() {
     }//GEN-LAST:event_BotonGuardarMedicamentoActionPerformed
 
     private void BotonLimpiarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarMedicamentoActionPerformed
-       limpiarCampos();
-       cambiarModoVista();
+        limpiarCampos();
+        cambiarModoVista();
     }//GEN-LAST:event_BotonLimpiarMedicamentoActionPerformed
 
     private void BotonEliminarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarMedicamentoActionPerformed
@@ -2470,24 +2530,24 @@ private void guardarFarmaceuta() {
     }//GEN-LAST:event_BotonBuscarMedicamentoActionPerformed
 
     private void BotonVerIndicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVerIndicacionesActionPerformed
-//        int fila = TablaRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaRecetas.getValueAt(fila, 0).toString(); // código de la receta
-//            Receta receta = controlador.buscarReceta(codigo); // debes tener este método en tu controlador
-//            if (receta != null) {
-//                mostrarIndicacionesReceta(receta);
-//            } else {
-//                JOptionPane.showMessageDialog(this,
-//                        "No se encontró la receta seleccionada.",
-//                        "Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this,
-//                    "Seleccione una receta de la tabla.",
-//                    "Aviso",
-//                    JOptionPane.WARNING_MESSAGE);
-//        }
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString(); // código de la receta
+            Receta receta = control.buscarReceta(codigo); // debes tener este método en tu controlador
+            if (receta != null) {
+                mostrarIndicacionesReceta(receta);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró la receta seleccionada.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una receta de la tabla.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
 
     //DashBoard=========================================================
@@ -2539,7 +2599,6 @@ private void guardarFarmaceuta() {
 
         // 3. Llamar al método del controlador para crear el gráfico
 //        JFreeChart chart = controlador.crearGraficoPastelRecetasPorEstado(inicio, fin);
-
         // 4. Mostrarlo en el PanelRecetas
 //        ChartPanel chartPanel = new ChartPanel(chart);
 //        chartPanel.setMouseWheelEnabled(true);
@@ -2547,7 +2606,6 @@ private void guardarFarmaceuta() {
 //                PanelRecetas.getWidth(),
 //                PanelRecetas.getHeight()
 //        ));
-
         PanelRecetas.removeAll();
         PanelRecetas.setLayout(new java.awt.BorderLayout());
 //        PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
@@ -2621,12 +2679,11 @@ private void guardarFarmaceuta() {
 //
 //        return modelo;
 //    }
-
     private void cargarMedicamentosComboBox() {
-//        jComboBoxMedicamentos.removeAllItems();
-//        for (Medicamento m : controlador.ListarMedicamentos()) {
-//            jComboBoxMedicamentos.addItem(m.getNombre());
-//        }
+        jComboBoxMedicamentos.removeAllItems();
+        for (Medicamento m : control.ListarMedicamentos()) {
+            jComboBoxMedicamentos.addItem(m.getNombre());
+        }
     }
 
     // Acción del botón "Agregar medicamento"
@@ -2741,7 +2798,6 @@ private void guardarFarmaceuta() {
 //                medicamentosSeleccionados, // usar la lista global
 //                controlador.ListarRecetas()
 //        );
-
         // 4. Mostrarlo en el PanelMedicamentos
 //        ChartPanel chartPanel = new ChartPanel(chart);
 //        chartPanel.setMouseWheelEnabled(true);
@@ -2749,7 +2805,6 @@ private void guardarFarmaceuta() {
 //                PanelMedicamentos.getWidth(),
 //                PanelMedicamentos.getHeight()
 //        ));
-
         PanelMedicamentos.removeAll();
         PanelMedicamentos.setLayout(new java.awt.BorderLayout());
 //        PanelMedicamentos.add(chartPanel, java.awt.BorderLayout.CENTER);
@@ -2837,11 +2892,6 @@ private void guardarFarmaceuta() {
                 Logger.getLogger(VentanaAdministrador.class.getName()).log(Level.SEVERE, null, ex);
             }
             Control controlador = new Control(modelo);
-//            try {
-//                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
             new VentanaAdministrador(controlador).setVisible(true);
         });
     }
