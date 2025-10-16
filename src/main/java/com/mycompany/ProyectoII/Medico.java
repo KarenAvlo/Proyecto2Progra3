@@ -12,22 +12,37 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@DatabaseTable(tableName = "medicos")
+@DatabaseTable(tableName = "medico")
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Getter
 @Setter
-@ToString(callSuper = true)
-public class Medico extends Persona {
+@ToString
+public class Medico {
 
-    public Medico(String cedula, String nombre, String especialidad, String clave) {
-        super(cedula, nombre, clave);
-        this.especialidad = especialidad;
-    }
+    @DatabaseField(id = true, columnName = "Cedula")
+    private String cedula;
 
-    @DatabaseField(columnName = "especialidad")
+    @DatabaseField(columnName = "Nombre")
+    private String nombre;
+
+    @DatabaseField(columnName = "Clave")
+    private String clave;
+
+    @DatabaseField(columnName = "Especialidad")
     private String especialidad;
 
+    @DatabaseField(columnName = "Estado")
+    private boolean estado;
+
+    // Constructor completo
+    public Medico(String cedula, String nombre, String clave, String especialidad, boolean estado) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.clave = clave;
+        this.especialidad = especialidad;
+        this.estado = true;
+    }
 }
 
 /*

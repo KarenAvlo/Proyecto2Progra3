@@ -5,9 +5,11 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.mycompany.ProyectoII.Farmaceuta;
-import com.mycompany.ProyectoII.Farmaceuta;
 import java.sql.SQLException;
 import java.util.List;
+import lombok.Getter;
+
+@Getter
 
 public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
 

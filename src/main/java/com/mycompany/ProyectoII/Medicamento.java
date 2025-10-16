@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@DatabaseTable(tableName = "medicamentos")
+@DatabaseTable(tableName = "medicamento")
 @NoArgsConstructor         // Constructor vacío (requerido por ORMLite)
 @AllArgsConstructor        // Constructor con todos los campos
 @Getter
@@ -16,13 +16,16 @@ import lombok.ToString;
 @ToString
 public class Medicamento {
 
-    @DatabaseField(id = true, columnName = "codigo")
+    @DatabaseField(id = true, columnName = "Codigo")
     private String codigo;
 
-    @DatabaseField(columnName = "nombre")
+    @DatabaseField(columnName = "Nombre")
     private String nombre;
 
-    @DatabaseField(columnName = "presentacion")
+    @DatabaseField(columnName = "Presentacion")
     private String presentacion;
+    
+    @DatabaseField(columnName = "Estado")
+    private String estado;
 
 }

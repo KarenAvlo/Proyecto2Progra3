@@ -1,4 +1,3 @@
-
 package com.mycompany.ProyectoII;
 
 import com.mycompany.ProyectoII.DAO.AdministrativoDAO;
@@ -10,12 +9,12 @@ import com.mycompany.ProyectoII.DAO.RecetaDAO;
 import com.mycompany.ProyectoII.DAO.IndicacionesDAO;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GestorHospital {
-    
+
     // DAOs
     private final PacienteDAO pacienteDAO;
     private final MedicoDAO medicoDAO;
@@ -58,16 +57,14 @@ public class GestorHospital {
     public void eliminarPaciente(String cedula) throws SQLException {
         pacienteDAO.delete(cedula);
     }
-    
+
     public Paciente buscarPorCedula(String cedula) throws SQLException {
         return pacienteDAO.findById(cedula);
     }
-    
-    
+
     // --------------------------
     // Funcionalidades específicas de Medico
     // --------------------------
-    
     public boolean inclusionPaciente(String id, String nombre, String nacimiento, String numero) throws SQLException {
         if (buscarPorCedula(id) == null) {
             Paciente p = new Paciente(id, nombre, numero, Date.valueOf(nacimiento));
@@ -80,8 +77,8 @@ public class GestorHospital {
     public boolean existePaciente(String ced) throws SQLException {
         return buscarPorCedula(ced) != null;
     }
-    
-      // Buscar por nombre (pueden haber varios)
+
+    // Buscar por nombre (pueden haber varios)
     public List<Paciente> buscarPorNombre(String nombre) throws SQLException {
         return pacienteDAO.getDao().queryForEq("nombre", nombre);
     }
@@ -118,11 +115,9 @@ public class GestorHospital {
         }
     }
 
-    
     // --------------------------
     // CRUD Medico
     // --------------------------
-
     public void agregarMedico(Medico medico) throws SQLException {
         medicoDAO.add(medico);
     }
@@ -142,11 +137,10 @@ public class GestorHospital {
     public void eliminarMedico(String cedula) throws SQLException {
         medicoDAO.delete(cedula);
     }
-    
+
     // --------------------------
     // Funcionalidades específicas de Medico
     // --------------------------
-    
     public Receta prescribirReceta(String codReceta, String cedulaPaciente, String cedulaMedico) throws SQLException {
         // Buscar paciente y medico en la base de datos
         Paciente paciente = pacienteDAO.findById(cedulaPaciente);
@@ -156,7 +150,7 @@ public class GestorHospital {
             return null; // no se puede crear receta si no existen paciente o médico
         }
 
-        Receta receta = new Receta(codReceta, paciente, medico, new ArrayList<>(), null, null, "Inprocess");
+        Receta receta = new Receta(codReceta, paciente, medico, null, null, "Inprocess");
         receta.finalizarReceta(); // setea fechaEmision, fechaRetiro y estado
 
         recetaDAO.add(receta); // guardar receta en la base de datos
@@ -165,7 +159,7 @@ public class GestorHospital {
 
     public void crearIndicacion(String codReceta, String codMedicamento, int cantidad,
             String indicaciones, int duracion) throws SQLException {
-        Receta receta = recetaDAO.findById(codReceta);
+        Receta receta = recetaDAO.findByCodigo(codReceta);
         if (receta == null) {
             return;
         }
@@ -175,7 +169,8 @@ public class GestorHospital {
             return;
         }
 
-        Indicaciones i = new Indicaciones(medicamento, cantidad, indicaciones, duracion);
+        Indicaciones i = new Indicaciones(medicamento, cantidad, indicaciones,
+                duracion, receta);
         receta.getIndicaciones().add(i);
 
         recetaDAO.update(receta); // actualizar la receta con la nueva indicación
@@ -183,7 +178,13 @@ public class GestorHospital {
 
     public void modificarReceta(String codReceta, String codigoMedicamento, String nuevoMedicamento,
             int cantidad, String indicaciones, int duracion) throws SQLException {
-        Receta receta = recetaDAO.findById(codReceta);
+        Receta receta = null;
+        try {
+            receta = recetaDAO.findByCodigo(codReceta);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
+
         if (receta == null) {
             return;
         }
@@ -220,36 +221,57 @@ public class GestorHospital {
     // Funcionalidades específicas de Farmaceuta
     // --------------------------
     // Procesar receta (pone en "En Proceso" si cumple condiciones)
-    public boolean procesarReceta(String idPaciente, String codRec) throws SQLException {
-        Receta receta = recetaDAO.findById(codRec);
-        if (receta != null && receta.getEstado().equals("CONFECCIONADA")) {
-            Date fechaHoy = Date.valueOf(LocalDate.now());
-            if (!receta.getFechaRetiro().before(fechaHoy) && !receta.getFechaRetiro().after(Date.valueOf(LocalDate.now().plusDays(3)))) {
-                receta.setEstado("En Proceso");
-                recetaDAO.update(receta);
-                return true;
-            }
+    public boolean ProcesarReceta(String idPaciente, String codRec) {
+        Receta receta = null;
+        try {
+            receta = recetaDAO.findByCodigo(codRec);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
+
+        if (receta != null && receta.getEstado().equals("CONFECCIONADA")
+                && (receta.getFechaRetiro().equals(LocalDate.now())
+                || receta.getFechaRetiro().equals(LocalDate.now().plusDays(1))
+                || receta.getFechaRetiro().equals(LocalDate.now().plusDays(2))
+                || receta.getFechaRetiro().equals(LocalDate.now().plusDays(3)))) {
+            receta.setEstado("En Proceso");
+            return true;
         }
         return false;
     }
 
 // Enlistar receta (pone en "Lista" si ya está en "En Proceso")
-    public void enlistarReceta(String idPaciente, String codRec) throws SQLException {
-        if (procesarReceta(idPaciente, codRec)) {
-            Receta receta = recetaDAO.findById(codRec);
+    public void enlistarReceta(String idPaciente, String codRec) {
+        if (ProcesarReceta(idPaciente, codRec)) {
+            Receta receta = null;
+            try {
+                receta = recetaDAO.findByCodigo(codRec);
+            } catch (SQLException ex) {
+                ex.getMessage();
+            }
             if (receta != null) {
                 receta.setEstado("Lista");
-                recetaDAO.update(receta);
             }
         }
     }
 
 // Despachar receta (pone en "Entregada" si está en "Lista")
-    public void despacharReceta(String idPaciente, String codRec) throws SQLException {
-        Receta receta = recetaDAO.findById(codRec);
+    public void despacharReceta(String idPaciente, String codRec) {
+
+        Receta receta = null;
+        try {
+            receta = recetaDAO.findByCodigo(codRec);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
+
         if (receta != null && "Lista".equals(receta.getEstado())) {
             receta.setEstado("Entregada");
-            recetaDAO.update(receta);
+            try {
+                recetaDAO.update(receta);
+            } catch (SQLException ex) {
+                ex.getMessage();
+            }
         }
     }
 
@@ -267,7 +289,6 @@ public class GestorHospital {
         }
     }
 
-    
     // --------------------------
     // CRUD Medicamento
     // --------------------------
@@ -296,8 +317,6 @@ public class GestorHospital {
     // --------------------------
     // Por ahora no hay funcionalidades especiales, pero aquí se podrían agregar métodos como:
     // buscar por nombre, filtrar por presentación, etc.
-
-
     // --------------------------
     // CRUD Indicaciones
     // --------------------------
@@ -314,16 +333,31 @@ public class GestorHospital {
     }
 
     // Agregar indicación a una receta
-    public void agregarIndicacionReceta(String codReceta, Indicaciones i) throws SQLException {
-        Receta r = recetaDAO.findById(codReceta);
+    public void agregarIndicacionReceta(String codReceta, Indicaciones i) {
+
+        Receta r = null;
+        try {
+            recetaDAO.findByCodigo(codReceta);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
         if (r != null) {
             i.setReceta(r);
             r.getIndicaciones().add(i);
-            IndicacionesDAO.add(i);
-            recetaDAO.update(r);  // opcional, para reflejar la lista de indicaciones
+            try {
+                agregarIndicacion(i);
+            } catch (SQLException ex) {
+                ex.getMessage();
+            }
+
+            try {
+                recetaDAO.update(r);
+            } catch (SQLException ex) {
+                ex.getMessage();
+            }
+            // opcional, para reflejar la lista de indicaciones
         }
     }
-
 
     // --------------------------
     // CRUD Receta
@@ -333,7 +367,7 @@ public class GestorHospital {
     }
 
     public Receta buscarRecetaPorCodigo(String codReceta) throws SQLException {
-        return recetaDAO.findById(codReceta);
+        return recetaDAO.findByCodigo(codReceta);
     }
 
     public List<Receta> obtenerTodasRecetas() throws SQLException {
@@ -345,23 +379,33 @@ public class GestorHospital {
     }
 
     public void eliminarReceta(String codReceta) throws SQLException {
-        recetaDAO.delete(codReceta);
+        recetaDAO.deleteByCodigo(codReceta);
     }
 
     // --------------------------
     // Funcionalidades específicas de Receta
     // --------------------------
-    public void modificarEstadoReceta(String codReceta, String nuevoEstado) throws SQLException {
-        Receta receta = recetaDAO.findById(codReceta);
+    public void modificarEstadoReceta(String codReceta, String nuevoEstado) {
+        Receta receta = null;
+        try {
+            recetaDAO.findByCodigo(codReceta);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
         if (receta != null) {
             receta.setEstado(nuevoEstado);
-            recetaDAO.update(receta);
+
+            try {
+                recetaDAO.update(receta);
+            } catch (SQLException ex) {
+                ex.getMessage();
+            }
         }
     }
 
     // Agregar indicaciones a receta existente (si no se hizo con crearIndicacion de médico)
     public void agregarIndicacionesReceta(String codReceta, Indicaciones indicacion) throws SQLException {
-        Receta receta = recetaDAO.findById(codReceta);
+        Receta receta = recetaDAO.findByCodigo(codReceta);
         if (receta != null) {
             receta.agregarIndicaciones(indicacion);
             recetaDAO.update(receta);
@@ -370,16 +414,19 @@ public class GestorHospital {
 
     // Buscar recetas por paciente
     public List<Receta> buscarRecetasPorPaciente(String cedulaPaciente) throws SQLException {
-        return recetaDAO.getDao().queryForEq("paciente_cedula", cedulaPaciente);
+        Paciente paciente = pacienteDAO.findById(cedulaPaciente);
+        if (paciente == null) {
+            return new ArrayList<>();
+        }
+
+        return recetaDAO.getDao().queryForEq("Paciente_Cedula", cedulaPaciente);
+
     }
 
     // Buscar recetas por médico
     public List<Receta> buscarRecetasPorMedico(String cedulaMedico) throws SQLException {
         return recetaDAO.getDao().queryForEq("medico_cedula", cedulaMedico);
     }
-
-    
-    
 
     // --------------------------
     // Cierre de conexión

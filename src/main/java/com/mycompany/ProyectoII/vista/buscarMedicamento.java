@@ -5,12 +5,15 @@ import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.modelo;
 import cr.ac.una.gui.FormHandler;
+import java.sql.SQLException;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /* -------------------------------------------------------------------+
@@ -358,15 +361,20 @@ public class buscarMedicamento extends javax.swing.JFrame {
         /* Create and display the form */
  
         java.awt.EventQueue.invokeLater(() -> {
-            modelo modelo = new modelo();
+            modelo modelo = null;
+            try {
+                modelo = new modelo();
+            } catch (SQLException ex) {
+                Logger.getLogger(buscarMedicamento.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Control controlador = new Control(modelo);
             Medico med = new Medico();
             VentanaMedico ventanaMedico = new VentanaMedico(controlador, med);
-            try {
-                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             new buscarMedicamento(controlador, ventanaMedico).setVisible(true);
         });
         
@@ -397,12 +405,12 @@ public class buscarMedicamento extends javax.swing.JFrame {
         txtBuscar.getDocument().addDocumentListener(da);  
         DesplegarOpcFiltrar.setSelectedItem("Nombre");
         
-        try {
-            listaMedicamentos = control.getModelo().listarMedicamentos();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar medicamentos: " + e.getMessage());
-            listaMedicamentos = List.of();
-        }
+//        try {
+//            listaMedicamentos = control.getModelo().listarMedicamentos();
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(this, "Error al cargar medicamentos: " + e.getMessage());
+//            listaMedicamentos = List.of();
+//        }
         cargarTabla(listaMedicamentos);
         cambiarModoVista();
         habilitarPanelIndicaciones(false);
@@ -450,20 +458,20 @@ public class buscarMedicamento extends javax.swing.JFrame {
     }
     
     private void seleccionarMedicamento(){
-        int fila = medicamentos.getSelectedRow();
-        if (fila >= 0) {
-            String codigo = (String) medicamentos.getValueAt(fila, 0);
-            Medicamento seleccionado = control.getModelo().buscarMedicamento(codigo);
-            if (seleccionado != null) {
-                this.medicamentoSeleccionado = seleccionado;
-                habilitarPanelIndicaciones(true);
-            }
-            else {
-                JOptionPane.showMessageDialog(this, "No se encontró el medicamento seleccionado.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Seleccione un medicamento de la tabla.");
-        }
+//        int fila = medicamentos.getSelectedRow();
+//        if (fila >= 0) {
+//            String codigo = (String) medicamentos.getValueAt(fila, 0);
+//            Medicamento seleccionado = control.getModelo().buscarMedicamento(codigo);
+//            if (seleccionado != null) {
+//                this.medicamentoSeleccionado = seleccionado;
+//                habilitarPanelIndicaciones(true);
+//            }
+//            else {
+//                JOptionPane.showMessageDialog(this, "No se encontró el medicamento seleccionado.");
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Seleccione un medicamento de la tabla.");
+//        }
     }
     
     

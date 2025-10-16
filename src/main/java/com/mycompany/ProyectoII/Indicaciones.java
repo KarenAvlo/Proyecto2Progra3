@@ -16,18 +16,18 @@ import lombok.ToString;
 @ToString
 public class Indicaciones {
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "medicamento_codigo")
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "CodigoMedicamento")
     private Medicamento medicamento;
 
-    @DatabaseField(columnName = "cantidad")
+    @DatabaseField(columnName = "Cantidad")
     private int cantidad;
 
-    @DatabaseField(columnName = "indicaciones")
+    @DatabaseField(columnName = "Indicaciones")
     private String indicaciones;
 
-    @DatabaseField(columnName = "duracion")
+    @DatabaseField(columnName = "Duracion")
     private int duracion;
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "receta_codReceta")
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "Receta_id")
     private Receta receta;  // para relacionar con la receta a la que pertenece
 }

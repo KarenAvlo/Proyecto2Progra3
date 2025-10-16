@@ -190,33 +190,33 @@ public class CambioContraseña extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
-
-        String cedula = txtCedula.getText().trim();
-        String claveAnterior = new String(txtclaveAnterior.getPassword());
-        String nuevaClave = new String(txtclaveNueva.getPassword());
-
-        Persona persona = controlador.validarUsuario(cedula, claveAnterior);
-        if (nuevaClave.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "La nueva clave no puede estar vacía");
-            return;
-        }
-        if (persona != null) {
-            if (claveAnterior.equals(persona.getClave()) && !nuevaClave.equals(persona.getClave())) {
-                persona.setClave(nuevaClave);
-                controlador.GuardarCambioContraseña();
-                JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
-            } else {
-                JOptionPane.showMessageDialog(this, "La clave es la misma que la anterior");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrecta");
-        }
+//
+//        String cedula = txtCedula.getText().trim();
+//        String claveAnterior = new String(txtclaveAnterior.getPassword());
+//        String nuevaClave = new String(txtclaveNueva.getPassword());
+//
+//        Persona persona = controlador.validarUsuario(cedula, claveAnterior);
+//        if (nuevaClave.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "La nueva clave no puede estar vacía");
+//            return;
+//        }
+//        if (persona != null) {
+//            if (claveAnterior.equals(persona.getClave()) && !nuevaClave.equals(persona.getClave())) {
+//                persona.setClave(nuevaClave);
+//                controlador.GuardarCambioContraseña();
+//                JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
+//            } else {
+//                JOptionPane.showMessageDialog(this, "La clave es la misma que la anterior");
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrecta");
+//        }
     }//GEN-LAST:event_btnCambiarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // Abrir la ventana de Login
         this.dispose();
-        controlador.volverVentanaPrincipal();
+//        controlador.volverVentanaPrincipal();
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 

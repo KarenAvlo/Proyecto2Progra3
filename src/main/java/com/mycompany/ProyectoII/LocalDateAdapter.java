@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 */
 
 
-public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
+public class LocalDateAdapter extends XmlAdapter<String, LocalDate> { // no lo necesitamos
 
     @Override
     public LocalDate unmarshal(String v) throws Exception {

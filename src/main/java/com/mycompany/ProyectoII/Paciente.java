@@ -18,17 +18,28 @@ import lombok.ToString;
 @ToString
 public class Paciente {
 
-    @DatabaseField(id = true, columnName = "cedula")
+    @DatabaseField(id = true, columnName = "Cedula")
     private String cedula;
 
-    @DatabaseField(columnName = "nombre")
+    @DatabaseField(columnName = "Nombre")
     private String nombre;
 
-    @DatabaseField(columnName = "telefono")
+    @DatabaseField(columnName = "Telefono")
     private String telefono;
 
-    @DatabaseField(columnName = "fechaNacimiento")
+    @DatabaseField(columnName = "Fecha Nacimiento")
     private Date fechaNacimiento;  // java.sql.Date para compatibilidad con MySQL
+    
+    @DatabaseField(columnName = "Estado")
+    private boolean estado;
+    
+        public Paciente(String cedula, String nombre, String telefono, Date fechaNacimiento) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.fechaNacimiento = fechaNacimiento;
+        this.estado = true; // siempre activo al crear
+    }
 }
 
 

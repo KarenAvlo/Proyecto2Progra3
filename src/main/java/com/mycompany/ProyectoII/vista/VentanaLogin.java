@@ -184,28 +184,28 @@ public class VentanaLogin extends javax.swing.JFrame {
 
     private void BotonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLoginActionPerformed
         // TODO add your handling code here:
-        String cedula = textCedula.getText().trim();
-        String clave = new String(txtclave.getPassword()).trim();
-
-        Persona persona = controlador.validarUsuario(cedula, clave); // usa el login del GestorPersonas
-        TipoUsuario tipo = controlador.tipoDeUsuario(persona);
-
-        if (persona != null && tipo == TipoUsuario.MEDICO) {
-            controlador.abrirVentanaMedico((Medico) persona); // abre la ventana correcta
-            this.dispose(); // cierra la ventana de login
-        }
-        if (tipo != null) {
-            controlador.abrirVentanaSegunUsuario(tipo);
-            this.dispose();
-        } else {
-            lblmensaje.setText("Usuario o clave incorrectos");
-        }
+//        String cedula = textCedula.getText().trim();
+//        String clave = new String(txtclave.getPassword()).trim();
+//
+//        Persona persona = controlador.validarUsuario(cedula, clave); // usa el login del GestorPersonas
+//        TipoUsuario tipo = controlador.tipoDeUsuario(persona);
+//
+//        if (persona != null && tipo == TipoUsuario.MEDICO) {
+//            controlador.abrirVentanaMedico((Medico) persona); // abre la ventana correcta
+//            this.dispose(); // cierra la ventana de login
+//        }
+//        if (tipo != null) {
+//            controlador.abrirVentanaSegunUsuario(tipo);
+//            this.dispose();
+//        } else {
+//            lblmensaje.setText("Usuario o clave incorrectos");
+//        }
     }//GEN-LAST:event_BotonLoginActionPerformed
 
     private void BotonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVolverActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        controlador.volverVentanaPrincipal();
+//        this.dispose();
+//        controlador.volverVentanaPrincipal();
     }//GEN-LAST:event_BotonVolverActionPerformed
 
     /**

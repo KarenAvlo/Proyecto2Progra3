@@ -2,6 +2,7 @@ package com.mycompany.ProyectoII.vista;
 
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.modelo;
+import java.sql.SQLException;
 import javax.swing.SwingConstants;
 import org.kordamp.ikonli.swing.FontIcon;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
@@ -215,7 +216,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         modelo modelo = new modelo();              // Modelo
         Control controlador = new Control(modelo); // Controlador
 

@@ -22,10 +22,10 @@ import lombok.ToString;
  */
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @ToString
 
-public class Farmacia {
+public class Farmacia { // creo que no lo necesitamos
 //
 //    public Farmacia(GestorFarmaceutas gestorFarmaceutas) {
 //        this.gestorFarmaceutas = gestorFarmaceutas; // usa el mismo que Hospital

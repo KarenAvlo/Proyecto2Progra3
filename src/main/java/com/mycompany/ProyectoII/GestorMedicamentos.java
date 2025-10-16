@@ -33,7 +33,7 @@ import java.util.List;
 @XmlRootElement(name = "medicamentos")
 @XmlAccessorType(XmlAccessType.FIELD)
 
-public class GestorMedicamentos {
+public class GestorMedicamentos { // no lo necesitamos
 //
 //    public static GestorMedicamentos cargarDesdeXML() throws IOException, JAXBException {
 //        try (InputStream is = GestorMedicamentos.class.getClassLoader().getResourceAsStream("medicamentos.xml")) {

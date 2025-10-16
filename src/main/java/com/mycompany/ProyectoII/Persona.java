@@ -12,14 +12,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public abstract class Persona {
+public abstract class Persona { // no necesita el database, pues no haytabla para esto
 
-    @DatabaseField(id = true, columnName = "cedula")
+//    @DatabaseField(id = true, columnName = "cedula")
     private String cedula;
 
-    @DatabaseField(columnName = "nombre")
+//    @DatabaseField(columnName = "nombre")
     private String nombre;
 
-    @DatabaseField(columnName = "clave")
+//    @DatabaseField(columnName = "clave")
     private String clave;
 }

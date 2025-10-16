@@ -25,16 +25,23 @@ import lombok.ToString;
 * --------------------------------------------------------------------+
  */
 @DatabaseTable(tableName = "administrativo")
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @ToString(callSuper = true)
 public class Administrativo extends Persona {
 
-    public Administrativo(String ced, String nombre, String clave) {
-        super(ced, nombre, clave);
-    }
+    @DatabaseField(id = true, columnName = "Cedula")
+    private String cedula;
 
-   
+    @DatabaseField(columnName = "Nombre")
+    private String nombre;
+
+    @DatabaseField(columnName = "Clave")
+    private String clave;
+
+    public Administrativo(String cedula, String nombre, String clave) {
+        super(cedula, nombre, clave);
+    }
 }

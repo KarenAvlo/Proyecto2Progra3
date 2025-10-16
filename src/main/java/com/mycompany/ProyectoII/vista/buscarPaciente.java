@@ -5,7 +5,10 @@ import com.mycompany.ProyectoII.Paciente;
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.modelo;
 import cr.ac.una.gui.FormHandler;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -45,9 +48,9 @@ public class buscarPaciente extends javax.swing.JFrame {
         this.control = control;
         this.ventanaMedico = ventanaMedico;
         this.estado = new FormHandler();
-        modelo modelo = control.getModelo();
+        modelo modelo = control.getModel();
         if (modelo != null) {
-            listaPacientes = modelo.listarPacientes();
+//            listaPacientes = modelo.listarPacientes();
         }
         initComponents();
         init();
@@ -273,15 +276,20 @@ public class buscarPaciente extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            modelo modelo = new modelo();
+            modelo modelo = null;
+            try {
+                modelo = new modelo();
+            } catch (SQLException ex) {
+                Logger.getLogger(buscarPaciente.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Control controlador = new Control(modelo);
             Medico med = new Medico();
             VentanaMedico ventanaMedico = new VentanaMedico(controlador, med);
-            try {
-                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             buscarPaciente ventana = new buscarPaciente(controlador, ventanaMedico);
             ventana.init();  // <-- Aquí inicializas todo correctamente
            
@@ -312,12 +320,12 @@ public class buscarPaciente extends javax.swing.JFrame {
         };
         txtBuscar.getDocument().addDocumentListener(da);
         ElegirFiltroBusqueda.setSelectedItem("Nombre");
-         try {
-            listaPacientes = control.getModelo().listarPacientes();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar pacientes: " + e.getMessage());
-            listaPacientes = List.of();
-        }
+//         try {
+//            listaPacientes = control.getModelo().listarPacientes();
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(this, "Error al cargar pacientes: " + e.getMessage());
+//            listaPacientes = List.of();
+//        }
         actualizarTabla(listaPacientes);
         cambiarModoVista();
         setVisible(true);
@@ -379,36 +387,36 @@ public class buscarPaciente extends javax.swing.JFrame {
     }
     
     private void cargarDatosTabla() {
-        modelo modelo = control.getModelo();
-        if (modelo == null) {
-            JOptionPane.showMessageDialog(this, "Error: El modelo no está disponible.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            listaPacientes = modelo.listarPacientes();
-             System.out.println("Pacientes cargados: buscarMedicos " + listaPacientes.size());
-            actualizarTabla(listaPacientes);
-        } catch (Exception e) {
-            logger.log(java.util.logging.Level.SEVERE, "Error al cargar los datos de pacientes", e);
-            JOptionPane.showMessageDialog(this, "Error al cargar los pacientes: " + e.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
-        }
+//        modelo modelo = control.getModelo();
+//        if (modelo == null) {
+//            JOptionPane.showMessageDialog(this, "Error: El modelo no está disponible.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        try {
+//            listaPacientes = modelo.listarPacientes();
+//             System.out.println("Pacientes cargados: buscarMedicos " + listaPacientes.size());
+//            actualizarTabla(listaPacientes);
+//        } catch (Exception e) {
+//            logger.log(java.util.logging.Level.SEVERE, "Error al cargar los datos de pacientes", e);
+//            JOptionPane.showMessageDialog(this, "Error al cargar los pacientes: " + e.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
+//        }
     }
     
     private void seleccionPaciente() {
-       int filaSeleccionada = tblPacientes.getSelectedRow();
-       if (filaSeleccionada >= 0) {
-           String cedula = (String) tblPacientes.getValueAt(filaSeleccionada, 0);
-           Paciente pacienteSeleccionado = control.getHospital().getGestorP().buscarPorCedula(cedula);
-           if (pacienteSeleccionado != null) {
-               ventanaMedico.pacienteSeleccionado(pacienteSeleccionado);
-               this.dispose();
-           } else {
-               JOptionPane.showMessageDialog(this, "No se encontró el paciente en el modelo.", "Error", JOptionPane.ERROR_MESSAGE);
-           }
-       } else {
-           JOptionPane.showMessageDialog(this, "Por favor, seleccione un paciente de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-       } 
+//       int filaSeleccionada = tblPacientes.getSelectedRow();
+//       if (filaSeleccionada >= 0) {
+//           String cedula = (String) tblPacientes.getValueAt(filaSeleccionada, 0);
+//           Paciente pacienteSeleccionado = control.getHospital().getGestorP().buscarPorCedula(cedula);
+//           if (pacienteSeleccionado != null) {
+//               ventanaMedico.pacienteSeleccionado(pacienteSeleccionado);
+//               this.dispose();
+//           } else {
+//               JOptionPane.showMessageDialog(this, "No se encontró el paciente en el modelo.", "Error", JOptionPane.ERROR_MESSAGE);
+//           }
+//       } else {
+//           JOptionPane.showMessageDialog(this, "Por favor, seleccione un paciente de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//       } 
    }
     
 
