@@ -1098,14 +1098,53 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
     private void BotonGuardarCambioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarCambioActionPerformed
         // TODO add your handling code here:
-        try {
-//            control.guardarRecetas();
-            control.actualizarReceta(receta);
-        } catch (Exception ex) {
-            System.getLogger(VentanaFarmaceuta.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+ //REVISAR LO DE LA FECHA POR EL MYSQL DEBE DE HABER ALGUNA CONVERSION A DATE
+   try {
+        int filaSeleccionada = tblRecetaSelec.getSelectedRow(); // fila seleccionada en la tabla
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una receta para guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Obtener el código de la receta desde la tabla
+        String codigoReceta = tblRecetaSelec.getValueAt(filaSeleccionada, 0).toString();
+
+        // Buscar la receta completa en el controlador
+        Receta recetaSeleccionada = control.buscarRecetaPorCodigo(codigoReceta);
+        if (recetaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró la receta seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener el nuevo estado desde la tabla
+        String nuevoEstado = tblRecetaSelec.getValueAt(filaSeleccionada, 5).toString();
+        recetaSeleccionada.setEstado(nuevoEstado);
+
+        // Validación de fecha de retiro (±3 días)
+        if (recetaSeleccionada.getFechaRetiro() != null) {
+            LocalDate hoy = LocalDate.now();
+            LocalDate fechaRetiro = recetaSeleccionada.getFechaRetiro().toLocalDate();
+            if (fechaRetiro.isBefore(hoy.minusDays(3)) || fechaRetiro.isAfter(hoy.plusDays(3))) {
+                JOptionPane.showMessageDialog(this,
+                        "No se puede cambiar el estado. La fecha de retiro debe estar dentro de los 3 días antes o después de hoy.",
+                        "Fecha inválida",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // Guardar cambios en la base de datos
+        control.actualizarReceta(recetaSeleccionada);
+
+        JOptionPane.showMessageDialog(this, "Receta actualizada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         limpiarCampos();
         actualizarTablaRecetas();
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al guardar los cambios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
         
     }//GEN-LAST:event_BotonGuardarCambioActionPerformed
 

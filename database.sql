@@ -15,6 +15,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+CREATE DATABASE IF NOT EXISTS `bdhospital`;
+USE `bdhospital`;
 --
 -- Table structure for table `administrativo`
 --
@@ -62,7 +65,7 @@ CREATE TABLE `farmaceuta` (
 
 LOCK TABLES `farmaceuta` WRITE;
 /*!40000 ALTER TABLE `farmaceuta` DISABLE KEYS */;
-INSERT  IGNORE INTO `farmaceuta` VALUES ('123','Karolina Diaz','3',1),('F005','Lorena Salazar','F005',1),('F009','Carolina Mendez','F009',1),('F010','Lana Lang','F010',1),('F060','Clark Kent','F060',1),('F075','María Fernández','F075',1),('F076','Juan Pérez','F076',1),('F077','Ana Gómez','F077',1),('F078','Carlos Rodríguez','F078',1),('F079','Laura Morales','F079',1),('F080','David Castro','F080',1),('F081','Isabel Torres','F081',1),('F082','Fernando Rojas','F082',1);
+INSERT  IGNORE INTO `farmaceuta` VALUES ('123','Karolina Diaz','3',1),('F005','Lorena Salazar','F005',1),('F009','Carolina Mendez','F009',1),('F010','Lana Lang','F010',1),('F060','Clark Kent','F060',1),('F075','María Fernández','F075',1),('F076','Juan Pérez','F076',1),('F077','Ana Gómez','F077',1),('F078','Carlos Rodríguez','F078',1),('F079','Laura Morales','F079',1),('F080','David Castro','F080',1),('F081','Isabel Torres','F081',1),('F082','Fernando Rojas','F082',1),('F092','Patrona Snachez','F092',0);
 /*!40000 ALTER TABLE `farmaceuta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +122,7 @@ CREATE TABLE `medicamento` (
 
 LOCK TABLES `medicamento` WRITE;
 /*!40000 ALTER TABLE `medicamento` DISABLE KEYS */;
-INSERT  IGNORE INTO `medicamento` VALUES ('M001','Paracetamol','500 mg',1),('M002','Ibuprofeno','400 mg',1),('M003','Amoxicilina','250 mg cápsulas',1),('M004','Loratadina','10 mg tabletas',1),('M005','Omeprazol','20 mg cápsulas',1),('M006','Metformina','850 mg tabletas',1),('M007','Losartán','50 mg tabletas',1),('M008','Enalapril','10 mg tabletas',1),('M009','Claritromicina','500 mg tabletas',1),('M010','Diclofenaco','50 mg tabletas',1),('M011','Cefalexina','500 mg cápsulas',1),('M012','Azitromicina','500 mg tabletas',1),('M013','Prednisona','5 mg tabletas',1),('M014','Hidroclorotiazida','25 mg tabletas',1),('M015','Furosemida','40 mg tabletas',1),('M016','Salbutamol','Inhalador 100 mcg/dosis',1),('M017','Insulina Glargina','100 UI/ml solución inyectable',1),('M018','Ranitidina','150 mg tabletas',1),('M019','Clopidogrel','75 mg tabletas',1),('M020','Aspirina','100 mg tabletas',1),('M021','Atorvastatina','20 mg tabletas',1),('M022','Simvastatina','20 mg tabletas',1),('M023','Levotiroxina','50 mcg tabletas',1),('M024','Diazepam','10 mg tabletas',1),('M025','Alprazolam','0.5 mg tabletas',1),('M026','Sertralina','50 mg tabletas',1),('M027','Escitalopram','10 mg tabletas',1),('M028','Fluoxetina','20 mg cápsulas',1),('M029','Quetiapina','100 mg tabletas',1),('M030','Olanzapina','10 mg tabletas',1),('M031','Gabapentina','300 mg cápsulas',1),('M032','Tramadol','100 mg cápsulas',1),('M033','Morfina','10 mg/ml solución inyectable',1),('M034','Ketorolaco','10 mg tabletas',1);
+INSERT  IGNORE INTO `medicamento` VALUES ('M001','Paracetamol','500 mg',1),('M002','Ibuprofeno','400 mg',1),('M003','Amoxicilina','250 mg cápsulas',1),('M004','Loratadina','10 mg tabletas',1),('M005','Omeprazol','20 mg cápsulas',1),('M006','Metformina','850 mg tabletas',1),('M007','Losartán','50 mg tabletas',1),('M008','Enalapril','10 mg tabletas',1),('M009','Claritromicina','500 mg tabletas',1),('M010','Diclofenaco','50 mg tabletas',1),('M011','Cefalexina','500 mg cápsulas',1),('M012','Azitromicina','500 mg tabletas',1),('M013','Prednisona','5 mg tabletas',1),('M014','Hidroclorotiazida','25 mg tabletas',1),('M015','Furosemida','40 mg tabletas',1),('M016','Salbutamol','Inhalador 100 mcg/dosis',1),('M017','Insulina Glargina','100 UI/ml solución inyectable',1),('M018','Ranitidina','150 mg tabletas',1),('M019','Clopidogrel','75 mg tabletas',1),('M020','Aspirina','100 mg tabletas',1),('M021','Atorvastatina','20 mg tabletas',1),('M022','Simvastatina','20 mg tabletas',1),('M023','Levotiroxina','50 mcg tabletas',1),('M024','Diazepam','10 mg tabletas',1),('M025','Alprazolam','0.5 mg tabletas',1),('M026','Sertralina','50 mg tabletas',1),('M027','Escitalopram','10 mg tabletas',1),('M028','Fluoxetina','20 mg cápsulas',1),('M029','Quetiapina','100 mg tabletas',1),('M030','Olanzapina','10 mg tabletas',1),('M031','Gabapentina','300 mg cápsulas',1),('M032','Tramadol','100 mg cápsulas',1),('M033','Morfina','10 mg/ml solución inyectable',1),('M034','Ketorolaco','10 mg tabletas',1),('M035','Morfina','50gm',1);
 /*!40000 ALTER TABLE `medicamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,7 +149,7 @@ CREATE TABLE `medico` (
 
 LOCK TABLES `medico` WRITE;
 /*!40000 ALTER TABLE `medico` DISABLE KEYS */;
-INSERT  IGNORE INTO `medico` VALUES ('123','Juan Pérez','Cardiología','2',1),('M002','María López','Pediatría','clave456',1),('M003','Carlos Sánchez','Neurología','clave789',1),('M004','Ana Torres','Ginecología','clave321',1),('M089','Pedro','Cabezas','M089',1);
+INSERT  IGNORE INTO `medico` VALUES ('123','Juan Pérez','Cardiología','2',1),('3453','Karlota Jimenez','General','3453',1),('M002','María López','Pediatría','clave456',1),('M003','Carlos Sánchez','Neurología','clave789',0),('M004','Ana Torres','Ginecología','clave321',1),('M089','Pedro','Cabezas','M089',1);
 /*!40000 ALTER TABLE `medico` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +176,7 @@ CREATE TABLE `paciente` (
 
 LOCK TABLES `paciente` WRITE;
 /*!40000 ALTER TABLE `paciente` DISABLE KEYS */;
-INSERT  IGNORE INTO `paciente` VALUES ('1010','Ricardo Torres','60101234','2003-03-22',1),('1212','Valeria Soto','60112345','1994-07-14',1),('1313','Diego Méndez','60123456','2002-11-09',1),('1414','Gabriela Ruiz','60134567','1998-06-17',1),('1515','Héctor Vargas','60145678','1997-12-25',1),('1616','Paola Castillo','60156789','2005-05-02',1),('1717','Sebastián Navarro','60167890','1996-08-27',1),('1818','Carolina Pineda','60178901','2000-01-13',1),('1919','Martín Chacón','60189012','1999-09-21',1),('2020','Daniela Cordero','60190123','2004-02-06',1),('2121','Tomás Esquivel','60201234','1995-10-10',1),('2222','David Rodríguez','60023456','2002-09-20',1),('3333','María Fernández','60034567','1997-12-03',1),('4444','José Ramírez','60045678','2004-06-28',1),('5555','Sofía Morales','60056789','1995-01-07',1),('5678','Juan Pérez','50234567','2000-07-12',1),('6548','Carlos Sanchez','80050016','2005-03-01',1),('6666','Andrés López','60067890','2001-10-19',1),('7777','Camila Vargas','60078901','1996-02-11',1),('8888','Felipe Castro','60089012','2000-04-30',1),('9101','Ana Gómez','50345678','1999-11-23',1),('9999','Isabel Herrera','60090123','1999-08-05',1);
+INSERT  IGNORE INTO `paciente` VALUES ('1010','Ricardo Torres','60101234','2003-03-22',1),('1111','Carbon Perez','800800800','2023-05-12',0),('1212','Valeria Soto','60112345','1994-07-14',1),('1313','Diego Méndez','60123456','2002-11-09',1),('1414','Gabriela Ruiz','60134567','1998-06-17',1),('1515','Héctor Vargas','60145678','1997-12-25',1),('1616','Paola Castillo','60156789','2005-05-02',1),('1717','Sebastián Navarro','60167890','1996-08-27',1),('1818','Carolina Pineda','60178901','2000-01-13',1),('1919','Martín Chacón','60189012','1999-09-21',1),('2020','Daniela Cordero','60190123','2004-02-06',1),('2121','Tomás Esquivel','60201234','1995-10-10',1),('2222','David Rodríguez','60023456','2002-09-20',1),('3333','María Fernández','60034567','1997-12-03',1),('4444','José Ramírez','60045678','2004-06-28',1),('5555','Sofía Morales','60056789','1995-01-07',1),('5678','Juan Pérez','50234567','2000-07-12',1),('6548','Carlos Sanchez','80050016','2005-03-01',1),('6666','Andrés López','60067890','2001-10-19',1),('7777','Camila Vargas','60078901','1996-02-11',1),('8888','Felipe Castro','60089012','2000-04-30',1),('9101','Ana Gómez','50345678','1999-11-23',1),('9999','Isabel Herrera','60090123','1999-08-05',1);
 /*!40000 ALTER TABLE `paciente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,4 +222,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-15 23:14:49
+-- Dump completed on 2025-10-16 16:48:31
