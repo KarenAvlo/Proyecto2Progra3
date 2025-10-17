@@ -7,11 +7,32 @@ import com.mycompany.ProyectoII.DAO.MedicoDAO;
 import com.mycompany.ProyectoII.DAO.PacienteDAO;
 import com.mycompany.ProyectoII.DAO.RecetaDAO;
 import com.mycompany.ProyectoII.DAO.IndicacionesDAO;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+import org.jfree.data.time.Month;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 public class GestorHospital {
 
@@ -74,13 +95,6 @@ public class GestorHospital {
         return false;
     }
 
-//    public boolean existePaciente(String ced) throws SQLException {
-//        return buscarPorCedula(ced) != null;
-//    }
-    // Buscar por nombre (pueden haber varios), nunca buscamos por nombre
-//    public List<Paciente> buscarPorNombre(String nombre) throws SQLException {
-//        return pacienteDAO.getDao().queryForEq("nombre", nombre);
-//    }
     // Consultar paciente (solo imprime información)
     public void consultaPaciente(String cedula) throws SQLException {
         Paciente p = buscarPorCedula(cedula);
@@ -449,6 +463,166 @@ public class GestorHospital {
         // Si no se encuentra en ninguna tabla
         return null;
     }
+    
+    private PieDataset crearDatasetRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+        List<Receta> recetas = recetaDAO.findAll();
+
+        if (recetas == null || recetas.isEmpty()) {
+            return dataset;
+        }
+
+        Map<String, Long> conteo = recetas.stream()
+                .filter(r -> {
+                    Date fecha = r.getFechaEmision();
+                    if (fecha == null) {
+                        return false;
+                    }
+
+                    // Convertir a LocalDate
+                    LocalDate fechaEmision;
+                    if (fecha instanceof java.sql.Date) {
+                        fechaEmision = ((java.sql.Date) fecha).toLocalDate();
+                    } else {
+                        fechaEmision = fecha.toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+                    }
+
+                    // Comparar fechas
+                    return (fechaEmision.isEqual(fechaInicio) || fechaEmision.isAfter(fechaInicio))
+                            && (fechaEmision.isEqual(fechaFin) || fechaEmision.isBefore(fechaFin));
+                })
+                .collect(Collectors.groupingBy(
+                        r -> {
+                            Object e = r.getEstado();
+                            return (e == null) ? "Sin estado" : e.toString();
+                        },
+                        Collectors.counting()
+                ));
+
+        conteo.forEach(dataset::setValue);
+        return dataset;
+    }
+
+    public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
+        PieDataset dataset = crearDatasetRecetasPorEstado(fechaInicio, fechaFin);
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Recetas (" + fechaInicio + " a " + fechaFin + ")",
+                dataset,
+                true,
+                true,
+                false
+        );
+
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setNoDataMessage("No hay recetas registradas");
+        plot.setCircular(true);
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator(
+                "{0} = {1} ({2})",
+                new DecimalFormat("0"),
+                new DecimalFormat("0.0%")
+        ));
+        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 10));
+        plot.setSimpleLabels(false);
+        plot.setLabelGap(0.02);
+        plot.setInteriorGap(0.04);
+        plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator("Cantidad: {1}"));
+        return chart;
+    }
+
+    public TimeSeriesCollection crearDatasetMedicamentosPorMes(
+            LocalDate fechaInicio, LocalDate fechaFin,
+            List<String> medicamentosSeleccionados, List<Receta> listaRecetas) {
+
+        TimeSeriesCollection dataset = new TimeSeriesCollection();
+
+        for (String nombreMed : medicamentosSeleccionados) {
+            TimeSeries serie = new TimeSeries(nombreMed);
+            LocalDate fecha = fechaInicio.withDayOfMonth(1);
+
+            while (!fecha.isAfter(fechaFin)) {
+                int cantidad = 0;
+
+                for (Receta r : listaRecetas) {
+                    Date fechaEmisionDate = r.getFechaEmision();
+                    if (fechaEmisionDate == null) {
+                        continue;
+                    }
+
+                    // 🔄 Convertir la fecha a LocalDate
+                    LocalDate fechaEmision;
+                    if (fechaEmisionDate instanceof java.sql.Date) {
+                        fechaEmision = ((java.sql.Date) fechaEmisionDate).toLocalDate();
+                    } else {
+                        fechaEmision = fechaEmisionDate.toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+                    }
+
+                    // ✅ Comparar año y mes correctamente
+                    if (fechaEmision.getYear() == fecha.getYear()
+                            && fechaEmision.getMonthValue() == fecha.getMonthValue()) {
+
+                        for (Indicaciones i : r.getIndicaciones()) {
+                            if (i.getMedicamento().getNombre().equals(nombreMed)) {
+                                cantidad += i.getCantidad();
+                            }
+                        }
+                    }
+                }
+
+                serie.add(new Month(fecha.getMonthValue(), fecha.getYear()), cantidad);
+                fecha = fecha.plusMonths(1);
+            }
+
+            dataset.addSeries(serie);
+        }
+
+        return dataset;
+    }
+
+    public JFreeChart crearGraficoLineaMedicamentos(
+            LocalDate inicio, LocalDate fin, List<String> seleccionados, List<Receta> listaRecetas) {
+
+        // Crear dataset con los datos de medicamentos
+        TimeSeriesCollection dataset = crearDatasetMedicamentosPorMes(inicio, fin, seleccionados, listaRecetas);
+
+        // Crear el gráfico de líneas
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                "Medicamentos despachados por mes",
+                "Mes",
+                "Cantidad",
+                dataset,
+                true,
+                true,
+                false
+        );
+
+        // Configurar el gráfico
+        XYPlot plot = chart.getXYPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.LIGHT_GRAY);
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setDefaultShapesVisible(true);
+        renderer.setDefaultShapesFilled(true);
+        renderer.setDefaultStroke(new BasicStroke(2.0f));
+        plot.setRenderer(renderer);
+
+        // Formato de eje X (fecha)
+        DateAxis ejeX = (DateAxis) plot.getDomainAxis();
+        ejeX.setDateFormatOverride(new SimpleDateFormat("MMM yyyy"));
+
+        // Si no hay datos, muestra aviso
+        if (dataset.getSeriesCount() == 0) {
+            chart.addSubtitle(new TextTitle("No hay datos disponibles para el rango seleccionado"));
+        }
+
+        return chart;
+    }
+
 
     // --------------------------
     // Cierre de conexión
