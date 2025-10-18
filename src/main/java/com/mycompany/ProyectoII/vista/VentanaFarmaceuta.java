@@ -55,7 +55,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     /**
      * Creates new form VentanaFarmaceutico
      */
-    public VentanaFarmaceuta(Control control) {
+    public VentanaFarmaceuta(Control control) throws SQLException {
         this.control = control;
         this.estado = new FormHandler();
         
@@ -86,7 +86,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         
     }
     
-    public void init() {
+    public void init() throws SQLException {
         // ====== DocumentListener para campos de edición ======
         DocumentListener listenerEdicion = new DocumentListener() {
             @Override
@@ -142,8 +142,15 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                     actualizarTablaRecetas();
                     break;
                 case 1:
-                    actualizarTablaMedicamentosDashboard();
+                {
+                    try {
+                        refrescarTablaMedicamentos();
+                    } catch (SQLException ex) {
+                        System.getLogger(VentanaFarmaceuta.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    }
+                }
                     break;
+
                 case 2:
                     actualizarTablaRecetas2();
                     break;
@@ -152,7 +159,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         });
 
         // ====== Inicializar tablas ======
-        actualizarTablaMedicamentosDashboard();
+        refrescarTablaMedicamentos();
         configurarTablaRecetaSelec();
         actualizarTablaRecetas();
 
@@ -336,7 +343,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     // =========================== Recetas ================================
     private void actualizarTablaRecetas() {
         try {
-            List<Receta> recetas = control.listarRecetas();
+            List<Receta> recetas = control.obtenerTodasRecetas();
             DefaultTableModel modelo = (DefaultTableModel) tblRecetas.getModel();
             modelo.setRowCount(0);
             
@@ -360,7 +367,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     
     private void actualizarTablaRecetas2() {
         try {
-            List<Receta> recetas = control.listarRecetas();
+            List<Receta> recetas = control.obtenerTodasRecetas();
             DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
             modelo.setRowCount(0);
             
@@ -438,7 +445,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         
         try {
             // Obtén todas las recetas desde el control
-            List<Receta> recetas = control.listarRecetas();
+            List<Receta> recetas = control.obtenerTodasRecetas();
             DefaultTableModel modelo = (DefaultTableModel) tblRecetas.getModel();
             modelo.setRowCount(0); // limpiar tabla antes de insertar
 
@@ -1082,8 +1089,12 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonSeleccionFechasActionPerformed
 
     private void BotonAgregarMedicamentoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAgregarMedicamentoComboBoxActionPerformed
-        // TODO add your handling code here:
-        agregarMedicamentoSeleccionado();
+        try {
+            // TODO add your handling code here:
+            agregarMedicamentoSeleccionado();
+        } catch (SQLException ex) {
+            System.getLogger(VentanaFarmaceuta.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }//GEN-LAST:event_BotonAgregarMedicamentoComboBoxActionPerformed
 
     private void areaTxtBusCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaTxtBusCodigoActionPerformed
@@ -1197,7 +1208,13 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         Modelo modelo = new Modelo();
         Control control = new Control(modelo);
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaFarmaceuta(control).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new VentanaFarmaceuta(control).setVisible(true);
+            } catch (SQLException ex) {
+                System.getLogger(VentanaFarmaceuta.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
     }
 
     //=============================================== Despacho ================================================
@@ -1275,125 +1292,162 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     }
     
     private void confirmarSeleccionFechasPastel() {
-        // 1. Capturar los valores de los Spinners
-        Date fechaAñoInicio = (Date) AñoInicio.getValue();
-        Date fechaAñoFin = (Date) AñoFin.getValue();
-        Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
-        Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
+        try {
+            // 1️⃣ Capturar los valores de los Spinners
+            Date fechaAñoInicio = (Date) AñoInicio.getValue();
+            Date fechaAñoFin = (Date) AñoFin.getValue();
+            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
+            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
 
-        // 2. Convertir a LocalDate (opcional, según tu método)
-        LocalDate inicio = LocalDate.of(
-                fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
-        );
-        
-        LocalDate fin = LocalDate.of(
-                fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
-        );
+            // 2️⃣ Convertir a LocalDate correctamente
+            LocalDate inicio = LocalDate.of(
+                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
 
-        // 3. Llamar al método del controlador para crear el gráfico
-//        JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(inicio, fin);
+            LocalDate fin = LocalDate.of(
+                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
 
-        // 4. Mostrarlo en el PanelRecetas
-//        ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setMouseWheelEnabled(true);
-//        chartPanel.setPreferredSize(new java.awt.Dimension(
-//                PanelRecetas.getWidth(),
-//                PanelRecetas.getHeight()
-//        ));
-        
-        PanelRecetas.removeAll();
-        PanelRecetas.setLayout(new java.awt.BorderLayout());
-//        PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
-        PanelRecetas.validate();
-        PanelRecetas.repaint();
+            // Validar rango
+            if (inicio.isAfter(fin)) {
+                JOptionPane.showMessageDialog(this,
+                        "La fecha de inicio no puede ser posterior a la fecha final.",
+                        "Rango inválido",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 3️⃣ Llamar al método para generar el gráfico
+            crearGraficoPastelRecetasPorEstado(inicio, fin);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al procesar las fechas: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    private void crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) {
+        try {
+            // 1️⃣ Llamar al controlador para crear el gráfico
+            JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
+
+            // 2️⃣ Crear un ChartPanel que lo contenga
+            ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setMouseWheelEnabled(true);
+            chartPanel.setPreferredSize(new java.awt.Dimension(
+                    PanelRecetas.getWidth(),
+                    PanelRecetas.getHeight()
+            ));
+
+            // 3️⃣ Reemplazar el contenido del panel
+            PanelRecetas.removeAll();
+            PanelRecetas.setLayout(new java.awt.BorderLayout());
+            PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
+
+            // 4️⃣ Refrescar el panel
+            PanelRecetas.validate();
+            PanelRecetas.repaint();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar el gráfico: " + ex.getMessage(),
+                    "Error de base de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }
     
-    private void crearGraficoPastelRecetasPorEstado(LocalDate fI, LocalDate fF) {
-//        // Pedimos el gráfico al controlador
-//        JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(fI, fF);
-//
-//        // Lo metemos en un ChartPanel
-//        ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setMouseWheelEnabled(true);
-//        
-//        chartPanel.setPreferredSize(null);
-//        chartPanel.setPreferredSize(new java.awt.Dimension(
-//                PanelRecetas.getWidth(),
-//                PanelRecetas.getHeight()
-//        ));
-//
-//        // Limpiamos y agregamos al PanelRecetas
-//        PanelRecetas.removeAll();
-//        PanelRecetas.setLayout(new java.awt.BorderLayout());
-//        PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
-//
-//        // Forzar actualización visual
-//        PanelRecetas.validate();
-//        PanelRecetas.repaint();
+public DefaultTableModel crearTablaMedicamentosPorMes(
+            LocalDate inicio, LocalDate fin,
+            List<String> seleccionados, List<Receta> listaRecetas) {
+
+        // Validar entradas
+        if (listaRecetas == null || listaRecetas.isEmpty()) {
+            return new DefaultTableModel(new Object[][]{}, new String[]{"Medicamento"});
+        }
+
+        // 🧩 Construcción dinámica de columnas: Año-Mes
+        List<String> columnas = new ArrayList<>();
+        columnas.add("Medicamento");
+
+        LocalDate fecha = inicio.withDayOfMonth(1);
+        while (!fecha.isAfter(fin)) {
+            columnas.add(fecha.getYear() + "-" + String.format("%02d", fecha.getMonthValue()));
+            fecha = fecha.plusMonths(1);
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
+
+        // 🩺 Llenar las filas por medicamento
+        for (String med : seleccionados) {
+            List<Object> fila = new ArrayList<>();
+            fila.add(med);
+
+            fecha = inicio.withDayOfMonth(1);
+            while (!fecha.isAfter(fin)) {
+                int cantidad = 0;
+
+                for (Receta r : listaRecetas) {
+                    if (r.getFechaEmision() == null) {
+                        continue;
+                    }
+
+                    // Convertir a LocalDate (según el tipo real)
+                    LocalDate fechaEmision;
+                    if (r.getFechaEmision() instanceof java.sql.Date) {
+                        fechaEmision = ((java.sql.Date) r.getFechaEmision()).toLocalDate();
+                    } else {
+                        fechaEmision = r.getFechaEmision().toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+                    }
+
+                    // Comparar mes y año
+                    if (fechaEmision.getYear() == fecha.getYear()
+                            && fechaEmision.getMonthValue() == fecha.getMonthValue()) {
+
+                        // Buscar el medicamento en las indicaciones
+                        for (Indicaciones i : r.getIndicaciones()) {
+                            if (i.getMedicamento() != null
+                                    && med.equals(i.getMedicamento().getNombre())) {
+                                cantidad += i.getCantidad();
+                            }
+                        }
+                    }
+                }
+
+                fila.add(cantidad);
+                fecha = fecha.plusMonths(1);
+            }
+
+            modelo.addRow(fila.toArray());
+        }
+
+        return modelo;
     }
     
-//    public DefaultTableModel crearTablaMedicamentosPorMes(
-//            LocalDate inicio, LocalDate fin, List<String> seleccionados, List<Receta> listaRecetas) {
-//
-//        // Construir los títulos de las columnas dinámicamente: Año-Mes
-//        List<String> columnas = new ArrayList<>();
-//        columnas.add("Medicamento");
-//        
-//        LocalDate fecha = inicio.withDayOfMonth(1);
-//        while (!fecha.isAfter(fin)) {
-//            columnas.add(fecha.getYear() + "-" + String.format("%02d", fecha.getMonthValue()));
-//            fecha = fecha.plusMonths(1);
-//        }
-//        
-//        DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
-//
-//        // Llenar filas
-//        for (String med : seleccionados) {
-//            List<Object> fila = new ArrayList<>();
-//            fila.add(med);
-//            
-//            fecha = inicio.withDayOfMonth(1);
-//            while (!fecha.isAfter(fin)) {
-//                int cantidad = 0;
-//                for (Receta r : listaRecetas) {
-//                    LocalDate fechaEmision = r.getFechaEmision();
-//                    if ((fechaEmision.getYear() == fecha.getYear()) && (fechaEmision.getMonthValue() == fecha.getMonthValue())) {
-//                        for (Indicaciones i : r.getIndicaciones()) {
-//                            if (i.getMedicamento().getNombre().equals(med)) {
-//                                cantidad += i.getCantidad();
-//                            }
-//                        }
-//                    }
-//                }
-//                fila.add(cantidad);
-//                fecha = fecha.plusMonths(1);
-//            }
-//            
-//            modelo.addRow(fila.toArray());
-//        }
-//        
-//        return modelo;
-//    }
-    
-    private void cargarMedicamentosComboBox() {
+    private void cargarMedicamentosComboBox() throws SQLException {
         jComboBoxMedicamentos.removeAllItems();
-        for (Medicamento m : control.ListarMedicamentos()) {
+        for (Medicamento m : control.obtenerTodosMedicamentos()) {
             jComboBoxMedicamentos.addItem(m.getNombre());
         }
     }
 
     // Acción del botón "Agregar medicamento"
-    private void agregarMedicamentoSeleccionado() {
+    private void agregarMedicamentoSeleccionado() throws SQLException {
         String seleccionado = (String) jComboBoxMedicamentos.getSelectedItem();
         if (seleccionado != null && !medicamentosSeleccionados.contains(seleccionado)) {
             medicamentosSeleccionados.add(seleccionado);
 
             // Refrescar tabla y gráfico
-            actualizarTablaMedicamentosDashboard();
+            refrescarTablaMedicamentos();
         } else {
             JOptionPane.showMessageDialog(this,
                     "Ya has agregado este medicamento o no hay selección válida.",
@@ -1401,118 +1455,98 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
         }
     }
-    
-    private void actualizarTablaMedicamentosDashboard() {
+    private void refrescarTablaMedicamentos() throws SQLException {
         LocalDate inicio = LocalDate.of(
                 ((Date) AñoInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
                 ((Date) DiaMesInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
                 1
         );
-        
+
         LocalDate fin = LocalDate.of(
                 ((Date) AñoFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
                 ((Date) DiaMesFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
                 1
         );
-        
-//        DefaultTableModel modelo = crearTablaMedicamentosPorMes(
-//                inicio,
-//                fin,
-//                medicamentosSeleccionados,
-//                control.listarRecetas()
-//        );
-//        tblMedicamentosGrafico.setModel(modelo);
+
+        DefaultTableModel modelo = crearTablaMedicamentosPorMes(
+                inicio,
+                fin,
+                medicamentosSeleccionados,
+                control.obtenerTodasRecetas()
+        );
+        tblMedicamentosGrafico.setModel(modelo);
     }
     
-    private void generarGraficoMedicamentos() {
-        if (medicamentosSeleccionados.isEmpty()) {
+   private void generarGraficoMedicamentos() {
+        try {
+            // 1️⃣ Validar que haya medicamentos seleccionados
+            if (medicamentosSeleccionados.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe agregar al menos un medicamento para generar el gráfico.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 2️⃣ Capturar y convertir las fechas de los Spinners
+            Date fechaAñoInicio = (Date) AñoInicio.getValue();
+            Date fechaAñoFin = (Date) AñoFin.getValue();
+            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
+            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
+
+            LocalDate inicio = LocalDate.of(
+                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
+
+            LocalDate fin = LocalDate.of(
+                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
+
+            // 3️⃣ Validar rango
+            if (inicio.isAfter(fin)) {
+                JOptionPane.showMessageDialog(this,
+                        "La fecha de inicio no puede ser posterior a la fecha final.",
+                        "Rango inválido",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 4️⃣ Llamar al controlador para generar el gráfico
+            JFreeChart chart = control.crearGraficoLineaMedicamentos(
+                    inicio,
+                    fin,
+                    medicamentosSeleccionados,
+                    control.obtenerTodasRecetas()
+            );
+
+            // 5️⃣ Mostrar el gráfico en el panel
+            ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setMouseWheelEnabled(true);
+            chartPanel.setPreferredSize(new java.awt.Dimension(
+                    PanelMedicamentos.getWidth(),
+                    PanelMedicamentos.getHeight()
+            ));
+
+            PanelMedicamentos.removeAll();
+            PanelMedicamentos.setLayout(new java.awt.BorderLayout());
+            PanelMedicamentos.add(chartPanel, java.awt.BorderLayout.CENTER);
+            PanelMedicamentos.validate();
+            PanelMedicamentos.repaint();
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Debe agregar al menos un medicamento para generar el gráfico.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
+                    "Error al generar el gráfico: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        
-        LocalDate inicio = LocalDate.of(
-                ((Date) AñoInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                ((Date) DiaMesInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
-                1
-        );
-        
-        LocalDate fin = LocalDate.of(
-                ((Date) AñoFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                ((Date) DiaMesFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
-                1
-        );
-        
-//        JFreeChart chart = control.crearGraficoLineaMedicamentos(
-//                inicio,
-//                fin,
-//                medicamentosSeleccionados,
-//                control.ListarRecetas()
-//        );
-        
-        PanelMedicamentos.removeAll();
-//        ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setMouseWheelEnabled(true);
-//        chartPanel.setPreferredSize(new Dimension(PanelMedicamentos.getWidth(), PanelMedicamentos.getHeight()));
-        PanelMedicamentos.setLayout(new BorderLayout());
-//        PanelMedicamentos.add(chartPanel, BorderLayout.CENTER);
-        PanelMedicamentos.validate();
-        PanelMedicamentos.repaint();
     }
-    
-    private void confirmarSeleccionFechasLineal() {
-        // 1. Capturar los valores de los Spinners
-        Date fechaAñoInicio = (Date) AñoInicio.getValue();
-        Date fechaAñoFin = (Date) AñoFin.getValue();
-        Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
-        Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
 
-        // 2. Convertir a LocalDate
-        LocalDate inicio = LocalDate.of(
-                fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).getMonth(),
-                1 // siempre el primer día del mes
-        );
-        
-        LocalDate fin = LocalDate.of(
-                fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).getMonth(),
-                1 // primer día del mes
-        );
-
-        // ⚠️ Usar la lista global, NO crear una nueva
-        if (medicamentosSeleccionados.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Debe agregar al menos un medicamento.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // 3. Crear el gráfico de líneas usando el controlador
-//        JFreeChart chart = control.crearGraficoLineaMedicamentos(
-//                inicio,
-//                fin,
-//                medicamentosSeleccionados, // usar la lista global
-//                control.ListarRecetas()
-//        );
-
-        // 4. Mostrarlo en el PanelMedicamentos
-//        ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setMouseWheelEnabled(true);
-//        chartPanel.setPreferredSize(new java.awt.Dimension(
-//                PanelMedicamentos.getWidth(),
-//                PanelMedicamentos.getHeight()
-//        ));
-//        
-        PanelMedicamentos.removeAll();
-        PanelMedicamentos.setLayout(new java.awt.BorderLayout());
-//        PanelMedicamentos.add(chartPanel, java.awt.BorderLayout.CENTER);
-        PanelMedicamentos.validate();
-        PanelMedicamentos.repaint();
-    }
+  
 
     //==============================================================================================
     private void asignarIconosPestanas() {

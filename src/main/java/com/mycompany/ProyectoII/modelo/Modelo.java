@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.jfree.chart.JFreeChart;
 
 public class Modelo {
 
@@ -99,9 +100,11 @@ public class Modelo {
         gestor.eliminarMedicamento(codigo);
     }
 
-    public List<Medicamento> listarMedicamentos() throws SQLException {
+    public List<Medicamento> obtenerTodosMedicamentos() throws SQLException {
         return gestor.obtenerTodosMedicamentos();
     }
+    
+    
 
     public Medicamento buscarMedicamento(String codigo) throws SQLException {
         return gestor.buscarMedicamentoPorCodigo(codigo);
@@ -173,14 +176,14 @@ public class Modelo {
     
     
     
-    //Nicolas puedes revisarlo, porque no sé xd
-//    public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin){
-//        return gestor.getFarma().getGestorRecetas().crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
-//    }
-//    
-//    public JFreeChart crearGraficoLineaMedicamentos(LocalDate i, LocalDate f, List<String> sel, List<Receta> listRe) {
-//        return gestor.getFarma().getGestorRecetas().crearGraficoLineaMedicamentos(i, f, sel, listRe);
-//    }
+
+   public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException{
+       return gestor.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
+    }
+   
+   public JFreeChart crearGraficoLineaMedicamentos(LocalDate i, LocalDate f, List<String> sel, List<Receta> listRe) {        
+       return gestor.crearGraficoLineaMedicamentos(i, f, sel, listRe);
+   }
     
 //    //============Otro===============
   

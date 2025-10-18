@@ -18,10 +18,12 @@ import com.mycompany.ProyectoII.vista.VentanaFarmaceuta;
 import com.mycompany.ProyectoII.vista.VentanaMedico;
 import com.mycompany.ProyectoII.vista.VentanaPrincipal;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import lombok.Setter;
+import org.jfree.chart.JFreeChart;
 
 @Setter
 @Getter
@@ -54,7 +56,7 @@ public class Control {
         modelo.guardarDatos();
     }
      */
-    public void abrirVentanaSegunUsuario(TipoUsuario tipo) {
+    public void abrirVentanaSegunUsuario(TipoUsuario tipo) throws SQLException {
         System.out.println("abrirVentanaSegunUsuario llamado con tipo: " + tipo);
         switch (tipo) {
             case FARMACEUTA -> {
@@ -72,7 +74,7 @@ public class Control {
         }
     }
 
-    public void abrirVentanaMedico(Medico med) {
+    public void abrirVentanaMedico(Medico med) throws SQLException {
         VentanaMedico ventanaMedico = new VentanaMedico(this, med);
         ventanaMedico.setVisible(true);
     }
@@ -232,16 +234,10 @@ public class Control {
         }
     }
 
-    public List<Medicamento> ListarMedicamentos() {
-        List<Medicamento> meds = null;
-        try {
-            meds = modelo.listarMedicamentos();
-        } catch (SQLException ex) {
-            ex.getMessage();
-        }
-        return meds;
-
+    public List<Medicamento> obtenerTodosMedicamentos() throws SQLException {
+        return modelo.obtenerTodosMedicamentos();
     }
+   
 
     public Medicamento buscarMedicamento(String cod) {
         Medicamento med = null;
@@ -261,6 +257,11 @@ public class Control {
         }
     }
 
+    
+    
+    
+    
+    
     //================= Recetas =============
     public void agregarReceta(Receta receta) {
         try {
@@ -271,14 +272,8 @@ public class Control {
         }
     }
 
-    public List<Receta> listarRecetas() {
-        List<Receta> rece = null;
-        try {
-            rece = modelo.listarRecetas();
-        } catch (SQLException ex) {
-            ex.getMessage();
-        }
-        return rece;
+    public List<Receta> obtenerTodasRecetas() throws SQLException {
+        return modelo.obtenerTodasRecetas();
 
     }
 
@@ -329,13 +324,14 @@ public class Control {
         return modelo.buscarRecetasPorMedico(cedulaMedico);
     }
 
-//    public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) {
-//        return modelo.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
-//    }
-//
-//    public JFreeChart crearGraficoLineaMedicamentos(LocalDate i, LocalDate f, List<String> sel, List<Receta> listRe) {
-//        return modelo.crearGraficoLineaMedicamentos(i, f, sel, listRe);
-//    }
+
+    public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
+        return modelo.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
+    }
+
+    public JFreeChart crearGraficoLineaMedicamentos(LocalDate i, LocalDate f, List<String> sel, List<Receta> listRe) {
+        return modelo.crearGraficoLineaMedicamentos(i, f, sel, listRe);
+    }
     //============historico===========
     public Receta buscarReceta(String cod) {
         Receta re = null;

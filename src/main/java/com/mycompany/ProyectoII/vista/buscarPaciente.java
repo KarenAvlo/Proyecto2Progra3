@@ -284,12 +284,12 @@ public class buscarPaciente extends javax.swing.JFrame {
             }
             Control controlador = new Control(modelo);
             Medico med = new Medico();
-            VentanaMedico ventanaMedico = new VentanaMedico(controlador, med);
-//            try {
-//                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            VentanaMedico ventanaMedico = null;
+            try {
+                ventanaMedico = new VentanaMedico(controlador, med);
+            } catch (SQLException ex) {
+                System.getLogger(buscarPaciente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
             buscarPaciente ventana = new buscarPaciente(controlador, ventanaMedico);
             ventana.init();  // <-- Aquí inicializas todo correctamente
            

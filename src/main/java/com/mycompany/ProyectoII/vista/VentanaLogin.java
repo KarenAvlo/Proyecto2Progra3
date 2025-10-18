@@ -197,11 +197,19 @@ public class VentanaLogin extends javax.swing.JFrame {
        TipoUsuario tipo = control.tipoDeUsuario(persona);
         System.out.println(tipo);
        if (persona != null && tipo == TipoUsuario.MEDICO) {
-           control.abrirVentanaMedico((Medico) persona); // abre la ventana correcta
+           try {
+               control.abrirVentanaMedico((Medico) persona); // abre la ventana correcta
+           } catch (SQLException ex) {
+               System.getLogger(VentanaLogin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+           }
            this.dispose(); // cierra la ventana de login
        }
        if (tipo != null) {
-           control.abrirVentanaSegunUsuario(tipo);
+           try {
+               control.abrirVentanaSegunUsuario(tipo);
+           } catch (SQLException ex) {
+               System.getLogger(VentanaLogin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+           }
            this.dispose();
        } else {
           lblmensaje.setText("Usuario o clave incorrectos");
