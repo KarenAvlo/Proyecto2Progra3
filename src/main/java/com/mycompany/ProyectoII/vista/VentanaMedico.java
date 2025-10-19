@@ -8,12 +8,8 @@ import com.mycompany.ProyectoII.Receta;
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.sql.SQLException;
-
 import java.time.LocalDate;
-
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -838,24 +834,24 @@ public class VentanaMedico extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonAgregarMedicamentoComboBoxActionPerformed
 
     private void BotonVerIndicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVerIndicacionesActionPerformed
-//        int fila = TablaRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaRecetas.getValueAt(fila, 0).toString(); // código de la receta
-//            Receta receta = controlador.buscarReceta(codigo); // debes tener este método en tu controlador
-//            if (receta != null) {
-//                mostrarIndicacionesReceta(receta);
-//            } else {
-//                JOptionPane.showMessageDialog(this,
-//                        "No se encontró la receta seleccionada.",
-//                        "Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this,
-//                    "Seleccione una receta de la tabla.",
-//                    "Aviso",
-//                    JOptionPane.WARNING_MESSAGE);
-//        }
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo); 
+            if (receta != null) {
+                mostrarIndicacionesReceta(receta);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró la receta seleccionada.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una receta de la tabla.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+        }  
     }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
     /*    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
      */
@@ -892,12 +888,7 @@ public class VentanaMedico extends javax.swing.JFrame {
             Control controlador = new Control(modelo);
             Medico med = new Medico();
             try {
-                //            try {
-//                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-new VentanaMedico(controlador, med).setVisible(true);
+                new VentanaMedico(controlador, med).setVisible(true);
             } catch (SQLException ex) {
                 System.getLogger(VentanaMedico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
@@ -929,13 +920,12 @@ new VentanaMedico(controlador, med).setVisible(true);
     }
 
     public void medicamentoSeleccionado(Medicamento medicamento, int can, String indica, int dura) {
-//        nuevasIndicaciones = new Indicaciones(medicamento, can, indica, dura);
-//        recetaActual.agregarIndicaciones(nuevasIndicaciones);
-//        actualizarTabla(recetaActual);
-//        indicarCambios();
-//        cambiarModoEditar();
-//        actualizarControles();
-
+        //Indicaciones nuevasIndicaciones = new Indicaciones(medicamento, can, indica, dura);
+        recetaActual.agregarIndicaciones(nuevasIndicaciones);
+        actualizarTabla(recetaActual);
+        indicarCambios();
+        cambiarModoEditar();
+        actualizarControles();
     }
 
     private void actualizarTabla(Receta receta) {
@@ -1282,56 +1272,52 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
 //====================Historico==================
 
     private void cargarRecetaDesdeTabla() {
-//        int fila = TablaRecetas.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
-//            Receta receta = controlador.buscarReceta(codigo);
-//
-//            if (receta != null) {
-//                estado.setModel(receta);      // guardamos en el estado actual
-//                cambiarModoVista();           // cambiamos a modo vista (como haces en otros módulos)
-//                actualizarComponentes();      // actualiza botones/campos
-//
-//                // Además: limpiar tabla de indicaciones y llenarla con esta receta
-//                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
-//                modelo.setRowCount(0);
-//
-//                for (Indicaciones ind : receta.getIndicaciones()) {
-//                    modelo.addRow(new Object[]{
-//                        ind.getMedicamento().getNombre(),
-//                        ind.getCantidad(),
-//                        ind.getIndicaciones(),
-//                        ind.getDuracion()
-//                    });
-//                }
-//            }
-//        }
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo);
+
+            if (receta != null) {
+                estado.setModel(receta);  
+                cambiarModoVista();         
+                actualizarComponentes();  
+                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
+                modelo.setRowCount(0);
+                for (Indicaciones ind : receta.getIndicaciones()) {
+                    modelo.addRow(new Object[]{
+                        ind.getMedicamento().getNombre(),
+                        ind.getCantidad(),
+                        ind.getIndicaciones(),
+                        ind.getDuracion()
+                    });
+                }
+            }
+        }
     }
 
     private void actualizarTablaRecetas() {
-//        try {
-//            List<Receta> recetas = controlador.ListarRecetas(); 
-//            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
-//            modelo.setRowCount(0); // limpia la tabla
-//
-//            if (recetas != null) {
-//                for (Receta r : recetas) {
-//                    modelo.addRow(new Object[]{
-//                        r.getCodReceta(),
-//                        r.getPaciente() != null ? r.getPaciente().getNombre() : "Sin paciente",
-//                        r.getMedico() != null ? r.getMedico().getNombre() : "Sin médico",
-//                        r.getFechaEmision(),
-//                        r.getFechaRetiro() != null ? r.getFechaRetiro() : "No retirado",
-//                        r.getEstado()
-//                    });
-//                }
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this,
-//                    "Error al cargar las recetas: " + ex.getMessage(),
-//                    "Error",
-//                    JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            List<Receta> recetas = control.obtenerTodasRecetas();
+            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
+            modelo.setRowCount(0); 
+            if (recetas != null) {
+                for (Receta r : recetas) {
+                    modelo.addRow(new Object[]{
+                        r.getCodReceta(),
+                        r.getPaciente() != null ? r.getPaciente().getNombre() : "Sin paciente",
+                        r.getMedico() != null ? r.getMedico().getNombre() : "Sin médico",
+                        r.getFechaEmision(),
+                        r.getFechaRetiro() != null ? r.getFechaRetiro() : "No retirado",
+                        r.getEstado()
+                    });
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar las recetas: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void mostrarIndicacionesReceta(Receta receta) {

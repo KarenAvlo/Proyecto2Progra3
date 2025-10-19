@@ -570,16 +570,15 @@ private void guardarFarmaceuta() {
                 JOptionPane.showMessageDialog(this, "Nombre y cédula son obligatorios");
                 return;
             }
-            Farmaceuta farma = new Farmaceuta(cedula, nombre, cedula);
-            
-             Farmaceuta existente = control.buscarFarmaceuta(cedula);
+            Farmaceuta existente = control.buscarFarmaceuta(cedula);
             if (estado.isAdding() && existente != null) {
                 JOptionPane.showMessageDialog(this,
                         "Ya existe un farmaceuta con esa cédula",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            
+            Farmaceuta farma = new Farmaceuta(cedula, nombre, cedula);
             if (estado.isAdding()) {
                 control.agregarFarmaceuta(farma);
                 JOptionPane.showMessageDialog(this, "Farmaceuta agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -676,7 +675,7 @@ private void guardarFarmaceuta() {
             if (farma != null) {
                 ResultadoFtxt.setText(farma.getNombre());
                 estado.setModel(farma);
-                cambiarModoVista();
+                cambiarModoAgregar();
                 actualizarComponentes();
                 JOptionPane.showMessageDialog(this, "Farmaceuta encontrado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
