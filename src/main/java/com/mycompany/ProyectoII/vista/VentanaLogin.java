@@ -194,6 +194,11 @@ public class VentanaLogin extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.getLogger(VentanaLogin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
+        
+        if (persona != null) {
+        control.setUsuarioActual(persona);
+}
+        
        TipoUsuario tipo = control.tipoDeUsuario(persona);
         System.out.println(tipo);
        if (persona != null && tipo == TipoUsuario.MEDICO) {

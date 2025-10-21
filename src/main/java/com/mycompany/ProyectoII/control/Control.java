@@ -29,6 +29,7 @@ import org.jfree.chart.JFreeChart;
 @Getter
 
 public class Control {
+    private Persona usuarioActual;
 
     public Control(Modelo m) {
         this.modelo = m;
@@ -52,22 +53,31 @@ public class Control {
     }
 
     /*
-    public void GuardarCambioContraseña() {
-        modelo.guardarDatos();
-    }
+    Usuarios
      */
+    
+     public void setUsuarioActual(Persona usuario) {
+        this.usuarioActual = usuario;
+    }
+
+    public Persona getUsuarioActual() {
+        return usuarioActual;
+    }
+    
     public void abrirVentanaSegunUsuario(TipoUsuario tipo) throws SQLException {
         System.out.println("abrirVentanaSegunUsuario llamado con tipo: " + tipo);
         switch (tipo) {
             case FARMACEUTA -> {
                 VentanaFarmaceuta ventanaFarmaceuta = new VentanaFarmaceuta(this);
                 ventanaFarmaceuta.setVisible(true);
+             System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
             }
             case MEDICO -> {
             }
             case ADMINISTRATIVO -> {
                 VentanaAdministrador ventanaAdmin = new VentanaAdministrador(this);
                 ventanaAdmin.setVisible(true);
+             System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
             }
             default ->
                 JOptionPane.showMessageDialog(null, "Usuario no reconocido");
@@ -77,6 +87,7 @@ public class Control {
     public void abrirVentanaMedico(Medico med) throws SQLException {
         VentanaMedico ventanaMedico = new VentanaMedico(this, med);
         ventanaMedico.setVisible(true);
+        System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
     }
 
     public void volverVentanaPrincipal() {

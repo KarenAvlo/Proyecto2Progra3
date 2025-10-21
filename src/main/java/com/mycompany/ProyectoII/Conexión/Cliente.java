@@ -1,6 +1,8 @@
 
 package com.mycompany.ProyectoII.Conexión;
 
+import com.mycompany.ProyectoII.Persona;
+import com.mycompany.ProyectoII.control.Control;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +24,8 @@ public class Cliente {
         ) {
             System.out.println("Conectado al servidor.");
             System.out.println(entrada.readLine()); // mensaje de bienvenida
-
+            
+            
             // Hilo para escuchar mensajes del servidor
             new Thread(() -> {
                 String respuesta;
@@ -49,4 +52,5 @@ public class Cliente {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
         }
     }
+
 }
