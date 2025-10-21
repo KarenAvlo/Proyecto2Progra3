@@ -222,9 +222,9 @@ public class VentanaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonLoginActionPerformed
 
     private void BotonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVolverActionPerformed
-        // TODO add your handling code here:
-//        this.dispose();
-//        controlador.volverVentanaPrincipal();
+//         TODO add your handling code here:
+        this.dispose();
+        control.volverVentanaPrincipal();
     }//GEN-LAST:event_BotonVolverActionPerformed
 
     /**

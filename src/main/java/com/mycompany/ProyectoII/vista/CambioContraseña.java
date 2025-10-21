@@ -1,7 +1,11 @@
 package com.mycompany.ProyectoII.vista;
 
+import com.mycompany.ProyectoII.Administrativo;
+import com.mycompany.ProyectoII.Farmaceuta;
+import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.control.Control;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
@@ -190,33 +194,54 @@ public class CambioContraseña extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
-//
-//        String cedula = txtCedula.getText().trim();
-//        String claveAnterior = new String(txtclaveAnterior.getPassword());
-//        String nuevaClave = new String(txtclaveNueva.getPassword());
-//
-//        Persona persona = controlador.validarUsuario(cedula, claveAnterior);
-//        if (nuevaClave.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "La nueva clave no puede estar vacía");
-//            return;
-//        }
-//        if (persona != null) {
-//            if (claveAnterior.equals(persona.getClave()) && !nuevaClave.equals(persona.getClave())) {
-//                persona.setClave(nuevaClave);
-//                controlador.GuardarCambioContraseña();
-//                JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
-//            } else {
-//                JOptionPane.showMessageDialog(this, "La clave es la misma que la anterior");
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrecta");
-//        }
+String cedula = txtCedula.getText().trim();
+    String claveAnterior = new String(txtclaveAnterior.getPassword());
+    String nuevaClave = new String(txtclaveNueva.getPassword());
+
+    if (cedula.isEmpty() || claveAnterior.isEmpty() || nuevaClave.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
+        return;
+    }
+
+    try {
+        Persona persona = controlador.validarUsuario(cedula, claveAnterior);
+
+        if (persona == null) {
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrecta");
+            return;
+        }
+
+        if (nuevaClave.equals(persona.getClave())) {
+            JOptionPane.showMessageDialog(this, "La nueva clave no puede ser igual a la anterior");
+            return;
+        }
+
+        boolean actualizado = false;
+
+        if (persona instanceof Medico) {
+            
+            actualizado = controlador.actualizarClaveMedico(cedula, nuevaClave);
+        } else if (persona instanceof Farmaceuta) {
+            actualizado = controlador.actualizarClaveFarma(cedula, nuevaClave);
+        } else if (persona instanceof Administrativo) {
+            actualizado = controlador.actualizarClaveAdmi(cedula, nuevaClave);
+        }
+
+        if (actualizado) {
+            JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo actualizar la contraseña. Intente nuevamente.");
+        }
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error de base de datos: " + ex.getMessage());
+    }
     }//GEN-LAST:event_btnCambiarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // Abrir la ventana de Login
         this.dispose();
-//        controlador.volverVentanaPrincipal();
+       controlador.volverVentanaPrincipal();
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 

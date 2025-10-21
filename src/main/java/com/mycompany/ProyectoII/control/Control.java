@@ -29,6 +29,7 @@ import org.jfree.chart.JFreeChart;
 @Getter
 
 public class Control {
+
     private Persona usuarioActual;
 
     public Control(Modelo m) {
@@ -55,29 +56,28 @@ public class Control {
     /*
     Usuarios
      */
-    
-     public void setUsuarioActual(Persona usuario) {
+    public void setUsuarioActual(Persona usuario) {
         this.usuarioActual = usuario;
     }
 
     public Persona getUsuarioActual() {
         return usuarioActual;
     }
-    
+
     public void abrirVentanaSegunUsuario(TipoUsuario tipo) throws SQLException {
         System.out.println("abrirVentanaSegunUsuario llamado con tipo: " + tipo);
         switch (tipo) {
             case FARMACEUTA -> {
                 VentanaFarmaceuta ventanaFarmaceuta = new VentanaFarmaceuta(this);
                 ventanaFarmaceuta.setVisible(true);
-             System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
+                System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
             }
             case MEDICO -> {
             }
             case ADMINISTRATIVO -> {
                 VentanaAdministrador ventanaAdmin = new VentanaAdministrador(this);
                 ventanaAdmin.setVisible(true);
-             System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
+                System.out.println("🟢 Usuario conectado: " + usuarioActual.getNombre());
             }
             default ->
                 JOptionPane.showMessageDialog(null, "Usuario no reconocido");
@@ -112,6 +112,17 @@ public class Control {
         }
         return null;
     }
+//admin
+
+    public boolean actualizarClaveAdmi(String cedula, String nuevaClave) {
+        boolean sepudo = false;
+        try {
+            sepudo = modelo.actualizarClaveAdmi(cedula, nuevaClave);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
+        return sepudo;
+    }
 
     //========MEDICOS==========
     public void agregarMedico(Medico m) throws SQLException {
@@ -138,6 +149,15 @@ public class Control {
 
     public List<Medico> obtenerTodosMedicos() throws SQLException {
         return modelo.obtenerTodosMedicos();
+    }
+    public boolean actualizarClaveMedico(String cedula, String nuevaClave) {
+        boolean sepudo = false;
+        try {
+            sepudo = modelo.actualizarClaveMedico(cedula, nuevaClave);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
+        return sepudo;
     }
 
     //=================Farmaceutas=============
@@ -183,6 +203,15 @@ public class Control {
         }
     }
 
+    public boolean actualizarClaveFarma(String cedula, String nuevaClave) {
+        boolean sepudo = false;
+        try {
+            sepudo = modelo.actualizarClaveFarma(cedula, nuevaClave);
+        } catch (SQLException ex) {
+            ex.getMessage();
+        }
+        return sepudo;
+    }
     //=============Pacientes=============
     public void agregarPaciente(Paciente paciente) {
         try {
@@ -248,7 +277,6 @@ public class Control {
     public List<Medicamento> obtenerTodosMedicamentos() throws SQLException {
         return modelo.obtenerTodosMedicamentos();
     }
-   
 
     public Medicamento buscarMedicamento(String cod) {
         Medicamento med = null;
@@ -268,11 +296,6 @@ public class Control {
         }
     }
 
-    
-    
-    
-    
-    
     //================= Recetas =============
     public void agregarReceta(Receta receta) {
         try {
@@ -327,14 +350,13 @@ public class Control {
 
     // Buscar recetas por paciente
     public List<Receta> buscarRecetasPorPaciente(String cedulaPaciente) throws SQLException {
-        return modelo. buscarRecetasPorPaciente(cedulaPaciente);
+        return modelo.buscarRecetasPorPaciente(cedulaPaciente);
     }
 
     // Buscar recetas por médico
     public List<Receta> buscarRecetasPorMedico(String cedulaMedico) throws SQLException {
         return modelo.buscarRecetasPorMedico(cedulaMedico);
     }
-
 
     public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
         return modelo.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
@@ -343,6 +365,7 @@ public class Control {
     public JFreeChart crearGraficoLineaMedicamentos(LocalDate i, LocalDate f, List<String> sel, List<Receta> listRe) {
         return modelo.crearGraficoLineaMedicamentos(i, f, sel, listRe);
     }
+
     //============historico===========
     public Receta buscarReceta(String cod) {
         Receta re = null;

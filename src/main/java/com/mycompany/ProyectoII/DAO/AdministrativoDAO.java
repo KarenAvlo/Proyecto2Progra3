@@ -11,7 +11,7 @@ import java.util.List;
 
 public class AdministrativoDAO implements AbstractDAO<String, Administrativo> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -51,5 +51,13 @@ public class AdministrativoDAO implements AbstractDAO<String, Administrativo> {
     public void close() throws Exception {
         conexion.close();
     }
-
+public boolean actualizarClave(String cedula, String nuevaClave) throws SQLException {
+    Administrativo admi = findById(cedula);
+    if (admi != null) {
+        admi.setClave(nuevaClave);
+        dao.update(admi);
+        return true;
+    }
+    return false;
+}
 }

@@ -126,7 +126,12 @@ public class GestorHospital {
             return "";
         }
     }
-
+//administrativo
+     public boolean actualizarClaveAdmi(String cedula, String nuevaClave) throws SQLException {
+     return administrativoDAO.actualizarClave(cedula, nuevaClave);
+    }
+    
+    
     // --------------------------
     // CRUD Medico
     // --------------------------
@@ -148,6 +153,9 @@ public class GestorHospital {
 
     public void eliminarMedico(String cedula) throws SQLException {
         medicoDAO.delete(cedula);
+    }
+     public boolean actualizarClave(String cedula, String nuevaClave) throws SQLException {
+     return medicoDAO.actualizarClave(cedula, nuevaClave);
     }
 
     // --------------------------
@@ -227,6 +235,10 @@ public class GestorHospital {
 
     public void eliminarFarmaceuta(String cedula) throws SQLException {
         farmaceutaDAO.delete(cedula);
+    }
+    
+     public boolean actualizarClaveFarma(String cedula, String nuevaClave) throws SQLException {
+     return farmaceutaDAO.actualizarClave(cedula, nuevaClave);
     }
 
     // --------------------------

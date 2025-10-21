@@ -10,7 +10,7 @@ import java.util.List;
 
 public class IndicacionesDAO implements AbstractDAO<Integer, Indicaciones> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 

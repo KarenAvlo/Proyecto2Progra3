@@ -14,7 +14,7 @@ import lombok.Getter;
 
 public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -71,7 +71,15 @@ public class FarmaceutaDAO implements AbstractDAO<String, Farmaceuta> {
             System.out.println("No se encontro farmaceuta con la cedula: " + cedula);
         }
     }
-
+public boolean actualizarClave(String cedula, String nuevaClave) throws SQLException {
+    Farmaceuta medico = findById(cedula);
+    if (medico != null) {
+        medico.setClave(nuevaClave);
+        dao.update(medico);
+        return true;
+    }
+    return false;
+}
     public void close() throws Exception {
         conexion.close();
     }

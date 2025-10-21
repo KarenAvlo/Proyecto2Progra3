@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MedicoDAO implements AbstractDAO<String, Medico> {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/mybd";
+    private static final String URL = "jdbc:mysql://localhost:3306/bdhospital";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
 
@@ -71,6 +71,16 @@ public class MedicoDAO implements AbstractDAO<String, Medico> {
         }
 
     }
+    
+    public boolean actualizarClave(String cedula, String nuevaClave) throws SQLException {
+    Medico medico = findById(cedula);
+    if (medico != null) {
+        medico.setClave(nuevaClave);
+        dao.update(medico);
+        return true;
+    }
+    return false;
+}
 
     public void close() throws Exception {
         conexion.close();

@@ -13,7 +13,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
 import org.jfree.chart.JFreeChart;
+
+@Data
 
 public class Modelo {
 
@@ -27,6 +30,10 @@ public class Modelo {
     
     public Persona validarUsuario(String cedula, String clave) throws SQLException {
         return gestor.validarUsuario(cedula, clave);
+    }
+    //admi
+     public boolean actualizarClaveAdmi(String cedula, String nuevaClave) throws SQLException {
+     return gestor.actualizarClaveAdmi(cedula, nuevaClave);
     }
 
     //========MEDICOS==========
@@ -47,6 +54,10 @@ public class Modelo {
 
     public List<Medico> obtenerTodosMedicos() throws SQLException {
         return gestor.obtenerTodosMedicos();
+    }
+    
+       public boolean actualizarClaveMedico(String cedula, String nuevaClave) throws SQLException {
+     return gestor.actualizarClave(cedula, nuevaClave);
     }
 
 //    //----Farmaceutas---
@@ -69,6 +80,11 @@ public class Modelo {
     public void eliminarFarmaceuta(String cedula) throws SQLException {
         gestor.eliminarFarmaceuta(cedula);
     }
+    
+    public boolean actualizarClaveFarma(String cedula, String nuevaClave) throws SQLException {
+     return gestor.actualizarClaveFarma(cedula, nuevaClave);
+    }
+    
 //
 //    //=============Pacientes==============
     public void agregarPaciente(Paciente paciente) throws SQLException {
