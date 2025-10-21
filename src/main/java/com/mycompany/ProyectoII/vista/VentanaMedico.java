@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableModel;
 
@@ -161,6 +163,12 @@ public class VentanaMedico extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         VentanaMedico = new javax.swing.JTabbedPane();
         PestañaPrescribir = new javax.swing.JPanel();
         RecetaMedica = new javax.swing.JPanel();
@@ -212,6 +220,68 @@ public class VentanaMedico extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Médico");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Usuarios", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel1.setMaximumSize(new java.awt.Dimension(243, 325));
+        jPanel1.setPreferredSize(new java.awt.Dimension(243, 325));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Activos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+
+        jButton2.setText("Enviar");
+
+        jButton3.setText("Recibir");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addContainerGap(108, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addContainerGap(129, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 233, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_START);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 233, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.PAGE_END);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         VentanaMedico.setToolTipText("");
         VentanaMedico.setMaximumSize(new java.awt.Dimension(800, 600));
@@ -405,7 +475,7 @@ public class VentanaMedico extends javax.swing.JFrame {
                 .addComponent(BotonLimpiarPresc)
                 .addGap(18, 18, 18)
                 .addComponent(BotonDetallesPresc)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(287, Short.MAX_VALUE))
         );
         AjustePrescribLayout.setVerticalGroup(
             AjustePrescribLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -593,16 +663,14 @@ public class VentanaMedico extends javax.swing.JFrame {
         PestañaDashboardLayout.setHorizontalGroup(
             PestañaDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PestañaDashboardLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addGroup(PestañaDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PestañaDashboardLayout.createSequentialGroup()
-                        .addGap(82, 82, 82)
                         .addComponent(PanelMedicamentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(73, 73, 73)
                         .addComponent(PanelRecetas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PestañaDashboardLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         PestañaDashboardLayout.setVerticalGroup(
             PestañaDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -613,7 +681,7 @@ public class VentanaMedico extends javax.swing.JFrame {
                 .addGroup(PestañaDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(PanelRecetas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PanelMedicamentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         VentanaMedico.addTab("Dashboard", PestañaDashboard);
@@ -717,7 +785,7 @@ public class VentanaMedico extends javax.swing.JFrame {
         PestañaHistoricoLayout.setHorizontalGroup(
             PestañaHistoricoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PestañaHistoricoLayout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -726,7 +794,7 @@ public class VentanaMedico extends javax.swing.JFrame {
             .addGroup(PestañaHistoricoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(177, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
 
         VentanaMedico.addTab("Historico ", PestañaHistorico);
@@ -770,49 +838,44 @@ public class VentanaMedico extends javax.swing.JFrame {
 
         VentanaMedico.addTab("Acerca de", PestañaAcercaDe);
 
-        getContentPane().add(VentanaMedico, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(VentanaMedico, java.awt.BorderLayout.WEST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BotonAgregarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAgregarMedicamentoActionPerformed
-        // TODO add your handling code here:
-        abrirBuscarMedicamento();
-    }//GEN-LAST:event_BotonAgregarMedicamentoActionPerformed
-
     private void VentanaMedicoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_VentanaMedicoAncestorAdded
         // TODO add your handling code here:
-
     }//GEN-LAST:event_VentanaMedicoAncestorAdded
 
-    private void BotonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPacienteActionPerformed
-        // TODO add your handling code here:
-        abrirBuscarPaciente();
-    }//GEN-LAST:event_BotonBuscarPacienteActionPerformed
+    private void BotonVerIndicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVerIndicacionesActionPerformed
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo);
+            if (receta != null) {
+                mostrarIndicacionesReceta(receta);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "No se encontró la receta seleccionada.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "Seleccione una receta de la tabla.",
+                "Aviso",
+                JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
 
-    private void mostrarNombreAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_mostrarNombreAncestorAdded
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_mostrarNombreAncestorAdded
-
-    private void BotonGuardarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarPrescActionPerformed
-        // TODO add your handling code here:
-        guardarPrescripcion();
-    }//GEN-LAST:event_BotonGuardarPrescActionPerformed
-
-    private void BotonEliminarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarPrescActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BotonEliminarPrescActionPerformed
-
-    private void BotonDetallesPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDetallesPrescActionPerformed
-        // TODO add your handling code here:
-        mostrarDetalles();
-    }//GEN-LAST:event_BotonDetallesPrescActionPerformed
-
-    private void BotonLimpiarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarPrescActionPerformed
-        // TODO add your handling code here:
-        limpiarCampos();
-    }//GEN-LAST:event_BotonLimpiarPrescActionPerformed
+    private void BotonAgregarMedicamentoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAgregarMedicamentoComboBoxActionPerformed
+        try {
+            // TODO add your handling code here:
+            agregarMedicamentoSeleccionado();
+        } catch (SQLException ex) {
+            System.getLogger(VentanaMedico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_BotonAgregarMedicamentoComboBoxActionPerformed
 
     private void BotonSeleccionFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonSeleccionFechasActionPerformed
         // TODO add your handling code here:
@@ -824,35 +887,38 @@ public class VentanaMedico extends javax.swing.JFrame {
         generarGraficoMedicamentos();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void BotonAgregarMedicamentoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAgregarMedicamentoComboBoxActionPerformed
-        try {
-            // TODO add your handling code here:
-            agregarMedicamentoSeleccionado();
-        } catch (SQLException ex) {
-            System.getLogger(VentanaMedico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
-    }//GEN-LAST:event_BotonAgregarMedicamentoComboBoxActionPerformed
+    private void BotonDetallesPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDetallesPrescActionPerformed
+        // TODO add your handling code here:
+        mostrarDetalles();
+    }//GEN-LAST:event_BotonDetallesPrescActionPerformed
 
-    private void BotonVerIndicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVerIndicacionesActionPerformed
-        int fila = TablaRecetas.getSelectedRow();
-        if (fila >= 0) {
-            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
-            Receta receta = control.buscarReceta(codigo); 
-            if (receta != null) {
-                mostrarIndicacionesReceta(receta);
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "No se encontró la receta seleccionada.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Seleccione una receta de la tabla.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-        }  
-    }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
+    private void BotonLimpiarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarPrescActionPerformed
+        // TODO add your handling code here:
+        limpiarCampos();
+    }//GEN-LAST:event_BotonLimpiarPrescActionPerformed
+
+    private void BotonGuardarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarPrescActionPerformed
+        // TODO add your handling code here:
+        guardarPrescripcion();
+    }//GEN-LAST:event_BotonGuardarPrescActionPerformed
+
+    private void BotonEliminarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarPrescActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonEliminarPrescActionPerformed
+
+    private void BotonAgregarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAgregarMedicamentoActionPerformed
+        // TODO add your handling code here:
+        abrirBuscarMedicamento();
+    }//GEN-LAST:event_BotonAgregarMedicamentoActionPerformed
+
+    private void BotonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPacienteActionPerformed
+        // TODO add your handling code here:
+        abrirBuscarPaciente();
+    }//GEN-LAST:event_BotonBuscarPacienteActionPerformed
+
+    private void mostrarNombreAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_mostrarNombreAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mostrarNombreAncestorAdded
     /*    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
      */
 
@@ -1390,6 +1456,8 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JTable TablaRecetas;
     private javax.swing.JTabbedPane VentanaMedico;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBoxMedicamentos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1399,7 +1467,11 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
@@ -1409,6 +1481,8 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JTable tblMedicamentosGrafico;
     // End of variables declaration//GEN-END:variables
 
+    
+    
 
     private final Control control; 
     private FormHandler estado;
