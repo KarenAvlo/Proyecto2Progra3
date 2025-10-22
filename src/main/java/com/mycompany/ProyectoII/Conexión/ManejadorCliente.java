@@ -1,4 +1,3 @@
-
 package com.mycompany.ProyectoII.Conexión;
 
 import com.mycompany.ProyectoII.control.Control;
@@ -7,8 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import lombok.Data;
 
+@Data
 public class ManejadorCliente implements Runnable {
+
     private Socket socket;
     private Control control;
     private PrintWriter salida;
@@ -26,8 +28,7 @@ public class ManejadorCliente implements Runnable {
     @Override
     public void run() {
         try (
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-        ) {
+                BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             salida = new PrintWriter(socket.getOutputStream(), true);
             salida.println("Bienvenido al servidor multicliente!");
 
@@ -38,13 +39,22 @@ public class ManejadorCliente implements Runnable {
 
                 switch (comando) {
                     case "LOGIN":
-                        usuario = partes[1]; // ej: LOGIN:Karen
-                        // Aquí validar usuario usando `control`
-                        Servidor.notificarATodos("USUARIO_CONECTADO:" + usuario);
+                        usuario = partes[1];
+                        Servidor.agregarUsuarioActivo(usuario);
+
+                        // Enviar lista de usuarios existentes al cliente que entra
+                        for (String u : Servidor.getUsuariosActivos()) {
+                            if (!u.equals(usuario)) {
+                                enviarMensaje("USUARIO_CONECTADO:" + u);
+                            }
+                        }
+
+                        // Notificar a todos los demás clientes
+                        Servidor.notificarATodosExcepto("USUARIO_CONECTADO:" + usuario, this);
                         break;
                     case "LOGOUT":
-                        Servidor.notificarATodos("USUARIO_DESCONECTADO:" + usuario);
                         Servidor.removerCliente(this);
+                        Servidor.notificarATodosExcepto("USUARIO_DESCONECTADO:" + usuario, this);
                         socket.close();
                         return;
                     case "MENSAJE":

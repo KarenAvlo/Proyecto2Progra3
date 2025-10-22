@@ -1,6 +1,8 @@
 package com.mycompany.ProyectoII.vista;
 
 import com.mycompany.ProyectoII.Administrativo;
+import com.mycompany.ProyectoII.Conexión.Protocolo;
+import com.mycompany.ProyectoII.Conexión.ServiceProxy;
 import com.mycompany.ProyectoII.Farmaceuta;
 import com.mycompany.ProyectoII.Indicaciones;
 import com.mycompany.ProyectoII.Medicamento;
@@ -14,6 +16,7 @@ import cr.ac.una.gui.FormHandler;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -26,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -60,6 +64,20 @@ public class VentanaAdministrador extends javax.swing.JFrame {
         this.estado = new FormHandler();
         initComponents();
         this.setLocationRelativeTo(null); // aparece en el centro
+
+        try {
+            proxy = new ServiceProxy("localhost", Protocolo.PUERTO);
+
+            //  Hacer login con el usuario actual
+            proxy.login(control.getUsuarioActual().getNombre());
+
+            //  Hilo que actualiza la tabla cuando lleguen notificaciones
+            refrescarUsuarios(proxy);
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "No se pudo conectar al servidor: " + ex.getMessage());
+        }
+
         init();
     }
 
@@ -420,11 +438,66 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
         }
     }
+
+    //Tabla usuarios conectados
+    private void actualizarTablaUsuarios() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Mensaje"}, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return (columnIndex == 1) ? Boolean.class : String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 1; // solo la columna "Mensaje" (checkbox)
+            }
+        };
+
+        for (String usuario : proxy.getUsuariosActivos()) {
+            model.addRow(new Object[]{usuario, false});
+        }
+
+        UsuariosConectados.setModel(model);
+    }
+
+    // Este método actualiza tu JTable con los usuarios activos
+    public void refrescarUsuarios(ServiceProxy proxy) {
+        new Thread(() -> {
+            while (true) {
+                List<String> usuarios = proxy.getUsuariosActivos();
+
+                SwingUtilities.invokeLater(() -> {
+                    DefaultTableModel model = (DefaultTableModel) UsuariosConectados.getModel();
+
+                    // Guardar estado actual de los checkboxes
+                    Map<String, Boolean> estadoCheck = new HashMap<>();
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        String usuario = (String) model.getValueAt(i, 0);
+                        Boolean seleccionado = (Boolean) model.getValueAt(i, 1);
+                        estadoCheck.put(usuario, seleccionado);
+                    }
+
+                    // Limpiar y volver a llenar la tabla
+                    model.setRowCount(0);
+                    for (String u : usuarios) {
+                        Boolean sel = estadoCheck.getOrDefault(u, false); // restaurar checkbox si existía
+                        model.addRow(new Object[]{u, sel});
+                    }
+                });
+
+                try {
+                    Thread.sleep(1000); // refresca cada segundo
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        }).start();
+    }
+
     // -------------------------------------------------------------------------
     // OPERACIONES CRUD
     // -------------------------------------------------------------------------
     //----------------Medicos----------------
-
     private void guardarMedico() {
         try {
             String cedula = campoId.getText().trim();
@@ -577,7 +650,7 @@ private void guardarFarmaceuta() {
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             Farmaceuta farma = new Farmaceuta(cedula, nombre, cedula);
             if (estado.isAdding()) {
                 control.agregarFarmaceuta(farma);
@@ -985,9 +1058,9 @@ private void guardarFarmaceuta() {
             Receta receta = control.buscarReceta(codigo);
 
             if (receta != null) {
-                estado.setModel(receta);  
-                cambiarModoVista();         
-                actualizarComponentes();  
+                estado.setModel(receta);
+                cambiarModoVista();
+                actualizarComponentes();
                 DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
                 modelo.setRowCount(0);
                 for (Indicaciones ind : receta.getIndicaciones()) {
@@ -1006,7 +1079,7 @@ private void guardarFarmaceuta() {
         try {
             List<Receta> recetas = control.obtenerTodasRecetas();
             DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
-            modelo.setRowCount(0); 
+            modelo.setRowCount(0);
             if (recetas != null) {
                 for (Receta r : recetas) {
                     modelo.addRow(new Object[]{
@@ -1059,9 +1132,8 @@ private void guardarFarmaceuta() {
         jPanel4 = new javax.swing.JPanel();
         BotonEnviar = new javax.swing.JButton();
         BotonRecibir = new javax.swing.JButton();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jScrollPane9 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        UsuariosConectados = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         PestañaMedicos = new javax.swing.JPanel();
@@ -1200,10 +1272,20 @@ private void guardarFarmaceuta() {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Activos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         BotonEnviar.setText("Enviar");
+        BotonEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEnviarActionPerformed(evt);
+            }
+        });
 
         BotonRecibir.setText("Recibir");
+        BotonRecibir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonRecibirActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        UsuariosConectados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -1215,7 +1297,7 @@ private void guardarFarmaceuta() {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, true
@@ -1229,17 +1311,7 @@ private void guardarFarmaceuta() {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane9.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(75);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(75);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(75);
-            jTable1.getColumnModel().getColumn(1).setMinWidth(85);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(85);
-            jTable1.getColumnModel().getColumn(1).setMaxWidth(85);
-        }
-
-        jScrollPane6.setViewportView(jScrollPane9);
+        jScrollPane10.setViewportView(UsuariosConectados);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1248,11 +1320,14 @@ private void guardarFarmaceuta() {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(BotonEnviar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BotonRecibir))))
+                        .addComponent(BotonRecibir)
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1261,9 +1336,9 @@ private void guardarFarmaceuta() {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BotonEnviar)
                     .addComponent(BotonRecibir))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -1985,7 +2060,7 @@ private void guardarFarmaceuta() {
                 .addComponent(PanelBusquedaF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Pacientes", PestañaPacientes);
@@ -2794,7 +2869,7 @@ private void guardarFarmaceuta() {
         }
     }
 
-public DefaultTableModel crearTablaMedicamentosPorMes(
+    public DefaultTableModel crearTablaMedicamentosPorMes(
             LocalDate inicio, LocalDate fin,
             List<String> seleccionados, List<Receta> listaRecetas) {
 
@@ -2908,7 +2983,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
         tblMedicamentosGrafico.setModel(modelo);
     }
 
-   private void generarGraficoMedicamentos() {
+    private void generarGraficoMedicamentos() {
         try {
             // 1️⃣ Validar que haya medicamentos seleccionados
             if (medicamentosSeleccionados.isEmpty()) {
@@ -3030,6 +3105,51 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             cargarRecetaDesdeTabla();
         }
     }//GEN-LAST:event_TablaRecetasMouseClicked
+
+    private void BotonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEnviarActionPerformed
+        DefaultTableModel model = (DefaultTableModel) UsuariosConectados.getModel();
+        String destinatario = null;
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Boolean seleccionado = (Boolean) model.getValueAt(i, 1);
+            if (seleccionado != null && seleccionado) {
+                if (destinatario != null) {
+                    JOptionPane.showMessageDialog(this, "Seleccione solo un usuario a la vez.");
+                    return; // sale porque hay más de uno marcado
+                }
+                destinatario = (String) model.getValueAt(i, 0);
+            }
+        }
+
+        if (destinatario == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para enviar el mensaje.");
+            return;
+        }
+
+        String mensaje = JOptionPane.showInputDialog(this, "Ingrese el mensaje para " + destinatario + ":");
+        if (mensaje == null || mensaje.trim().isEmpty()) {
+            return; // si cancela o está vacío, no hace nada
+        }
+
+        proxy.enviarMensaje(destinatario, mensaje);
+        JOptionPane.showMessageDialog(this, "Mensaje enviado a " + destinatario);
+
+        // Limpiar el checkbox para que quede desmarcado
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt(false, i, 1);
+        }
+    }//GEN-LAST:event_BotonEnviarActionPerformed
+
+    private void BotonRecibirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRecibirActionPerformed
+        List<String> msgs = proxy.getMensajesPendientes();
+        if (msgs.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay mensajes nuevos.");
+            return;
+        }
+        String todos = String.join("\n", msgs);
+        JOptionPane.showMessageDialog(this, todos, "Mensajes recibidos", JOptionPane.INFORMATION_MESSAGE);
+        proxy.limpiarMensajesPendientes();
+    }//GEN-LAST:event_BotonRecibirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3169,6 +3289,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JTable TablaPacientes;
     private javax.swing.JTable TablaRecetas;
     private javax.swing.JTextField TelefonoPtxt;
+    private javax.swing.JTable UsuariosConectados;
     private javax.swing.JPanel buscartxt;
     private javax.swing.JPanel buscartxt1;
     private javax.swing.JTextField campoId;
@@ -3206,21 +3327,19 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable tblMedicamentosGrafico;
     // End of variables declaration//GEN-END:variables
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaAdministrador.class.getName());
-
+    private ServiceProxy proxy;
     private final Control control;
     private FormHandler estado;
 
