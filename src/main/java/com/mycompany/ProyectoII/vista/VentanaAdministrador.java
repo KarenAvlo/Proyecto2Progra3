@@ -1,6 +1,5 @@
 package com.mycompany.ProyectoII.vista;
 
-import com.mycompany.ProyectoII.Administrativo;
 import com.mycompany.ProyectoII.Conexión.Protocolo;
 import com.mycompany.ProyectoII.Conexión.ServiceProxy;
 import com.mycompany.ProyectoII.Farmaceuta;
@@ -8,13 +7,10 @@ import com.mycompany.ProyectoII.Indicaciones;
 import com.mycompany.ProyectoII.Medicamento;
 import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Paciente;
-import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.Receta;
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,7 +32,6 @@ import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.kordamp.ikonli.swing.FontIcon;
-import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 
 /* -------------------------------------------------------------------+
@@ -54,7 +49,7 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 *                                                                     |
 * --------------------------------------------------------------------+
  */
-public class VentanaAdministrador extends javax.swing.JFrame {
+public final class VentanaAdministrador extends javax.swing.JFrame {
 
     public VentanaAdministrador(Control controlador) throws SQLException {
         if (controlador == null) {
@@ -67,15 +62,15 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
         try {
             proxy = new ServiceProxy("localhost", Protocolo.PUERTO);
-
-            //  Hacer login con el usuario actual
             proxy.login(control.getUsuarioActual().getNombre());
-
-            //  Hilo que actualiza la tabla cuando lleguen notificaciones
+            this.setTitle("Ventana Administrador - " + control.getUsuarioActual().getNombre());
             refrescarUsuarios(proxy);
 
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo conectar al servidor: " + ex.getMessage());
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo conectar al servidor:\n" + ex.getMessage(),
+                    "Error de conexión", JOptionPane.ERROR_MESSAGE);
         }
 
         init();

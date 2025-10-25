@@ -1,5 +1,6 @@
 package com.mycompany.ProyectoII;
 
+import com.mycompany.ProyectoII.Conexión.Servidor;
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.vista.VentanaPrincipal;
 import com.mycompany.ProyectoII.modelo.Modelo;
@@ -46,7 +47,6 @@ public class ProyectoII {
         } catch (UnsupportedEncodingException | UnsupportedLookAndFeelException ex) {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
         }
-
         new ProyectoII().init();
         System.out.println("Aplicación inicializada..");
     }
@@ -56,26 +56,24 @@ public class ProyectoII {
             try {
                 mostrarInterfaz();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                
             }
         });
     }
 
     private void mostrarInterfaz() throws Exception {
-        System.out.println("Iniciando interfaz..");
+        new Thread(() -> {
+            try {
+                Servidor.main(new String[]{}); // corre el servidor dentro del mismo proceso
+            } catch (Exception e) {
+                
+            }
+        }).start();
 
-        // 1️⃣ Crear modelo
+        // 🔹 Luego iniciar la interfaz
+        Thread.sleep(1000); // pequeña pausa para dar tiempo a que el servidor arranque
         Modelo modelo = new Modelo();
-
-        // 2️⃣ Cargar personas desde XML
-        //modelo.obtenerModelo().cargarDatos();
-        
-//        modelo.cargarDatos();
-//        
-        // 3️⃣ Crear controlador con modelo
         Control gestorPrincipal = new Control(modelo);
-        
-        // 4️⃣ Crear ventana principal y pasar controlador
         VentanaPrincipal ventana = new VentanaPrincipal(gestorPrincipal);
         ventana.setVisible(true);
     }

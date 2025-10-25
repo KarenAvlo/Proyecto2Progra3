@@ -1,5 +1,7 @@
 package com.mycompany.ProyectoII.vista;
 
+import com.mycompany.ProyectoII.Conexión.Protocolo;
+import com.mycompany.ProyectoII.Conexión.ServiceProxy;
 import com.mycompany.ProyectoII.Indicaciones;
 import com.mycompany.ProyectoII.Medicamento;
 
@@ -7,8 +9,7 @@ import com.mycompany.ProyectoII.Receta;
 import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -24,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -62,6 +64,20 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); // aparece en el centro
         configurarListeners();
+        
+        try {
+            proxy = new ServiceProxy("localhost", Protocolo.PUERTO);
+
+            //  Hacer login con el usuario actual
+            proxy.login(control.getUsuarioActual().getNombre());
+            this.setTitle("Ventana Farmaceuta - " + control.getUsuarioActual().getNombre());
+            //  Hilo que actualiza la tabla cuando lleguen notificaciones
+            refrescarUsuarios(proxy);
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "No se pudo conectar al servidor: " + ex.getMessage());
+        }
+        
         init();
         
     }
@@ -317,6 +333,64 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
             
         }
     }
+    
+    
+    //Tabla usuarios conectados
+    private void actualizarTablaUsuarios() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Mensaje"}, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return (columnIndex == 1) ? Boolean.class : String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 1; // solo la columna "Mensaje" (checkbox)
+            }
+        };
+
+        for (String usuario : proxy.getUsuariosActivos()) {
+            model.addRow(new Object[]{usuario, false});
+        }
+
+        UsuariosConectados.setModel(model);
+    }
+
+    public void refrescarUsuarios(ServiceProxy proxy) {
+        new Thread(() -> {
+            while (true) {
+                List<String> usuarios = proxy.getUsuariosActivos();
+
+                SwingUtilities.invokeLater(() -> {
+                    DefaultTableModel model = (DefaultTableModel) UsuariosConectados.getModel();
+
+                    // Guardar estado actual de los checkboxes
+                    Map<String, Boolean> estadoCheck = new HashMap<>();
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        String usuario = (String) model.getValueAt(i, 0);
+                        Boolean seleccionado = (Boolean) model.getValueAt(i, 1);
+                        estadoCheck.put(usuario, seleccionado);
+                    }
+
+                    // Limpiar y volver a llenar la tabla
+                    model.setRowCount(0);
+                    for (String u : usuarios) {
+                        Boolean sel = estadoCheck.getOrDefault(u, false); // restaurar checkbox si existía
+                        model.addRow(new Object[]{u, sel});
+                    }
+                });
+
+                try {
+                    Thread.sleep(1000); // refresca cada segundo
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        }).start();
+    }
+
+    
+    
 
     // -------------------------------------------------------------------------
     // OPERACIONES CRUD
@@ -503,11 +577,11 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        BotonEnviar = new javax.swing.JButton();
+        BotonRecibir = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        UsuariosConectados = new javax.swing.JTable();
         VentanaFarmaceuta = new javax.swing.JTabbedPane();
         PestañaDespacho = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -571,13 +645,23 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         jPanel1.setMaximumSize(new java.awt.Dimension(243, 325));
         jPanel1.setPreferredSize(new java.awt.Dimension(219, 400));
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Activos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Activos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
-        jButton2.setText("Enviar");
+        BotonEnviar.setText("Enviar");
+        BotonEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEnviarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Recibir");
+        BotonRecibir.setText("Recibir");
+        BotonRecibir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonRecibirActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        UsuariosConectados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -603,7 +687,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(UsuariosConectados);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -631,9 +715,9 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(jButton2)
+                        .addComponent(BotonEnviar)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addComponent(BotonRecibir)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -641,11 +725,11 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(BotonEnviar)
+                    .addComponent(BotonRecibir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -663,7 +747,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
         VentanaFarmaceuta.setPreferredSize(new java.awt.Dimension(900, 600));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Despacho de Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Despacho de Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         txtBusCodigo.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         txtBusCodigo.setText("Búsqueda por código");
@@ -848,7 +932,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         PestañaDashboard.setEnabled(false);
         PestañaDashboard.setMaximumSize(new java.awt.Dimension(767, 767));
 
-        PanelDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PanelDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Datos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         jLabel1.setText("Desde");
 
@@ -977,7 +1061,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        PanelMedicamentos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Medicamentos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PanelMedicamentos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Medicamentos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         javax.swing.GroupLayout PanelMedicamentosLayout = new javax.swing.GroupLayout(PanelMedicamentos);
         PanelMedicamentos.setLayout(PanelMedicamentosLayout);
@@ -990,7 +1074,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        PanelRecetas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PanelRecetas.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         javax.swing.GroupLayout PanelRecetasLayout = new javax.swing.GroupLayout(PanelRecetas);
         PanelRecetas.setLayout(PanelRecetasLayout);
@@ -1031,7 +1115,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
         VentanaFarmaceuta.addTab("Dashboard", PestañaDashboard);
 
-        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Listado", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Listado", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         TablaRecetas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1311,6 +1395,53 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
+
+    private void BotonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEnviarActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) UsuariosConectados.getModel();
+        String destinatario = null;
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Boolean seleccionado = (Boolean) model.getValueAt(i, 1);
+            if (seleccionado != null && seleccionado) {
+                if (destinatario != null) {
+                    JOptionPane.showMessageDialog(this, "Seleccione solo un usuario a la vez.");
+                    return; // sale porque hay más de uno marcado
+                }
+                destinatario = (String) model.getValueAt(i, 0);
+            }
+        }
+
+        if (destinatario == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para enviar el mensaje.");
+            return;
+        }
+
+        String mensaje = JOptionPane.showInputDialog(this, "Ingrese el mensaje para " + destinatario + ":");
+        if (mensaje == null || mensaje.trim().isEmpty()) {
+            return; // si cancela o está vacío, no hace nada
+        }
+
+        proxy.enviarMensaje(destinatario, mensaje);
+        JOptionPane.showMessageDialog(this, "Mensaje enviado a " + destinatario);
+
+        // Limpiar el checkbox para que quede desmarcado
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt(false, i, 1);
+        }
+    }//GEN-LAST:event_BotonEnviarActionPerformed
+
+    private void BotonRecibirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRecibirActionPerformed
+        // TODO add your handling code here:
+        List<String> msgs = proxy.getMensajesPendientes();
+        if (msgs.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay mensajes nuevos.");
+            return;
+        }
+        String todos = String.join("\n", msgs);
+        JOptionPane.showMessageDialog(this, todos, "Mensajes recibidos", JOptionPane.INFORMATION_MESSAGE);
+        proxy.limpiarMensajesPendientes();
+    }//GEN-LAST:event_BotonRecibirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1702,7 +1833,9 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JSpinner AñoInicio;
     private javax.swing.JButton BotonAgregarMedicamentoComboBox;
     private javax.swing.JButton BotonCancelarCambio;
+    private javax.swing.JButton BotonEnviar;
     private javax.swing.JButton BotonGuardarCambio;
+    private javax.swing.JButton BotonRecibir;
     private javax.swing.JButton BotonSeleccionFechas;
     private javax.swing.JButton BotonSeleccionar;
     private javax.swing.JButton BotonVerIndicaciones;
@@ -1717,11 +1850,10 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JPanel PestañaHistorico;
     private javax.swing.JTable TablaIndicaciones;
     private javax.swing.JTable TablaRecetas;
+    private javax.swing.JTable UsuariosConectados;
     private javax.swing.JTabbedPane VentanaFarmaceuta;
     private javax.swing.JTextField areaTxtBusCodigo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBoxMedicamentos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1745,13 +1877,13 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable tblMedicamentosGrafico;
     private javax.swing.JTable tblRecetaSelec;
     private javax.swing.JTable tblRecetas;
     private javax.swing.JLabel txtBusCodigo;
     // End of variables declaration//GEN-END:variables
 
+    private ServiceProxy proxy;
     private final Control control;
     private final FormHandler estado;
 }
