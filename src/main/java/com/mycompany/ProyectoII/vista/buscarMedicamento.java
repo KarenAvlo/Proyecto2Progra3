@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 * EIF206 - Programación 3                                             |
 * 2do ciclo 2025                                                      |
 * NRC 51189 – Grupo 05                                                |
-* Proyecto 1                                                          |
+* Proyecto 2                                                          |
 *                                                                     |
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
@@ -375,11 +375,7 @@ public class buscarMedicamento extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 System.getLogger(buscarMedicamento.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
-//            try {
-//                modelo.cargarDatos(); // ✅ carga médicos, pacientes, farmaceutas, etc.
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+
             new buscarMedicamento(controlador, ventanaMedico).setVisible(true);
         });
         
@@ -423,6 +419,7 @@ public class buscarMedicamento extends javax.swing.JFrame {
     }
     
     private void cargarTabla(List<Medicamento> lista) {
+        lista=control.obtenerTodosMedicamentos();
         DefaultTableModel model = (DefaultTableModel) medicamentos.getModel();
         model.setRowCount(0);
         for (Medicamento m : lista) {
@@ -455,6 +452,7 @@ public class buscarMedicamento extends javax.swing.JFrame {
     }
     
     private void actualizarTabla(List<Medicamento> lista) {
+        lista= control.obtenerTodosMedicamentos();
         DefaultTableModel model = (DefaultTableModel) medicamentos.getModel();
         model.setRowCount(0);
         for (Medicamento m : lista) {
@@ -463,20 +461,20 @@ public class buscarMedicamento extends javax.swing.JFrame {
     }
     
     private void seleccionarMedicamento(){
-//        int fila = medicamentos.getSelectedRow();
-//        if (fila >= 0) {
-//            String codigo = (String) medicamentos.getValueAt(fila, 0);
-//            Medicamento seleccionado = control.getModelo().buscarMedicamento(codigo);
-//            if (seleccionado != null) {
-//                this.medicamentoSeleccionado = seleccionado;
-//                habilitarPanelIndicaciones(true);
-//            }
-//            else {
-//                JOptionPane.showMessageDialog(this, "No se encontró el medicamento seleccionado.");
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Seleccione un medicamento de la tabla.");
-//        }
+        int fila = medicamentos.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = (String) medicamentos.getValueAt(fila, 0);
+            Medicamento seleccionado = control.buscarMedicamento(codigo);
+            if (seleccionado != null) {
+                this.medicamentoSeleccionado = seleccionado;
+                habilitarPanelIndicaciones(true);
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "No se encontró el medicamento seleccionado.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un medicamento de la tabla.");
+        }
     }
     
     

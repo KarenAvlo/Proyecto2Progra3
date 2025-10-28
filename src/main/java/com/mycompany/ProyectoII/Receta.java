@@ -1,5 +1,6 @@
 package com.mycompany.ProyectoII;
 
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -45,6 +46,7 @@ public class Receta {
     @ForeignCollectionField(eager = true)
     private ForeignCollection<Indicaciones> indicaciones;
 
+    private List<Indicaciones> inditemporal= new ArrayList<>();
 public Receta(String codReceta, Paciente paciente, Medico medico, Date fechaEmision, Date fechaRetiro, String estado) {
     this.codReceta = codReceta;
     this.paciente = paciente;
@@ -52,12 +54,23 @@ public Receta(String codReceta, Paciente paciente, Medico medico, Date fechaEmis
     this.fechaEmision = fechaEmision;
     this.fechaRetiro = fechaRetiro;
     this.estado = estado;
+   
 }
 
     
 //---------------------------------------------
 
        
+
+     public void agregarIndicaciones(Indicaciones nuevaIndicacion) {
+        if (this.indicaciones != null) {
+            this.indicaciones.add(nuevaIndicacion); // receta viene de BD
+        } else {
+            inditemporal.add(nuevaIndicacion); // receta nueva en memoria
+        }
+        // asegura la relación recíproca
+        nuevaIndicacion.setReceta(this);
+    }
 
     public void ModificarIndicaciones(String codigoMedicamento, String nuevomed, int cantidad,
             String indicaciones, int duracionDias, List<Medicamento> medicamentosdisp) {
@@ -67,8 +80,20 @@ public Receta(String codReceta, Paciente paciente, Medico medico, Date fechaEmis
                 nuevoMedicamento = m;
             }
         }
-        for (Indicaciones i : this.indicaciones) {
-            if (i.getMedicamento().getCodigo().equals(codigoMedicamento)) { // buscamos el medicamento por codigo el que deseamos cambiar
+        // busca y modifica
+        if (this.indicaciones != null) {
+            for (Indicaciones i : this.indicaciones) {
+                if (i.getMedicamento().getCodigo().equals(codigoMedicamento)) {
+                    i.setMedicamento(nuevoMedicamento);
+                    i.setCantidad(cantidad);
+                    i.setIndicaciones(indicaciones);
+                    i.setDuracion(duracionDias);
+                }
+            }
+        }
+        // también revisa la lista temporal si es necesario
+        for (Indicaciones i : this.inditemporal) {
+            if (i.getMedicamento().getCodigo().equals(codigoMedicamento)) {
                 i.setMedicamento(nuevoMedicamento);
                 i.setCantidad(cantidad);
                 i.setIndicaciones(indicaciones);
@@ -79,15 +104,10 @@ public Receta(String codReceta, Paciente paciente, Medico medico, Date fechaEmis
 
     public void finalizarReceta() {
         LocalDate hoy = LocalDate.now();
-        this.fechaEmision= Date.valueOf(hoy);
-        
+        this.fechaEmision = Date.valueOf(hoy);
         LocalDate retiro = hoy.plusDays(3);
-        this.fechaRetiro = Date.valueOf(retiro); //tres dias despues de emitida
+        this.fechaRetiro = Date.valueOf(retiro);
         this.estado = "CONFECCIONADA"; 
-    }
-    
-    public void agregarIndicaciones(Indicaciones nuevaIndicacion) {
-        this.indicaciones.add(nuevaIndicacion);
     }
 
 

@@ -150,6 +150,7 @@ public class Control {
     public List<Medico> obtenerTodosMedicos() throws SQLException {
         return modelo.obtenerTodosMedicos();
     }
+
     public boolean actualizarClaveMedico(String cedula, String nuevaClave) {
         boolean sepudo = false;
         try {
@@ -212,6 +213,7 @@ public class Control {
         }
         return sepudo;
     }
+
     //=============Pacientes=============
     public void agregarPaciente(Paciente paciente) {
         try {
@@ -274,8 +276,14 @@ public class Control {
         }
     }
 
-    public List<Medicamento> obtenerTodosMedicamentos() throws SQLException {
-        return modelo.obtenerTodosMedicamentos();
+    public List<Medicamento> obtenerTodosMedicamentos() {
+        List<Medicamento> med = null;
+        try {
+            med = modelo.obtenerTodosMedicamentos();
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+        return med;
     }
 
     public Medicamento buscarMedicamento(String cod) {
