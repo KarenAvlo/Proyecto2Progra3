@@ -28,6 +28,7 @@ public class Modelo {
         return gestor;
     }
     
+     //========LOGIN==========
     public Persona validarUsuario(String cedula, String clave) throws SQLException {
         return gestor.validarUsuario(cedula, clave);
     }
@@ -59,8 +60,8 @@ public class Modelo {
        public boolean actualizarClaveMedico(String cedula, String nuevaClave) throws SQLException {
      return gestor.actualizarClave(cedula, nuevaClave);
     }
-
-//    //----Farmaceutas---
+    
+//========Farmaceutas==========
     public void agregarFarmaceuta(Farmaceuta farmaceuta) throws SQLException {
         gestor.agregarFarmaceuta(farmaceuta);
     }
@@ -85,8 +86,8 @@ public class Modelo {
      return gestor.actualizarClaveFarma(cedula, nuevaClave);
     }
     
-//
-//    //=============Pacientes==============
+
+    //=============Pacientes==============
     public void agregarPaciente(Paciente paciente) throws SQLException {
        gestor.agregarPaciente(paciente);
     }
@@ -106,8 +107,8 @@ public class Modelo {
     public void eliminarPaciente(String cedula) throws SQLException {
          gestor.eliminarPaciente(cedula);
     }
-//
-//    //==============Medicamentos===============
+
+    //==============Medicamentos===============
     public void agregarMedicamento(Medicamento medicamento) throws SQLException {
          gestor.agregarMedicamento(medicamento);
     }
@@ -119,9 +120,7 @@ public class Modelo {
     public List<Medicamento> obtenerTodosMedicamentos() throws SQLException {
         return gestor.obtenerTodosMedicamentos();
     }
-    
-    
-
+   
     public Medicamento buscarMedicamento(String codigo) throws SQLException {
         return gestor.buscarMedicamentoPorCodigo(codigo);
     }
@@ -129,8 +128,14 @@ public class Modelo {
     public void eliminarMedicamento(String codigo) throws SQLException {
         gestor.eliminarMedicamento(codigo);
     }
-//
-//    //===========historicoRecetas=========
+
+    
+    public List<Medicamento> listarMedicamentos() throws SQLException {
+        return gestor.obtenerTodosMedicamentos();
+    }
+    
+    
+    //===========historicoRecetas=========
     public Receta buscarReceta(String codigo) throws SQLException {
         return gestor.buscarRecetaPorCodigo(codigo);
     }
@@ -158,6 +163,11 @@ public class Modelo {
 
     public void eliminarReceta(String codReceta) throws SQLException {
        gestor.eliminarReceta(codReceta);
+    }
+    
+      
+    public int cantidadRecetas()throws SQLException{
+        return gestor.cantidadRecetas();
     }
 
     // --------------------------

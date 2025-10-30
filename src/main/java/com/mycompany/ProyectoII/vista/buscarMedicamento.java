@@ -34,12 +34,6 @@ import java.util.stream.Collectors;
 
 public class buscarMedicamento extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(buscarMedicamento.class.getName());
-
-    /**
-     * Creates new form buscarPaciente
-     */
-    
     public buscarMedicamento(Control control, VentanaMedico ventanaMedico) {
         if (control == null) {
             throw new IllegalArgumentException("El controlador no puede ser null");
@@ -406,12 +400,12 @@ public class buscarMedicamento extends javax.swing.JFrame {
         txtBuscar.getDocument().addDocumentListener(da);  
         DesplegarOpcFiltrar.setSelectedItem("Nombre");
         
-//        try {
-//            listaMedicamentos = control.getModelo().listarMedicamentos();
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(this, "Error al cargar medicamentos: " + e.getMessage());
-//            listaMedicamentos = List.of();
-//        }
+        try {
+            listaMedicamentos = control.getModelo().listarMedicamentos();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar medicamentos: " + e.getMessage());
+            listaMedicamentos = List.of();
+        }
         cargarTabla(listaMedicamentos);
         cambiarModoVista();
         habilitarPanelIndicaciones(false);
@@ -536,7 +530,6 @@ public class buscarMedicamento extends javax.swing.JFrame {
         if (estado.isViewing()) {
             estado.changeToAddMode();
             actualizarComponentes();
-
             txtBuscar.requestFocusInWindow();
             txtBuscar.selectAll();
         }
@@ -546,9 +539,6 @@ public class buscarMedicamento extends javax.swing.JFrame {
         throw new UnsupportedOperationException();
     }
 
-    // -------------------------------------------------------------------------
-    //
-    
     private void indicarCambios() {
         estado.setModified(true);
         actualizarControles();
@@ -588,6 +578,8 @@ public class buscarMedicamento extends javax.swing.JFrame {
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
     
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(buscarMedicamento.class.getName());
     private final Control control;
     private final FormHandler estado;
     private final VentanaMedico ventanaMedico;

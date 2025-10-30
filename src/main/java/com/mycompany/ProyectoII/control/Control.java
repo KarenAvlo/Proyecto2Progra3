@@ -1,6 +1,5 @@
 package com.mycompany.ProyectoII.control;
 
-//package com.mycompany.ProyectoII.control;
 import com.mycompany.ProyectoII.Administrativo;
 import com.mycompany.ProyectoII.Farmaceuta;
 import com.mycompany.ProyectoII.Indicaciones;
@@ -9,7 +8,6 @@ import com.mycompany.ProyectoII.Medico;
 import com.mycompany.ProyectoII.Paciente;
 import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.Receta;
-import com.mycompany.ProyectoII.control.TipoUsuario;
 import static com.mycompany.ProyectoII.control.TipoUsuario.ADMINISTRATIVO;
 import static com.mycompany.ProyectoII.control.TipoUsuario.MEDICO;
 import com.mycompany.ProyectoII.modelo.Modelo;
@@ -343,7 +341,11 @@ public class Control {
             ex.getMessage();
         }
     }
-
+    
+      public int cantidadRecetas()throws SQLException{
+        return modelo.cantidadRecetas();
+    }
+    
     // --------------------------
     // Funcionalidades específicas de Receta
     // --------------------------

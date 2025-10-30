@@ -405,6 +405,11 @@ public class GestorHospital {
     public void eliminarReceta(String codReceta) throws SQLException {
         recetaDAO.deleteByCodigo(codReceta);
     }
+    
+    public int cantidadRecetas()throws SQLException{
+        List<Receta> recetas = recetaDAO.findAll();
+        return recetas.size();
+    }
 
     // --------------------------
     // Funcionalidades específicas de Receta

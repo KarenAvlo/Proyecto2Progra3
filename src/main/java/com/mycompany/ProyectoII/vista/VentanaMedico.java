@@ -11,11 +11,11 @@ import com.mycompany.ProyectoII.control.Control;
 import com.mycompany.ProyectoII.modelo.Modelo;
 import cr.ac.una.gui.FormHandler;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +52,7 @@ public class VentanaMedico extends javax.swing.JFrame {
 
     public VentanaMedico(Control controlador, Medico med) throws SQLException {
         if (controlador == null) {
-            throw new IllegalArgumentException("El controlador no puede ser null");
+            throw new IllegalArgumentException("El control no puede ser null");
         }
         this.control = controlador;
         this.estado = new FormHandler();
@@ -138,16 +138,17 @@ public class VentanaMedico extends javax.swing.JFrame {
 
     private void actualizarControles() {
         boolean hayPaciente = recetaActual.getPaciente() != null;
-        boolean hayMedicamento = recetaActual.getIndicaciones() != null && !recetaActual.getIndicaciones().isEmpty();
-        BotonBuscarPaciente.setEnabled(estado.isViewing()); // Puede buscar paciente en modo vista
-        BotonAgregarMedicamento.setEnabled(estado.isViewing()); // Puede agregar medicamentos en modo vista
-        BotonGuardarPresc.setEnabled(hayPaciente && hayMedicamento); // Guardar solo si hay cambios
-        BotonEliminarPresc.setEnabled(!estado.isViewing() && estado.getModel() != null); // Eliminar solo si hay algo cargado
-        BotonDetallesPresc.setEnabled(hayPaciente && hayMedicamento); // Ver detalles solo en modo vista
-        BotonLimpiarPresc.setEnabled(estado.isViewing());
-        BotonAgregarMedicamento.setText("Agregar Medicamento");
-    }
+        boolean hayMedicamento
+                = (recetaActual.getIndicaciones() != null && !recetaActual.getIndicaciones().isEmpty())
+                || (recetaActual.getInditemporal() != null && !recetaActual.getInditemporal().isEmpty());
 
+        BotonBuscarPaciente.setEnabled(true); // siempre debe poder buscar
+        BotonAgregarMedicamento.setEnabled(hayPaciente); // solo después de tener paciente
+        BotonGuardarPresc.setEnabled(hayPaciente && hayMedicamento);
+        BotonEliminarPresc.setEnabled(hayPaciente && estado.isEditing());
+        BotonDetallesPresc.setEnabled(hayPaciente && hayMedicamento);
+        BotonLimpiarPresc.setEnabled(true);
+}
     // -------------------------------------------------------------------------
     // OPERACIONES CRUD
     // -------------------------------------------------------------------------
@@ -224,6 +225,579 @@ public class VentanaMedico extends javax.swing.JFrame {
     }
 
     
+      private Medico medicoActual;
+    private Receta recetaActual;  //instancia local
+    private Indicaciones nuevasIndicaciones; //instancia local
+    private final List<String> medicamentosSeleccionados = new ArrayList<>();
+    
+    private void abrirBuscarPaciente() {
+        buscarPaciente ventana = new buscarPaciente(control, this);
+        ventana.setVisible(true);
+    }
+
+    public void pacienteSeleccionado(Paciente paciente) {
+        if (paciente != null) {
+            recetaActual.setPaciente(paciente);
+            mostrarNombre.setText(paciente.getCedula() + " - " + paciente.getNombre());
+            indicarCambios();
+            cambiarModoEditar();
+            actualizarControles();
+        }
+    }
+
+    private void abrirBuscarMedicamento() {
+        buscarMedicamento ventana = new buscarMedicamento(control, this);
+        ventana.setVisible(true);
+    }
+
+    public void medicamentoSeleccionado(Medicamento medicamento, int can, String indica, int dura) {
+        //  crear la indicación
+        Indicaciones nuevasIndicaciones = new Indicaciones();
+        nuevasIndicaciones.setMedicamento(medicamento);
+        nuevasIndicaciones.setCantidad(can);
+        nuevasIndicaciones.setIndicaciones(indica);
+        nuevasIndicaciones.setDuracion(dura);
+
+        //  agregarla a la receta actual
+        recetaActual.agregarIndicaciones(nuevasIndicaciones);
+
+        //  actualizar la tabla en la UI
+        actualizarTabla(recetaActual);
+        indicarCambios();
+        cambiarModoEditar();
+        actualizarControles();
+    }
+
+    private void actualizarTabla(Receta receta) {
+        DefaultTableModel model = (DefaultTableModel) TablaMedicamentosReceta.getModel();
+        model.setRowCount(0);
+
+        // Si la receta viene de BD, usa la colección persistida
+        if (receta.getIndicaciones() != null && !receta.getIndicaciones().isEmpty()) {
+            for (Indicaciones i : receta.getIndicaciones()) {
+                model.addRow(new Object[]{
+                    i.getMedicamento().getNombre(),
+                    i.getMedicamento().getPresentacion(),
+                    i.getCantidad(),
+                    i.getIndicaciones(),
+                    i.getDuracion(),});
+            }
+        } // Si la receta es nueva (no guardada), usa las temporales
+        else if (!receta.getInditemporal().isEmpty()) {
+            for (Indicaciones i : receta.getInditemporal()) {
+                model.addRow(new Object[]{
+                    i.getMedicamento().getNombre(),
+                    i.getMedicamento().getPresentacion(),
+                    i.getCantidad(),
+                    i.getIndicaciones(),
+                    i.getDuracion(),});
+            }
+        }
+    }
+    
+    private void guardarPrescripcion() {
+        try {
+            // Verificaciones iniciales
+            if (recetaActual == null) {
+                JOptionPane.showMessageDialog(this, "No hay receta activa.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (recetaActual.getPaciente() == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un paciente antes de guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if ((recetaActual.getIndicaciones() == null || recetaActual.getIndicaciones().isEmpty())
+                    && (recetaActual.getInditemporal() == null || recetaActual.getInditemporal().isEmpty())) {
+                JOptionPane.showMessageDialog(this, "Debe agregar al menos un medicamento a la receta.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Asignar datos a la receta
+            recetaActual.setMedico(medicoActual);
+            recetaActual.setCodReceta("R" + (control.cantidadRecetas() + 1));
+
+            // Fecha de emisión: hoy (java.sql.Date)
+            recetaActual.setFechaEmision(java.sql.Date.valueOf(LocalDate.now()));
+
+            // Fecha de retiro: obtenida del spinner (java.util.Date -> java.sql.Date)
+            java.util.Date fechaSeleccionada = (java.util.Date) SpinnerFechaRetiro.getValue();
+            java.sql.Date fechaRetiroSQL = new java.sql.Date(fechaSeleccionada.getTime());
+            recetaActual.setFechaRetiro(fechaRetiroSQL);
+
+            recetaActual.setEstado("CONFECCIONADA");
+
+            // Guardar la receta en BD
+            control.agregarReceta(recetaActual);
+
+            // Guardar todas las indicaciones temporales en BD asociadas a la receta
+            if (recetaActual.getInditemporal() != null && !recetaActual.getInditemporal().isEmpty()) {
+                for (Indicaciones ind : recetaActual.getInditemporal()) {
+                    // Guardar cada indicación en la base usando el método del controlador
+                    control.agregarIndicacion(recetaActual, ind);
+                    // Moverla a la lista persistida
+                    if (recetaActual.getIndicaciones() == null) {
+                        recetaActual.setIndicaciones(new ArrayList<>());
+                    }
+                    recetaActual.getIndicaciones().add(ind);
+                }
+                // Limpiar la lista temporal
+                recetaActual.getInditemporal().clear();
+            }
+
+            JOptionPane.showMessageDialog(this, "Receta y sus indicaciones guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cambiarModoVista();
+            limpiarCampos();
+
+            indicarCambios();
+            actualizarControles();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar la receta: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+
+    
+    private void mostrarDetalles() throws SQLException {
+        if (recetaActual == null) {
+            JOptionPane.showMessageDialog(this, "No hay receta seleccionada.", "Detalles de la receta", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Verificar que tenga paciente y al menos una indicación (ya sea en BD o en memoria)
+        boolean sinIndicaciones = (recetaActual.getIndicaciones() == null || recetaActual.getIndicaciones().isEmpty())
+                && (recetaActual.getInditemporal() == null || recetaActual.getInditemporal().isEmpty());
+
+        if (recetaActual.getPaciente() == null || sinIndicaciones) {
+            JOptionPane.showMessageDialog(this, "La receta está incompleta o vacía.", "Detalles de la receta", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Completar datos si faltan
+        if (recetaActual.getCodReceta() == null || recetaActual.getCodReceta().isEmpty()) {
+            recetaActual.setCodReceta("R" + (control.cantidadRecetas() + 1));
+        }
+
+        if (recetaActual.getFechaEmision() == null) {
+            recetaActual.setFechaEmision(Date.valueOf(LocalDate.now()));
+        }
+
+        recetaActual.setMedico(medicoActual);
+        recetaActual.setEstado("CONFECCIONADA");
+
+        // Construir el texto con los detalles
+        StringBuilder detalles = new StringBuilder();
+        detalles.append("Código de Receta: ").append(recetaActual.getCodReceta()).append("\n")
+                .append("Paciente: ").append(recetaActual.getPaciente().getCedula())
+                .append(" - ").append(recetaActual.getPaciente().getNombre()).append("\n")
+                .append("Médico: ").append(recetaActual.getMedico().getNombre()).append("\n")
+                .append("Fecha de emisión: ").append(recetaActual.getFechaEmision()).append("\n");
+
+        if (recetaActual.getFechaRetiro() != null) {
+            detalles.append("Fecha de retiro: ").append(recetaActual.getFechaRetiro()).append("\n");
+        }
+
+        detalles.append("Estado: ").append(recetaActual.getEstado()).append("\n\n");
+
+        detalles.append("Medicamentos:\n");
+
+        // Combinar las dos listas (de BD y temporal)
+        List<Indicaciones> todasIndicaciones = new ArrayList<>();
+        if (recetaActual.getIndicaciones() != null) {
+            todasIndicaciones.addAll(recetaActual.getIndicaciones());
+        }
+        if (recetaActual.getInditemporal() != null) {
+            todasIndicaciones.addAll(recetaActual.getInditemporal());
+        }
+
+        for (Indicaciones i : todasIndicaciones) {
+            if (i.getMedicamento() == null) {
+                continue;
+            }
+
+            detalles.append("- ").append(i.getMedicamento().getNombre())
+                    .append(" | Presentación: ").append(i.getMedicamento().getPresentacion())
+                    .append(" | Cantidad: ").append(i.getCantidad())
+                    .append(" | Indicaciones: ").append(i.getIndicaciones())
+                    .append(" | Duración: ").append(i.getDuracion()).append(" días\n");
+        }
+
+        JOptionPane.showMessageDialog(this, detalles.toString(), "Detalles de la Receta", JOptionPane.INFORMATION_MESSAGE);
+    }
+//==================================== DashBoard ========================================
+
+    private void configurarSpinnersDashboard() {
+        java.util.Date hoy = new java.util.Date();
+
+        // Spinner de años
+        AñoInicio.setModel(new javax.swing.SpinnerDateModel(hoy, null, null, java.util.Calendar.YEAR));
+        AñoFin.setModel(new javax.swing.SpinnerDateModel(hoy, null, null, java.util.Calendar.YEAR));
+
+        JSpinner.DateEditor editorAñoInicio = new JSpinner.DateEditor(AñoInicio, "yyyy");
+        AñoInicio.setEditor(editorAñoInicio);
+        JSpinner.DateEditor editorAñoFin = new JSpinner.DateEditor(AñoFin, "yyyy");
+        AñoFin.setEditor(editorAñoFin);
+
+        // Spinner de día/mes
+        DiaMesInicio.setModel(new javax.swing.SpinnerDateModel(hoy, null, null, java.util.Calendar.DAY_OF_MONTH));
+        DiaMesFin.setModel(new javax.swing.SpinnerDateModel(hoy, null, null, java.util.Calendar.DAY_OF_MONTH));
+
+        JSpinner.DateEditor editorDiaMesInicio = new JSpinner.DateEditor(DiaMesInicio, "dd-MMM");
+        DiaMesInicio.setEditor(editorDiaMesInicio);
+        JSpinner.DateEditor editorDiaMesFin = new JSpinner.DateEditor(DiaMesFin, "dd-MMM");
+        DiaMesFin.setEditor(editorDiaMesFin);
+    }
+
+
+    private void confirmarSeleccionFechasPastel() {
+        try {
+            // 1️⃣ Capturar los valores de los Spinners
+            Date fechaAñoInicio = (Date) AñoInicio.getValue();
+            Date fechaAñoFin = (Date) AñoFin.getValue();
+            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
+            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
+
+            // 2️⃣ Convertir a LocalDate correctamente
+            LocalDate inicio = LocalDate.of(
+                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
+
+            LocalDate fin = LocalDate.of(
+                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
+
+            // Validar rango
+            if (inicio.isAfter(fin)) {
+                JOptionPane.showMessageDialog(this,
+                        "La fecha de inicio no puede ser posterior a la fecha final.",
+                        "Rango inválido",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 3️⃣ Llamar al método para generar el gráfico
+            crearGraficoPastelRecetasPorEstado(inicio, fin);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al procesar las fechas: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    private void crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) {
+        try {
+            //  Llamar al controlador para crear el gráfico
+            JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
+
+            // Crear un ChartPanel que lo contenga
+            ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setMouseWheelEnabled(true);
+            chartPanel.setPreferredSize(new java.awt.Dimension(
+                    PanelRecetas.getWidth(),
+                    PanelRecetas.getHeight()
+            ));
+
+            // 3️⃣ Reemplazar el contenido del panel
+            PanelRecetas.removeAll();
+            PanelRecetas.setLayout(new java.awt.BorderLayout());
+            PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
+
+            // 4️⃣ Refrescar el panel
+            PanelRecetas.validate();
+            PanelRecetas.repaint();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar el gráfico: " + ex.getMessage(),
+                    "Error de base de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+public DefaultTableModel crearTablaMedicamentosPorMes(
+            LocalDate inicio, LocalDate fin,
+            List<String> seleccionados, List<Receta> listaRecetas) {
+
+        // Validar entradas
+        if (listaRecetas == null || listaRecetas.isEmpty()) {
+            return new DefaultTableModel(new Object[][]{}, new String[]{"Medicamento"});
+        }
+
+        // 🧩 Construcción dinámica de columnas: Año-Mes
+        List<String> columnas = new ArrayList<>();
+        columnas.add("Medicamento");
+
+        LocalDate fecha = inicio.withDayOfMonth(1);
+        while (!fecha.isAfter(fin)) {
+            columnas.add(fecha.getYear() + "-" + String.format("%02d", fecha.getMonthValue()));
+            fecha = fecha.plusMonths(1);
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
+
+        // 🩺 Llenar las filas por medicamento
+        for (String med : seleccionados) {
+            List<Object> fila = new ArrayList<>();
+            fila.add(med);
+
+            fecha = inicio.withDayOfMonth(1);
+            while (!fecha.isAfter(fin)) {
+                int cantidad = 0;
+
+                for (Receta r : listaRecetas) {
+                    if (r.getFechaEmision() == null) {
+                        continue;
+                    }
+
+                    // Convertir a LocalDate (según el tipo real)
+                    LocalDate fechaEmision;
+                    if (r.getFechaEmision() instanceof java.sql.Date) {
+                        fechaEmision = ((java.sql.Date) r.getFechaEmision()).toLocalDate();
+                    } else {
+                        fechaEmision = r.getFechaEmision().toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+                    }
+
+                    // Comparar mes y año
+                    if (fechaEmision.getYear() == fecha.getYear()
+                            && fechaEmision.getMonthValue() == fecha.getMonthValue()) {
+
+                        // Buscar el medicamento en las indicaciones
+                        for (Indicaciones i : r.getIndicaciones()) {
+                            if (i.getMedicamento() != null
+                                    && med.equals(i.getMedicamento().getNombre())) {
+                                cantidad += i.getCantidad();
+                            }
+                        }
+                    }
+                }
+
+                fila.add(cantidad);
+                fecha = fecha.plusMonths(1);
+            }
+
+            modelo.addRow(fila.toArray());
+        }
+
+        return modelo;
+    }
+
+    private void cargarMedicamentosComboBox() {
+        jComboBoxMedicamentos.removeAllItems();
+        for (Medicamento m : control.obtenerTodosMedicamentos()) {
+            jComboBoxMedicamentos.addItem(m.getNombre());
+        }
+    }
+    
+    private void agregarMedicamentoSeleccionado() throws SQLException {
+        String seleccionado = (String) jComboBoxMedicamentos.getSelectedItem();
+        if (seleccionado != null && !medicamentosSeleccionados.contains(seleccionado)) {
+            medicamentosSeleccionados.add(seleccionado);
+
+            // Refrescar tabla y gráfico
+            refrescarTablaMedicamentos();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Ya has agregado este medicamento o no hay selección válida.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void refrescarTablaMedicamentos() throws SQLException {
+        LocalDate inicio = LocalDate.of(
+                ((Date) AñoInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
+                ((Date) DiaMesInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
+                1
+        );
+
+        LocalDate fin = LocalDate.of(
+                ((Date) AñoFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
+                ((Date) DiaMesFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
+                1
+        );
+
+        DefaultTableModel modelo = crearTablaMedicamentosPorMes(
+                inicio,
+                fin,
+                medicamentosSeleccionados,
+                control.obtenerTodasRecetas()
+        );
+        tblMedicamentosGrafico.setModel(modelo);
+    }
+
+  
+
+    private void generarGraficoMedicamentos() {
+        try {
+            // 1️⃣ Validar que haya medicamentos seleccionados
+            if (medicamentosSeleccionados.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe agregar al menos un medicamento para generar el gráfico.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 2️⃣ Capturar y convertir las fechas de los Spinners
+            Date fechaAñoInicio = (Date) AñoInicio.getValue();
+            Date fechaAñoFin = (Date) AñoFin.getValue();
+            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
+            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
+
+            LocalDate inicio = LocalDate.of(
+                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
+
+            LocalDate fin = LocalDate.of(
+                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
+                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+            );
+
+            // 3️⃣ Validar rango
+            if (inicio.isAfter(fin)) {
+                JOptionPane.showMessageDialog(this,
+                        "La fecha de inicio no puede ser posterior a la fecha final.",
+                        "Rango inválido",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 4️⃣ Llamar al controlador para generar el gráfico
+            JFreeChart chart = control.crearGraficoLineaMedicamentos(
+                    inicio,
+                    fin,
+                    medicamentosSeleccionados,
+                    control.obtenerTodasRecetas()
+            );
+
+            // 5️⃣ Mostrar el gráfico en el panel
+            ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setMouseWheelEnabled(true);
+            chartPanel.setPreferredSize(new java.awt.Dimension(
+                    PanelMedicamentos.getWidth(),
+                    PanelMedicamentos.getHeight()
+            ));
+
+            PanelMedicamentos.removeAll();
+            PanelMedicamentos.setLayout(new java.awt.BorderLayout());
+            PanelMedicamentos.add(chartPanel, java.awt.BorderLayout.CENTER);
+            PanelMedicamentos.validate();
+            PanelMedicamentos.repaint();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar el gráfico: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+
+    
+    
+//====================Historico==================
+
+    private void cargarRecetaDesdeTabla() {
+        int fila = TablaRecetas.getSelectedRow();
+        if (fila >= 0) {
+            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
+            Receta receta = control.buscarReceta(codigo);
+
+            if (receta != null) {
+                estado.setModel(receta);  
+                cambiarModoVista();         
+                actualizarComponentes();  
+                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
+                modelo.setRowCount(0);
+                for (Indicaciones ind : receta.getIndicaciones()) {
+                    modelo.addRow(new Object[]{
+                        ind.getMedicamento().getNombre(),
+                        ind.getCantidad(),
+                        ind.getIndicaciones(),
+                        ind.getDuracion()
+                    });
+                }
+            }
+        }
+    }
+
+    private void actualizarTablaRecetas() {
+        try {
+            List<Receta> recetas = control.obtenerTodasRecetas();
+            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
+            modelo.setRowCount(0); 
+            if (recetas != null) {
+                for (Receta r : recetas) {
+                    modelo.addRow(new Object[]{
+                        r.getCodReceta(),
+                        r.getPaciente() != null ? r.getPaciente().getNombre() : "Sin paciente",
+                        r.getMedico() != null ? r.getMedico().getNombre() : "Sin médico",
+                        r.getFechaEmision(),
+                        r.getFechaRetiro() != null ? r.getFechaRetiro() : "No retirado",
+                        r.getEstado()
+                    });
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar las recetas: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void mostrarIndicacionesReceta(Receta receta) {
+        DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
+        modelo.setRowCount(0); // limpiar la tabla
+
+        if (receta != null && receta.getIndicaciones() != null) {
+            for (Indicaciones i : receta.getIndicaciones()) {
+                modelo.addRow(new Object[]{
+                    i.getMedicamento() != null ? i.getMedicamento().getNombre() : "Sin medicamento",
+                    i.getCantidad(),
+                    i.getIndicaciones(),
+                    i.getDuracion()
+                });
+            }
+        }
+    }
+    
+    private void asignarIconosPestanas() {
+        int tamañoIcono = 18;
+
+        // Mapa de panel -> icono
+        Map<javax.swing.JPanel, FontAwesomeSolid> iconos = new HashMap<>();
+        iconos.put(PestañaAcercaDe, FontAwesomeSolid.INFO_CIRCLE);
+        iconos.put(PestañaDashboard, FontAwesomeSolid.TACHOMETER_ALT);
+        iconos.put(PestañaHistorico, FontAwesomeSolid.HISTORY);
+        iconos.put(PestañaPrescribir, FontAwesomeSolid.FILE_PRESCRIPTION);
+
+        // Asignamos iconos
+        for (int i = 0; i < VentanaMedico.getTabCount(); i++) {
+            javax.swing.JPanel panel = (javax.swing.JPanel) VentanaMedico.getComponentAt(i);
+            if (iconos.containsKey(panel)) {
+                FontIcon icon = FontIcon.of(iconos.get(panel), tamañoIcono);
+                VentanaMedico.setIconAt(i, icon);
+            }
+        }
+    }
     
     
     
@@ -1024,8 +1598,12 @@ public class VentanaMedico extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void BotonDetallesPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDetallesPrescActionPerformed
-        // TODO add your handling code here:
-        mostrarDetalles();
+        try {
+            // TODO add your handling code here:
+            mostrarDetalles();
+        } catch (SQLException ex) {
+            System.getLogger(VentanaMedico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }//GEN-LAST:event_BotonDetallesPrescActionPerformed
 
     private void BotonLimpiarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLimpiarPrescActionPerformed
@@ -1144,476 +1722,7 @@ public class VentanaMedico extends javax.swing.JFrame {
         });
     }
 
-    private Medico medicoActual;
-    private Receta recetaActual;  //instancia local
-    private Indicaciones nuevasIndicaciones; //instancia local
-    private final List<String> medicamentosSeleccionados = new ArrayList<>();
-    private void abrirBuscarPaciente() {
-        buscarPaciente ventana = new buscarPaciente(control, this);
-        ventana.setVisible(true);
-    }
-
-    public void pacienteSeleccionado(Paciente paciente) {
-        if (paciente != null) {
-            recetaActual.setPaciente(paciente);
-            mostrarNombre.setText(paciente.getCedula() + " - " + paciente.getNombre());
-            indicarCambios();
-            cambiarModoEditar();
-            actualizarControles();
-        }
-    }
-
-    private void abrirBuscarMedicamento() {
-        buscarMedicamento ventana = new buscarMedicamento(control, this);
-        ventana.setVisible(true);
-    }
-
-    public void medicamentoSeleccionado(Medicamento medicamento, int can, String indica, int dura) {
-          //  crear la indicación
-    Indicaciones nuevasIndicaciones = new Indicaciones();
-    nuevasIndicaciones.setMedicamento(medicamento);
-    nuevasIndicaciones.setCantidad(can);
-    nuevasIndicaciones.setIndicaciones(indica);
-    nuevasIndicaciones.setDuracion(dura);
-
-    //  agregarla a la receta actual
-    recetaActual.agregarIndicaciones(nuevasIndicaciones);
-
-    //  actualizar la tabla en la UI
-    actualizarTabla(recetaActual);
-    indicarCambios();
-    cambiarModoEditar();
-    actualizarControles();
-    }
-
-    private void actualizarTabla(Receta receta) {
-        DefaultTableModel model = (DefaultTableModel) TablaMedicamentosReceta.getModel();
-        model.setRowCount(0); // Limpiar tabla
-        for (Indicaciones i : receta.getIndicaciones()) {
-            model.addRow(new Object[]{
-                i.getMedicamento().getNombre(),
-                i.getMedicamento().getPresentacion(),
-                i.getCantidad(),
-                i.getIndicaciones(),
-                i.getDuracion(),});
-        }
-    }
-
-    private void guardarPrescripcion() {
-//        recetaActual.setMedico(medicoActual);
-//        recetaActual.setCodReceta("R" + (controlador.cantidadRecetas() + 1));
-//        recetaActual.setFechaEmision(LocalDate.now());
-//        Date fechaSeleccionada = (Date) SpinnerFechaRetiro.getValue();
-//        // Conversión a LocalDate
-//        LocalDate fechaRetiro = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        recetaActual.setFechaRetiro(fechaRetiro);
-//        recetaActual.setEstado("CONFECCIONADA");
-//        if (control.agregarReceta(recetaActual)) {
-//            JOptionPane.showMessageDialog(this, "Receta guardada correctamente.");
-//        }
-//        indicarCambios();
-//        cambiarModoEditar();
-//        actualizarControles();
-    }
-
-    private void mostrarDetalles() {
-//        recetaActual.setMedico(medicoActual);
-//        recetaActual.setCodReceta("R0" + controlador.cantidadRecetas() + 1);
-//        recetaActual.setFechaEmision(LocalDate.now());
-//        Date fechaSeleccionada = (Date) SpinnerFechaRetiro.getValue();
-//        // Conversión a LocalDate
-//        LocalDate fechaRetiro = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        recetaActual.setFechaRetiro(fechaRetiro);
-//        recetaActual.setEstado("Confeccionada");
-//
-//        if (recetaActual == null || recetaActual.getPaciente() == null || recetaActual.getIndicaciones().isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "No hay receta seleccionada o está incompleta.", "Detalles de la receta", JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
-//        StringBuilder detalles = new StringBuilder();
-//        detalles.append("Código de Receta: ").append(recetaActual.getCodReceta()).append("\n");
-//        detalles.append("Paciente: ").append(recetaActual.getPaciente().getCedula())
-//                .append(" - ").append(recetaActual.getPaciente().getNombre()).append("\n");
-//        detalles.append("Médico: ").append(recetaActual.getMedico().getNombre()).append("\n");
-//        detalles.append("Fecha de emisión: ").append(recetaActual.getFechaEmision()).append("\n");
-//        detalles.append("Fecha de retiro: ").append(recetaActual.getFechaRetiro()).append("\n");
-//        detalles.append("Estado: ").append(recetaActual.getEstado()).append("\n\n");
-//
-//        detalles.append("Medicamentos:\n");
-//        for (Indicaciones i : recetaActual.getIndicaciones()) {
-//            detalles.append("- ").append(i.getMedicamento().getNombre())
-//                    .append(" | Presentación: ").append(i.getMedicamento().getPresentacion())
-//                    .append(" | Cantidad: ").append(i.getCantidad())
-//                    .append(" | Indicaciones: ").append(i.getIndicaciones())
-//                    .append(" | Duración: ").append(i.getDuracion()).append(" días\n");
-//        }
-//
-//        JOptionPane.showMessageDialog(this, detalles.toString(), "Detalles de la Receta", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    //==================================== DashBoard ========================================
-    private void configurarSpinnersDashboard() {
-        AñoInicio.setModel(new javax.swing.SpinnerDateModel(new Date(), null, null, java.util.Calendar.YEAR));
-        AñoFin.setModel(new javax.swing.SpinnerDateModel(new Date(), null, null, java.util.Calendar.YEAR));
-        JSpinner.DateEditor editorAñoInicio = new JSpinner.DateEditor(AñoInicio, "yyyy");
-        AñoInicio.setEditor(editorAñoInicio);
-        JSpinner.DateEditor editorAñoFin = new JSpinner.DateEditor(AñoFin, "yyyy");
-        AñoFin.setEditor(editorAñoFin);
-        DiaMesInicio.setModel(new javax.swing.SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH));
-        DiaMesFin.setModel(new javax.swing.SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH));
-        JSpinner.DateEditor editorDiaMesInicio = new JSpinner.DateEditor(DiaMesInicio, "dd-MMM");
-        DiaMesInicio.setEditor(editorDiaMesInicio);
-        JSpinner.DateEditor editorDiaMesFin = new JSpinner.DateEditor(DiaMesFin, "dd-MMM");
-        DiaMesFin.setEditor(editorDiaMesFin);
-    }
-
-    private void confirmarSeleccionFechasPastel() {
-        try {
-            // 1️⃣ Capturar los valores de los Spinners
-            Date fechaAñoInicio = (Date) AñoInicio.getValue();
-            Date fechaAñoFin = (Date) AñoFin.getValue();
-            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
-            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
-
-            // 2️⃣ Convertir a LocalDate correctamente
-            LocalDate inicio = LocalDate.of(
-                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
-            );
-
-            LocalDate fin = LocalDate.of(
-                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
-            );
-
-            // Validar rango
-            if (inicio.isAfter(fin)) {
-                JOptionPane.showMessageDialog(this,
-                        "La fecha de inicio no puede ser posterior a la fecha final.",
-                        "Rango inválido",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // 3️⃣ Llamar al método para generar el gráfico
-            crearGraficoPastelRecetasPorEstado(inicio, fin);
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al procesar las fechas: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
-
-    private void crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) {
-        try {
-            //  Llamar al controlador para crear el gráfico
-            JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
-
-            // Crear un ChartPanel que lo contenga
-            ChartPanel chartPanel = new ChartPanel(chart);
-            chartPanel.setMouseWheelEnabled(true);
-            chartPanel.setPreferredSize(new java.awt.Dimension(
-                    PanelRecetas.getWidth(),
-                    PanelRecetas.getHeight()
-            ));
-
-            // 3️⃣ Reemplazar el contenido del panel
-            PanelRecetas.removeAll();
-            PanelRecetas.setLayout(new java.awt.BorderLayout());
-            PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
-
-            // 4️⃣ Refrescar el panel
-            PanelRecetas.validate();
-            PanelRecetas.repaint();
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al generar el gráfico: " + ex.getMessage(),
-                    "Error de base de datos",
-                    JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }
-
-public DefaultTableModel crearTablaMedicamentosPorMes(
-            LocalDate inicio, LocalDate fin,
-            List<String> seleccionados, List<Receta> listaRecetas) {
-
-        // Validar entradas
-        if (listaRecetas == null || listaRecetas.isEmpty()) {
-            return new DefaultTableModel(new Object[][]{}, new String[]{"Medicamento"});
-        }
-
-        // 🧩 Construcción dinámica de columnas: Año-Mes
-        List<String> columnas = new ArrayList<>();
-        columnas.add("Medicamento");
-
-        LocalDate fecha = inicio.withDayOfMonth(1);
-        while (!fecha.isAfter(fin)) {
-            columnas.add(fecha.getYear() + "-" + String.format("%02d", fecha.getMonthValue()));
-            fecha = fecha.plusMonths(1);
-        }
-
-        DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
-
-        // 🩺 Llenar las filas por medicamento
-        for (String med : seleccionados) {
-            List<Object> fila = new ArrayList<>();
-            fila.add(med);
-
-            fecha = inicio.withDayOfMonth(1);
-            while (!fecha.isAfter(fin)) {
-                int cantidad = 0;
-
-                for (Receta r : listaRecetas) {
-                    if (r.getFechaEmision() == null) {
-                        continue;
-                    }
-
-                    // Convertir a LocalDate (según el tipo real)
-                    LocalDate fechaEmision;
-                    if (r.getFechaEmision() instanceof java.sql.Date) {
-                        fechaEmision = ((java.sql.Date) r.getFechaEmision()).toLocalDate();
-                    } else {
-                        fechaEmision = r.getFechaEmision().toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate();
-                    }
-
-                    // Comparar mes y año
-                    if (fechaEmision.getYear() == fecha.getYear()
-                            && fechaEmision.getMonthValue() == fecha.getMonthValue()) {
-
-                        // Buscar el medicamento en las indicaciones
-                        for (Indicaciones i : r.getIndicaciones()) {
-                            if (i.getMedicamento() != null
-                                    && med.equals(i.getMedicamento().getNombre())) {
-                                cantidad += i.getCantidad();
-                            }
-                        }
-                    }
-                }
-
-                fila.add(cantidad);
-                fecha = fecha.plusMonths(1);
-            }
-
-            modelo.addRow(fila.toArray());
-        }
-
-        return modelo;
-    }
-
-    private void cargarMedicamentosComboBox() {
-        jComboBoxMedicamentos.removeAllItems();
-        for (Medicamento m : control.obtenerTodosMedicamentos()) {
-            jComboBoxMedicamentos.addItem(m.getNombre());
-        }
-    }
-    
-    private void agregarMedicamentoSeleccionado() throws SQLException {
-        String seleccionado = (String) jComboBoxMedicamentos.getSelectedItem();
-        if (seleccionado != null && !medicamentosSeleccionados.contains(seleccionado)) {
-            medicamentosSeleccionados.add(seleccionado);
-
-            // Refrescar tabla y gráfico
-            refrescarTablaMedicamentos();
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Ya has agregado este medicamento o no hay selección válida.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    private void refrescarTablaMedicamentos() throws SQLException {
-        LocalDate inicio = LocalDate.of(
-                ((Date) AñoInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                ((Date) DiaMesInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
-                1
-        );
-
-        LocalDate fin = LocalDate.of(
-                ((Date) AñoFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                ((Date) DiaMesFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
-                1
-        );
-
-        DefaultTableModel modelo = crearTablaMedicamentosPorMes(
-                inicio,
-                fin,
-                medicamentosSeleccionados,
-                control.obtenerTodasRecetas()
-        );
-        tblMedicamentosGrafico.setModel(modelo);
-    }
-
   
-
-    private void generarGraficoMedicamentos() {
-        try {
-            // 1️⃣ Validar que haya medicamentos seleccionados
-            if (medicamentosSeleccionados.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe agregar al menos un medicamento para generar el gráfico.",
-                        "Aviso",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // 2️⃣ Capturar y convertir las fechas de los Spinners
-            Date fechaAñoInicio = (Date) AñoInicio.getValue();
-            Date fechaAñoFin = (Date) AñoFin.getValue();
-            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
-            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
-
-            LocalDate inicio = LocalDate.of(
-                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
-            );
-
-            LocalDate fin = LocalDate.of(
-                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
-            );
-
-            // 3️⃣ Validar rango
-            if (inicio.isAfter(fin)) {
-                JOptionPane.showMessageDialog(this,
-                        "La fecha de inicio no puede ser posterior a la fecha final.",
-                        "Rango inválido",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // 4️⃣ Llamar al controlador para generar el gráfico
-            JFreeChart chart = control.crearGraficoLineaMedicamentos(
-                    inicio,
-                    fin,
-                    medicamentosSeleccionados,
-                    control.obtenerTodasRecetas()
-            );
-
-            // 5️⃣ Mostrar el gráfico en el panel
-            ChartPanel chartPanel = new ChartPanel(chart);
-            chartPanel.setMouseWheelEnabled(true);
-            chartPanel.setPreferredSize(new java.awt.Dimension(
-                    PanelMedicamentos.getWidth(),
-                    PanelMedicamentos.getHeight()
-            ));
-
-            PanelMedicamentos.removeAll();
-            PanelMedicamentos.setLayout(new java.awt.BorderLayout());
-            PanelMedicamentos.add(chartPanel, java.awt.BorderLayout.CENTER);
-            PanelMedicamentos.validate();
-            PanelMedicamentos.repaint();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al generar el gráfico: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
-
-
-    
-    
-//====================Historico==================
-
-    private void cargarRecetaDesdeTabla() {
-        int fila = TablaRecetas.getSelectedRow();
-        if (fila >= 0) {
-            String codigo = TablaRecetas.getValueAt(fila, 0).toString();
-            Receta receta = control.buscarReceta(codigo);
-
-            if (receta != null) {
-                estado.setModel(receta);  
-                cambiarModoVista();         
-                actualizarComponentes();  
-                DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
-                modelo.setRowCount(0);
-                for (Indicaciones ind : receta.getIndicaciones()) {
-                    modelo.addRow(new Object[]{
-                        ind.getMedicamento().getNombre(),
-                        ind.getCantidad(),
-                        ind.getIndicaciones(),
-                        ind.getDuracion()
-                    });
-                }
-            }
-        }
-    }
-
-    private void actualizarTablaRecetas() {
-        try {
-            List<Receta> recetas = control.obtenerTodasRecetas();
-            DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
-            modelo.setRowCount(0); 
-            if (recetas != null) {
-                for (Receta r : recetas) {
-                    modelo.addRow(new Object[]{
-                        r.getCodReceta(),
-                        r.getPaciente() != null ? r.getPaciente().getNombre() : "Sin paciente",
-                        r.getMedico() != null ? r.getMedico().getNombre() : "Sin médico",
-                        r.getFechaEmision(),
-                        r.getFechaRetiro() != null ? r.getFechaRetiro() : "No retirado",
-                        r.getEstado()
-                    });
-                }
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al cargar las recetas: " + ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void mostrarIndicacionesReceta(Receta receta) {
-        DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
-        modelo.setRowCount(0); // limpiar la tabla
-
-        if (receta != null && receta.getIndicaciones() != null) {
-            for (Indicaciones i : receta.getIndicaciones()) {
-                modelo.addRow(new Object[]{
-                    i.getMedicamento() != null ? i.getMedicamento().getNombre() : "Sin medicamento",
-                    i.getCantidad(),
-                    i.getIndicaciones(),
-                    i.getDuracion()
-                });
-            }
-        }
-    }
-    
-    private void asignarIconosPestanas() {
-        int tamañoIcono = 18;
-
-        // Mapa de panel -> icono
-        Map<javax.swing.JPanel, FontAwesomeSolid> iconos = new HashMap<>();
-        iconos.put(PestañaAcercaDe, FontAwesomeSolid.INFO_CIRCLE);
-        iconos.put(PestañaDashboard, FontAwesomeSolid.TACHOMETER_ALT);
-        iconos.put(PestañaHistorico, FontAwesomeSolid.HISTORY);
-        iconos.put(PestañaPrescribir, FontAwesomeSolid.FILE_PRESCRIPTION);
-
-        // Asignamos iconos
-        for (int i = 0; i < VentanaMedico.getTabCount(); i++) {
-            javax.swing.JPanel panel = (javax.swing.JPanel) VentanaMedico.getComponentAt(i);
-            if (iconos.containsKey(panel)) {
-                FontIcon icon = FontIcon.of(iconos.get(panel), tamañoIcono);
-                VentanaMedico.setIconAt(i, icon);
-            }
-        }
-    }
-    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

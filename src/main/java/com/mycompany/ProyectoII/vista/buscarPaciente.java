@@ -319,13 +319,14 @@ public class buscarPaciente extends javax.swing.JFrame {
             }
         };
         txtBuscar.getDocument().addDocumentListener(da);
+        
         ElegirFiltroBusqueda.setSelectedItem("Nombre");
-//         try {
-//            listaPacientes = control.getModelo().listarPacientes();
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(this, "Error al cargar pacientes: " + e.getMessage());
-//            listaPacientes = List.of();
-//        }
+         try {
+            listaPacientes = control.getModelo().listarPacientes();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar pacientes: " + e.getMessage());
+            listaPacientes = List.of();
+        }
         actualizarTabla(listaPacientes);
         cambiarModoVista();
         setVisible(true);
