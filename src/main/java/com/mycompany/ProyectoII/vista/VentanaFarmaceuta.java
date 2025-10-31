@@ -46,7 +46,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
 *                                                                     |
-* versión 1.0.0 13-09-2005                                            |
+* versión 2.0.0 06-11-2025                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
 */
@@ -231,17 +231,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         }
     }
     
-    private void cambiarModoBuscar() { // no usado
-//        estado.changeToSearchMode();
-//        actualizarComponentes();
-//        
-//        int pestanaSeleccionada = VentanaFarmaceuta.getSelectedIndex();
-//        switch (pestanaSeleccionada) {
-//            case 0:
-//                break;
-//
-//        }
-    }
+
 
     // -------------------------------------------------------------------------
     // ACTUALIZACIÓN DE COMPONENTES
@@ -265,14 +255,8 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                 
                 break;
             
-            case 1: // DashBoard
-                //boolean noHayTextoFarma = tblMedicamentosGrafico.i .isEmpty();
-                break;
+            
 
-//            case 5: // Recetas
-//                boolean NohaytextoRec = CodigoRecetastxt.getText().trim().isEmpty();
-//                BotonBuscarReceta.setEnabled(!NohaytextoRec);
-//                break;
         }
     }
     
@@ -290,20 +274,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                 areaTxtBusCodigo.setEnabled(estado.getModel() == null || modoEdicionMed || estado.isModified());
                 
                 break;
-            
-            case 1: // Dashboard
-//            BotonBuscarF.setEnabled(!CedulaFtxt2.getText().trim().isEmpty());
-                
-                break;
 
-//            case 5: // Recetas falta
-//                CodigoRecetastxt.setEnabled(true);
-        
-    
-
-    ////                ResultadoRecetastxt.setEnabled(estado.isAdding() || estado.isSearching() || !estado.isViewing());
-//                BotonBuscarReceta.setEnabled(!CodigoRecetastxt.getText().trim().isEmpty());
-//                break;
         }
     }
 
@@ -645,7 +616,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         jPanel1.setMaximumSize(new java.awt.Dimension(243, 325));
         jPanel1.setPreferredSize(new java.awt.Dimension(219, 400));
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Activos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Activos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         BotonEnviar.setText("Enviar");
         BotonEnviar.addActionListener(new java.awt.event.ActionListener() {
@@ -729,7 +700,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                     .addComponent(BotonRecibir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -747,7 +718,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
         VentanaFarmaceuta.setPreferredSize(new java.awt.Dimension(900, 600));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Despacho de Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Despacho de Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         txtBusCodigo.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         txtBusCodigo.setText("Búsqueda por código");
@@ -932,7 +903,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
         PestañaDashboard.setEnabled(false);
         PestañaDashboard.setMaximumSize(new java.awt.Dimension(767, 767));
 
-        PanelDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Datos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PanelDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         jLabel1.setText("Desde");
 
@@ -954,7 +925,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
         jComboBoxMedicamentos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton1.setText("Gráfrico Medicamentos");
+        jButton1.setText("Gráfico Medicamentos");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -1061,7 +1032,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        PanelMedicamentos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Medicamentos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PanelMedicamentos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Medicamentos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         javax.swing.GroupLayout PanelMedicamentosLayout = new javax.swing.GroupLayout(PanelMedicamentos);
         PanelMedicamentos.setLayout(PanelMedicamentosLayout);
@@ -1074,7 +1045,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        PanelRecetas.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PanelRecetas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recetas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         javax.swing.GroupLayout PanelRecetasLayout = new javax.swing.GroupLayout(PanelRecetas);
         PanelRecetas.setLayout(PanelRecetasLayout);
@@ -1115,7 +1086,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
         VentanaFarmaceuta.addTab("Dashboard", PestañaDashboard);
 
-        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Listado", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Listado", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         TablaRecetas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1551,13 +1522,13 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
     
     private void confirmarSeleccionFechasPastel() {
         try {
-            // 1️⃣ Capturar los valores de los Spinners
+            // Capturar los valores de los Spinners
             Date fechaAñoInicio = (Date) AñoInicio.getValue();
             Date fechaAñoFin = (Date) AñoFin.getValue();
             Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
             Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
 
-            // 2️⃣ Convertir a LocalDate correctamente
+            // Convertir a LocalDate correctamente
             LocalDate inicio = LocalDate.of(
                     fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
                     fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
@@ -1579,7 +1550,7 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                 return;
             }
 
-            // 3️⃣ Llamar al método para generar el gráfico
+            // Llamar al método para generar el gráfico
             crearGraficoPastelRecetasPorEstado(inicio, fin);
 
         } catch (Exception e) {
@@ -1593,10 +1564,10 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
 
     private void crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) {
         try {
-            // 1️⃣ Llamar al controlador para crear el gráfico
+            //  Llamar al controlador para crear el gráfico
             JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
 
-            // 2️⃣ Crear un ChartPanel que lo contenga
+            //  Crear un ChartPanel que lo contenga
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setPreferredSize(new java.awt.Dimension(
@@ -1604,12 +1575,12 @@ public class VentanaFarmaceuta extends javax.swing.JFrame {
                     PanelRecetas.getHeight()
             ));
 
-            // 3️⃣ Reemplazar el contenido del panel
+            //  Reemplazar el contenido del panel
             PanelRecetas.removeAll();
             PanelRecetas.setLayout(new java.awt.BorderLayout());
             PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
 
-            // 4️⃣ Refrescar el panel
+            //  Refrescar el panel
             PanelRecetas.validate();
             PanelRecetas.repaint();
 
@@ -1631,7 +1602,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             return new DefaultTableModel(new Object[][]{}, new String[]{"Medicamento"});
         }
 
-        // 🧩 Construcción dinámica de columnas: Año-Mes
+        //  Construcción dinámica de columnas: Año-Mes
         List<String> columnas = new ArrayList<>();
         columnas.add("Medicamento");
 
@@ -1643,7 +1614,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
 
         DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
 
-        // 🩺 Llenar las filas por medicamento
+        //  Llenar las filas por medicamento
         for (String med : seleccionados) {
             List<Object> fila = new ArrayList<>();
             fila.add(med);
@@ -1737,7 +1708,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     
    private void generarGraficoMedicamentos() {
         try {
-            // 1️⃣ Validar que haya medicamentos seleccionados
+            //  Validar que haya medicamentos seleccionados
             if (medicamentosSeleccionados.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Debe agregar al menos un medicamento para generar el gráfico.",
@@ -1746,7 +1717,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                 return;
             }
 
-            // 2️⃣ Capturar y convertir las fechas de los Spinners
+            //  Capturar y convertir las fechas de los Spinners
             Date fechaAñoInicio = (Date) AñoInicio.getValue();
             Date fechaAñoFin = (Date) AñoFin.getValue();
             Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
@@ -1764,7 +1735,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                     fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
             );
 
-            // 3️⃣ Validar rango
+            //  Validar rango
             if (inicio.isAfter(fin)) {
                 JOptionPane.showMessageDialog(this,
                         "La fecha de inicio no puede ser posterior a la fecha final.",
@@ -1773,7 +1744,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                 return;
             }
 
-            // 4️⃣ Llamar al controlador para generar el gráfico
+            //  Llamar al controlador para generar el gráfico
             JFreeChart chart = control.crearGraficoLineaMedicamentos(
                     inicio,
                     fin,
@@ -1781,7 +1752,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                     control.obtenerTodasRecetas()
             );
 
-            // 5️⃣ Mostrar el gráfico en el panel
+            //  Mostrar el gráfico en el panel
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setPreferredSize(new java.awt.Dimension(

@@ -336,11 +336,7 @@ public class GestorHospital {
         medicamentoDAO.delete(codigo);
     }
 
-    // --------------------------
-    // Funcionalidades específicas de Medicamento
-    // --------------------------
-    // Por ahora no hay funcionalidades especiales, pero aquí se podrían agregar métodos como:
-    // buscar por nombre, filtrar por presentación, etc.
+    
     // --------------------------
     // CRUD Indicaciones
     // --------------------------
@@ -394,8 +390,6 @@ public class GestorHospital {
         return recetas.size();
     }
     
-    
-
     // --------------------------
     // Funcionalidades específicas de Receta
     // --------------------------
@@ -432,7 +426,6 @@ public class GestorHospital {
         if (paciente == null) {
             return new ArrayList<>();
         }
-
         return recetaDAO.getDao().queryForEq("Paciente_Cedula", cedulaPaciente);
 
     }
@@ -552,7 +545,7 @@ public class GestorHospital {
                         continue;
                     }
 
-                    // 🔄 Convertir la fecha a LocalDate
+                    //  Convertir la fecha a LocalDate
                     LocalDate fechaEmision;
                     if (fechaEmisionDate instanceof java.sql.Date) {
                         fechaEmision = ((java.sql.Date) fechaEmisionDate).toLocalDate();
@@ -562,7 +555,7 @@ public class GestorHospital {
                                 .toLocalDate();
                     }
 
-                    // ✅ Comparar año y mes correctamente
+                    //  Comparar año y mes correctamente
                     if (fechaEmision.getYear() == fecha.getYear()
                             && fechaEmision.getMonthValue() == fecha.getMonthValue()) {
 

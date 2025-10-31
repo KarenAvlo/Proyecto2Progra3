@@ -37,15 +37,15 @@ import org.kordamp.ikonli.swing.FontIcon;
 * EIF206 - Programación 3                                             |
 * 2do ciclo 2025                                                      |
 * NRC 51189 – Grupo 05                                                |
-* Proyecto 1                                                          |
+* Proyecto 2                                                          |
 *                                                                     |
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
 *                                                                     |
-* versión 1.0.0 13-09-2005                                            |
+* versión 2.0.0 06-11-2025                                               |
 *                                                                     |
 * --------------------------------------------------------------------+
-*/
+ */
 public class VentanaMedico extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaMedico.class.getName());
@@ -74,8 +74,7 @@ public class VentanaMedico extends javax.swing.JFrame {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "No se pudo conectar al servidor: " + ex.getMessage());
         }
-        
-        
+
         init();
     }
 
@@ -92,9 +91,10 @@ public class VentanaMedico extends javax.swing.JFrame {
             }
             actualizarControles();
         });
-        
+
         asignarIconosPestanas();
         actualizarTablaRecetas();
+        actualizarTablaMedicamentos();
         cambiarModoVista();
         setVisible(true);
 
@@ -145,10 +145,11 @@ public class VentanaMedico extends javax.swing.JFrame {
         BotonBuscarPaciente.setEnabled(true); // siempre debe poder buscar
         BotonAgregarMedicamento.setEnabled(hayPaciente); // solo después de tener paciente
         BotonGuardarPresc.setEnabled(hayPaciente && hayMedicamento);
-        BotonEliminarPresc.setEnabled(hayPaciente && estado.isEditing());
+        BotonEliminarPresc.setEnabled(hayPaciente && hayMedicamento);
         BotonDetallesPresc.setEnabled(hayPaciente && hayMedicamento);
         BotonLimpiarPresc.setEnabled(true);
-}
+    }
+
     // -------------------------------------------------------------------------
     // OPERACIONES CRUD
     // -------------------------------------------------------------------------
@@ -169,7 +170,7 @@ public class VentanaMedico extends javax.swing.JFrame {
         cambiarModoVista();
         actualizarControles();
     }
-    
+
     //Tabla usuarios conectados
     private void actualizarTablaUsuarios() {
         DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Mensaje"}, 0) {
@@ -224,12 +225,6 @@ public class VentanaMedico extends javax.swing.JFrame {
         }).start();
     }
 
-    
-      private Medico medicoActual;
-    private Receta recetaActual;  //instancia local
-    private Indicaciones nuevasIndicaciones; //instancia local
-    private final List<String> medicamentosSeleccionados = new ArrayList<>();
-    
     private void abrirBuscarPaciente() {
         buscarPaciente ventana = new buscarPaciente(control, this);
         ventana.setVisible(true);
@@ -294,7 +289,24 @@ public class VentanaMedico extends javax.swing.JFrame {
             }
         }
     }
-    
+
+    private void actualizarTablaMedicamentos() {
+        DefaultTableModel modelo = (DefaultTableModel) TablaMedicamentosReceta.getModel();
+        modelo.setRowCount(0); // limpia la tabla
+
+        if (recetaActual != null && recetaActual.getInditemporal() != null) {
+            for (Indicaciones ind : recetaActual.getInditemporal()) {
+                modelo.addRow(new Object[]{
+                    ind.getMedicamento().getCodigo(),
+                    ind.getMedicamento().getNombre(),
+                    ind.getCantidad(),
+                    ind.getDuracion(),
+                    ind.getIndicaciones()
+                });
+            }
+        }
+    }
+
     private void guardarPrescripcion() {
         try {
             if (recetaActual == null) {
@@ -346,8 +358,6 @@ public class VentanaMedico extends javax.swing.JFrame {
         }
     }
 
-
-    
     private void mostrarDetalles() throws SQLException {
         if (recetaActual == null) {
             JOptionPane.showMessageDialog(this, "No hay receta seleccionada.", "Detalles de la receta", JOptionPane.WARNING_MESSAGE);
@@ -438,16 +448,15 @@ public class VentanaMedico extends javax.swing.JFrame {
         DiaMesFin.setEditor(editorDiaMesFin);
     }
 
-
     private void confirmarSeleccionFechasPastel() {
         try {
-            // 1️⃣ Capturar los valores de los Spinners
+            // Capturar los valores de los Spinners
             Date fechaAñoInicio = (Date) AñoInicio.getValue();
             Date fechaAñoFin = (Date) AñoFin.getValue();
             Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
             Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
 
-            // 2️⃣ Convertir a LocalDate correctamente
+            //  Convertir a LocalDate correctamente
             LocalDate inicio = LocalDate.of(
                     fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
                     fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
@@ -469,7 +478,7 @@ public class VentanaMedico extends javax.swing.JFrame {
                 return;
             }
 
-            // 3️⃣ Llamar al método para generar el gráfico
+            // Llamar al método para generar el gráfico
             crearGraficoPastelRecetasPorEstado(inicio, fin);
 
         } catch (Exception e) {
@@ -494,12 +503,12 @@ public class VentanaMedico extends javax.swing.JFrame {
                     PanelRecetas.getHeight()
             ));
 
-            // 3️⃣ Reemplazar el contenido del panel
+            // Reemplazar el contenido del panel
             PanelRecetas.removeAll();
             PanelRecetas.setLayout(new java.awt.BorderLayout());
             PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
 
-            // 4️⃣ Refrescar el panel
+            //  Refrescar el panel
             PanelRecetas.validate();
             PanelRecetas.repaint();
 
@@ -512,7 +521,7 @@ public class VentanaMedico extends javax.swing.JFrame {
         }
     }
 
-public DefaultTableModel crearTablaMedicamentosPorMes(
+    public DefaultTableModel crearTablaMedicamentosPorMes(
             LocalDate inicio, LocalDate fin,
             List<String> seleccionados, List<Receta> listaRecetas) {
 
@@ -521,7 +530,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             return new DefaultTableModel(new Object[][]{}, new String[]{"Medicamento"});
         }
 
-        // 🧩 Construcción dinámica de columnas: Año-Mes
+        //  Construcción dinámica de columnas: Año-Mes
         List<String> columnas = new ArrayList<>();
         columnas.add("Medicamento");
 
@@ -533,7 +542,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
 
         DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
 
-        // 🩺 Llenar las filas por medicamento
+        //  Llenar las filas por medicamento
         for (String med : seleccionados) {
             List<Object> fila = new ArrayList<>();
             fila.add(med);
@@ -587,7 +596,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             jComboBoxMedicamentos.addItem(m.getNombre());
         }
     }
-    
+
     private void agregarMedicamentoSeleccionado() throws SQLException {
         String seleccionado = (String) jComboBoxMedicamentos.getSelectedItem();
         if (seleccionado != null && !medicamentosSeleccionados.contains(seleccionado)) {
@@ -625,11 +634,9 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
         tblMedicamentosGrafico.setModel(modelo);
     }
 
-  
-
     private void generarGraficoMedicamentos() {
         try {
-            // 1️⃣ Validar que haya medicamentos seleccionados
+            // Validar que haya medicamentos seleccionados
             if (medicamentosSeleccionados.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Debe agregar al menos un medicamento para generar el gráfico.",
@@ -638,7 +645,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                 return;
             }
 
-            // 2️⃣ Capturar y convertir las fechas de los Spinners
+            //  Capturar y convertir las fechas de los Spinners
             Date fechaAñoInicio = (Date) AñoInicio.getValue();
             Date fechaAñoFin = (Date) AñoFin.getValue();
             Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
@@ -656,7 +663,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                     fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
             );
 
-            // 3️⃣ Validar rango
+            //  Validar rango
             if (inicio.isAfter(fin)) {
                 JOptionPane.showMessageDialog(this,
                         "La fecha de inicio no puede ser posterior a la fecha final.",
@@ -665,7 +672,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                 return;
             }
 
-            // 4️⃣ Llamar al controlador para generar el gráfico
+            //  Llamar al controlador para generar el gráfico
             JFreeChart chart = control.crearGraficoLineaMedicamentos(
                     inicio,
                     fin,
@@ -673,7 +680,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                     control.obtenerTodasRecetas()
             );
 
-            // 5️⃣ Mostrar el gráfico en el panel
+            //  Mostrar el gráfico en el panel
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setPreferredSize(new java.awt.Dimension(
@@ -696,11 +703,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
         }
     }
 
-
-    
-    
 //====================Historico==================
-
     private void cargarRecetaDesdeTabla() {
         int fila = TablaRecetas.getSelectedRow();
         if (fila >= 0) {
@@ -708,9 +711,9 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             Receta receta = control.buscarReceta(codigo);
 
             if (receta != null) {
-                estado.setModel(receta);  
-                cambiarModoVista();         
-                actualizarComponentes();  
+                estado.setModel(receta);
+                cambiarModoVista();
+                actualizarComponentes();
                 DefaultTableModel modelo = (DefaultTableModel) TablaIndicaciones.getModel();
                 modelo.setRowCount(0);
                 for (Indicaciones ind : receta.getIndicaciones()) {
@@ -729,7 +732,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
         try {
             List<Receta> recetas = control.obtenerTodasRecetas();
             DefaultTableModel modelo = (DefaultTableModel) TablaRecetas.getModel();
-            modelo.setRowCount(0); 
+            modelo.setRowCount(0);
             if (recetas != null) {
                 for (Receta r : recetas) {
                     modelo.addRow(new Object[]{
@@ -765,7 +768,7 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             }
         }
     }
-    
+
     private void asignarIconosPestanas() {
         int tamañoIcono = 18;
 
@@ -785,9 +788,6 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
             }
         }
     }
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1553,15 +1553,15 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
                 mostrarIndicacionesReceta(receta);
             } else {
                 JOptionPane.showMessageDialog(this,
-                    "No se encontró la receta seleccionada.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                        "No se encontró la receta seleccionada.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this,
-                "Seleccione una receta de la tabla.",
-                "Aviso",
-                JOptionPane.WARNING_MESSAGE);
+                    "Seleccione una receta de la tabla.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_BotonVerIndicacionesActionPerformed
 
@@ -1604,7 +1604,30 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     }//GEN-LAST:event_BotonGuardarPrescActionPerformed
 
     private void BotonEliminarPrescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarPrescActionPerformed
-        // TODO add your handling code here:
+        int filaSeleccionada = TablaMedicamentosReceta.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un medicamento para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Confirmar la eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que desea eliminar este medicamento de la receta?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Eliminar de la lista temporal
+        if (recetaActual.getInditemporal() != null && filaSeleccionada < recetaActual.getInditemporal().size()) {
+            recetaActual.getInditemporal().remove(filaSeleccionada);
+        }
+
+        // Eliminar del modelo de la tabla
+        DefaultTableModel modelo = (DefaultTableModel) TablaMedicamentosReceta.getModel();
+        modelo.removeRow(filaSeleccionada);
     }//GEN-LAST:event_BotonEliminarPrescActionPerformed
 
     private void BotonAgregarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAgregarMedicamentoActionPerformed
@@ -1709,8 +1732,6 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
         });
     }
 
-  
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AjustePrescrib;
@@ -1770,10 +1791,12 @@ public DefaultTableModel crearTablaMedicamentosPorMes(
     private javax.swing.JTable tblMedicamentosGrafico;
     // End of variables declaration//GEN-END:variables
 
-    
-    
     private ServiceProxy proxy;
-    private final Control control; 
+    private final Control control;
     private FormHandler estado;
+    private Medico medicoActual;
+    private Receta recetaActual;  //instancia local
+    private Indicaciones nuevasIndicaciones; //instancia local
+    private final List<String> medicamentosSeleccionados = new ArrayList<>();
 
 };

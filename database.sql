@@ -15,12 +15,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
-CREATE DATABASE IF NOT EXISTS `bdhospital`;
-USE `bdhospital`;
 --
 -- Table structure for table `administrativo`
 --
+CREATE DATABASE IF NOT EXISTS bdhospital;
+USE bdhospital;
+
 
 DROP TABLE IF EXISTS `administrativo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -96,7 +96,7 @@ CREATE TABLE `indicaciones` (
 
 LOCK TABLES `indicaciones` WRITE;
 /*!40000 ALTER TABLE `indicaciones` DISABLE KEYS */;
-INSERT  IGNORE INTO `indicaciones` VALUES (1,'Después del desayuno','3',4,'M003'),(1,'Después del desayuno','3',5,'M002'),(1,'Aplicar en la zona afectada','10',6,'M004'),(2,'Cada 8 horas','5',7,'M001'),(1,'Antes del desayuno','14',7,'M005'),(1,'Después de la cena','30',8,'M006'),(1,'Una vez al día','14',9,'M004'),(3,'Cada 12 horas','10',10,'M003'),(2,'Antes del desayuno y cena','20',11,'M017'),(1,'Después del almuerzo','7',12,'M010'),(2,'Cada 6 horas','5',13,'M001'),(1,'Inhalar 2 veces al día','15',14,'M016'),(1,'Aplicar 2 veces al día','10',15,'M013'),(1,'Antes de dormir','7',16,'M024'),(1,'3 veces al día','20',17,'M016'),(1,'Diaria después del desayuno','30',18,'M001'),(5,'Cada 2 horas','3',19,'M002'),(5,'Antes de acostarse a dormir','3',20,'M001'),(10,'Mañana y noche 1 tba','3',21,'M015');
+INSERT  IGNORE INTO `indicaciones` VALUES (1,'Después del desayuno','3',4,'M003'),(1,'Después del desayuno','3',5,'M002'),(1,'Aplicar en la zona afectada','10',6,'M004'),(2,'Cada 8 horas','5',7,'M001'),(1,'Antes del desayuno','14',7,'M005'),(1,'Después de la cena','30',8,'M006'),(1,'Una vez al día','14',9,'M004'),(3,'Cada 12 horas','10',10,'M003'),(2,'Antes del desayuno y cena','20',11,'M017'),(1,'Después del almuerzo','7',12,'M010'),(2,'Cada 6 horas','5',13,'M001'),(1,'Inhalar 2 veces al día','15',14,'M016'),(1,'Aplicar 2 veces al día','10',15,'M013'),(1,'Antes de dormir','7',16,'M024'),(1,'3 veces al día','20',17,'M016'),(1,'Diaria después del desayuno','30',18,'M001'),(5,'Cada 2 horas','3',19,'M002'),(5,'Antes de acostarse a dormir','3',20,'M001'),(10,'Mañana y noche 1 tba','3',21,'M015'),(1,'Durante el dia','1',22,'M002'),(1,'solo por hoy','1',27,'M002'),(1,'PARA EL DOLOR DE CABEZA','1',28,'M001'),(1,'POR SI ACASO','1',28,'M003');
 /*!40000 ALTER TABLE `indicaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +200,7 @@ CREATE TABLE `receta` (
   KEY `fk_Receta_Medico1_idx` (`Medico_Cedula`),
   CONSTRAINT `fk_Receta_Medico1` FOREIGN KEY (`Medico_Cedula`) REFERENCES `medico` (`Cedula`),
   CONSTRAINT `fk_Receta_Paciente1` FOREIGN KEY (`Paciente_Cedula`) REFERENCES `paciente` (`Cedula`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +209,7 @@ CREATE TABLE `receta` (
 
 LOCK TABLES `receta` WRITE;
 /*!40000 ALTER TABLE `receta` DISABLE KEYS */;
-INSERT  IGNORE INTO `receta` VALUES (4,'R01','CONFECCIONADA','2025-08-27','2025-08-30','5678','123'),(5,'R02','CONFECCIONADA','2025-08-28','2025-09-01','9101','M002'),(6,'R03','CONFECCIONADA','2025-09-01','2025-09-05','6548','M003'),(7,'R04','CONFECCIONADA','2025-09-02','2025-09-06','2222','M004'),(8,'R05','CONFECCIONADA','2025-09-03','2025-09-10','3333','M089'),(9,'R06','CONFECCIONADA','2025-09-04','2025-09-08','4444','123'),(10,'R07','CONFECCIONADA','2025-09-05','2025-09-15','5555','M002'),(11,'R08','CONFECCIONADA','2025-09-06','2025-09-20','6666','M003'),(12,'R09','CONFECCIONADA','2025-09-07','2025-09-14','7777','M004'),(13,'R10','CONFECCIONADA','2025-09-08','2025-09-12','8888','M089'),(14,'R11','CONFECCIONADA','2025-09-09','2025-09-24','9999','123'),(15,'R12','CONFECCIONADA','2025-09-10','2025-09-20','1010','M002'),(16,'R13','CONFECCIONADA','2025-09-11','2025-09-18','1212','M003'),(17,'R14','CONFECCIONADA','2025-09-12','2025-09-30','1313','M004'),(18,'R15','CONFECCIONADA','2025-09-13','2025-10-13','1414','M089'),(19,'R16','CONFECCIONADA','2025-09-11','2025-09-10','2222','123'),(20,'R17','CONFECCIONADA','2025-09-11','2025-09-11','4444','123'),(21,'R18','CONFECCIONADA','2025-09-14','2025-09-14','1818','123');
+INSERT  IGNORE INTO `receta` VALUES (4,'R01','CONFECCIONADA','2025-08-27','2025-08-30','5678','123'),(5,'R02','CONFECCIONADA','2025-08-28','2025-09-01','9101','M002'),(6,'R03','CONFECCIONADA','2025-09-01','2025-09-05','6548','M003'),(7,'R04','CONFECCIONADA','2025-09-02','2025-09-06','2222','M004'),(8,'R05','CONFECCIONADA','2025-09-03','2025-09-10','3333','M089'),(9,'R06','CONFECCIONADA','2025-09-04','2025-09-08','4444','123'),(10,'R07','CONFECCIONADA','2025-09-05','2025-09-15','5555','M002'),(11,'R08','CONFECCIONADA','2025-09-06','2025-09-20','6666','M003'),(12,'R09','CONFECCIONADA','2025-09-07','2025-09-14','7777','M004'),(13,'R10','CONFECCIONADA','2025-09-08','2025-09-12','8888','M089'),(14,'R11','CONFECCIONADA','2025-09-09','2025-09-24','9999','123'),(15,'R12','CONFECCIONADA','2025-09-10','2025-09-20','1010','M002'),(16,'R13','CONFECCIONADA','2025-09-11','2025-09-18','1212','M003'),(17,'R14','CONFECCIONADA','2025-09-12','2025-09-30','1313','M004'),(18,'R15','CONFECCIONADA','2025-09-13','2025-10-13','1414','M089'),(19,'R16','CONFECCIONADA','2025-09-11','2025-09-10','2222','123'),(20,'R17','CONFECCIONADA','2025-09-11','2025-09-11','4444','123'),(21,'R18','CONFECCIONADA','2025-09-14','2025-09-14','1818','123'),(22,'R19','CONFECCIONADA','2025-10-30','2025-10-30','1010','123'),(27,'R22','CONFECCIONADA','2025-10-30','2025-10-30','1212','123'),(28,'R23','LISTA','2025-10-30','2025-10-30','1313','123');
 /*!40000 ALTER TABLE `receta` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -222,4 +222,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-16 16:48:31
+-- Dump completed on 2025-10-30 22:10:15

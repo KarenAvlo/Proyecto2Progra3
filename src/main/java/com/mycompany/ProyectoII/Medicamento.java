@@ -10,7 +10,6 @@ import lombok.ToString;
 
 @DatabaseTable(tableName = "medicamento")
 @NoArgsConstructor         // Constructor vacío (requerido por ORMLite)
-//@AllArgsConstructor        // Constructor con todos los campos
 @Getter
 @Setter
 @ToString

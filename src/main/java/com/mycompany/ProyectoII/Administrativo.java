@@ -19,7 +19,7 @@ import lombok.ToString;
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
 *                                                                     |
-* versión 2.0.0 15-10-2025                                            |
+* versión 2.0.0 06-11-2025                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
  */

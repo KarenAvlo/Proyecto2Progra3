@@ -40,12 +40,12 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 * EIF206 - Programación 3                                             |
 * 2do ciclo 2025                                                      |
 * NRC 51189 – Grupo 05                                                |
-* Proyecto 1                                                          |
+* Proyecto 2                                                          |
 *                                                                     |
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
 *                                                                     |
-* versión 1.0.0 13-09-2005                                            |
+* versión 2.0.0 06-11-2025                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
  */
@@ -2793,13 +2793,13 @@ private void guardarFarmaceuta() {
 
     private void confirmarSeleccionFechasPastel() {
         try {
-            // 1️⃣ Capturar los valores de los Spinners
+            // Capturar los valores de los Spinners
             Date fechaAñoInicio = (Date) AñoInicio.getValue();
             Date fechaAñoFin = (Date) AñoFin.getValue();
             Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
             Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
 
-            // 2️⃣ Convertir a LocalDate correctamente
+            //  Convertir a LocalDate correctamente
             LocalDate inicio = LocalDate.of(
                     fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
                     fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
@@ -2821,7 +2821,7 @@ private void guardarFarmaceuta() {
                 return;
             }
 
-            // 3️⃣ Llamar al método para generar el gráfico
+            //  Llamar al método para generar el gráfico
             crearGraficoPastelRecetasPorEstado(inicio, fin);
 
         } catch (Exception e) {
@@ -2835,10 +2835,10 @@ private void guardarFarmaceuta() {
 
     private void crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) {
         try {
-            // 1️⃣ Llamar al controlador para crear el gráfico
+            //  Llamar al controlador para crear el gráfico
             JFreeChart chart = control.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
 
-            // 2️⃣ Crear un ChartPanel que lo contenga
+            //  Crear un ChartPanel que lo contenga
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setPreferredSize(new java.awt.Dimension(
@@ -2846,12 +2846,12 @@ private void guardarFarmaceuta() {
                     PanelRecetas.getHeight()
             ));
 
-            // 3️⃣ Reemplazar el contenido del panel
+            //  Reemplazar el contenido del panel
             PanelRecetas.removeAll();
             PanelRecetas.setLayout(new java.awt.BorderLayout());
             PanelRecetas.add(chartPanel, java.awt.BorderLayout.CENTER);
 
-            // 4️⃣ Refrescar el panel
+            //  Refrescar el panel
             PanelRecetas.validate();
             PanelRecetas.repaint();
 
@@ -2873,7 +2873,7 @@ private void guardarFarmaceuta() {
             return new DefaultTableModel(new Object[][]{}, new String[]{"Medicamento"});
         }
 
-        // 🧩 Construcción dinámica de columnas: Año-Mes
+        //  Construcción dinámica de columnas: Año-Mes
         List<String> columnas = new ArrayList<>();
         columnas.add("Medicamento");
 
@@ -2885,7 +2885,7 @@ private void guardarFarmaceuta() {
 
         DefaultTableModel modelo = new DefaultTableModel(columnas.toArray(), 0);
 
-        // 🩺 Llenar las filas por medicamento
+        //  Llenar las filas por medicamento
         for (String med : seleccionados) {
             List<Object> fila = new ArrayList<>();
             fila.add(med);
@@ -2980,7 +2980,7 @@ private void guardarFarmaceuta() {
 
     private void generarGraficoMedicamentos() {
         try {
-            // 1️⃣ Validar que haya medicamentos seleccionados
+            //  Validar que haya medicamentos seleccionados
             if (medicamentosSeleccionados.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Debe agregar al menos un medicamento para generar el gráfico.",
@@ -2989,7 +2989,7 @@ private void guardarFarmaceuta() {
                 return;
             }
 
-            // 2️⃣ Capturar y convertir las fechas de los Spinners
+            //  Capturar y convertir las fechas de los Spinners
             Date fechaAñoInicio = (Date) AñoInicio.getValue();
             Date fechaAñoFin = (Date) AñoFin.getValue();
             Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
@@ -3007,7 +3007,7 @@ private void guardarFarmaceuta() {
                     fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
             );
 
-            // 3️⃣ Validar rango
+            //  Validar rango
             if (inicio.isAfter(fin)) {
                 JOptionPane.showMessageDialog(this,
                         "La fecha de inicio no puede ser posterior a la fecha final.",
@@ -3016,7 +3016,7 @@ private void guardarFarmaceuta() {
                 return;
             }
 
-            // 4️⃣ Llamar al controlador para generar el gráfico
+            //  Llamar al controlador para generar el gráfico
             JFreeChart chart = control.crearGraficoLineaMedicamentos(
                     inicio,
                     fin,
@@ -3024,7 +3024,7 @@ private void guardarFarmaceuta() {
                     control.obtenerTodasRecetas()
             );
 
-            // 5️⃣ Mostrar el gráfico en el panel
+            //  Mostrar el gráfico en el panel
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setPreferredSize(new java.awt.Dimension(

@@ -21,12 +21,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 * EIF206 - Programación 3                                             |
 * 2do ciclo 2025                                                      |
 * NRC 51189 – Grupo 05                                                |
-* Proyecto 1                                                          |
+* Proyecto 2                                                          |
 *                                                                     |
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
 *                                                                     |
-* versión 1.0.0 13-09-2005                                            |
+* versión 2.0.0 06-11-2025                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
 */
@@ -38,9 +38,6 @@ public class ProyectoII {
                     new FileOutputStream(FileDescriptor.out), true,
                     StandardCharsets.UTF_8.name()));
 
-            // 👉 Aquí aplicas FlatLaf en lugar del L&F del sistema
-            //UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
-            // Si quieres el tema claro:
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
 
             JFrame.setDefaultLookAndFeelDecorated(true);
@@ -70,7 +67,7 @@ public class ProyectoII {
             }
         }).start();
 
-        // 🔹 Luego iniciar la interfaz
+        // Luego iniciar la interfaz
         Thread.sleep(1000); // pequeña pausa para dar tiempo a que el servidor arranque
         Modelo modelo = new Modelo();
         Control gestorPrincipal = new Control(modelo);

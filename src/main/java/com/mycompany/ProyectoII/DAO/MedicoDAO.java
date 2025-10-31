@@ -31,7 +31,6 @@ public class MedicoDAO implements AbstractDAO<String, Medico> {
 
     @Override
     public Medico findById(String cedula) throws SQLException {
-        //porfavor no cambiar
         Medico med = dao.queryForId(cedula);
         if (med != null && med.isEstado()) {
             return med;

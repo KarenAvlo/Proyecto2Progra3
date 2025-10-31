@@ -22,4 +22,3 @@ public abstract class Persona {
     @DatabaseField(columnName = "Clave")
     private String clave;
 }
-//👉 Ojo: aunque no tengas tabla persona, sí puedes usar @DatabaseField en la clase base para que las subclases hereden correctamente esos campos.

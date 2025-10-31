@@ -21,12 +21,12 @@ import javax.swing.table.DefaultTableModel;
 * EIF206 - Programación 3                                             |
 * 2do ciclo 2025                                                      |
 * NRC 51189 – Grupo 05                                                |
-* Proyecto 1                                                          |
+* Proyecto 2                                                          |
 *                                                                     |
 * 2-0816-0954; Avilés López, Karen Minards                            |
 * 4-0232-0641; Zárate Hernández, Nicolas Alfredo                      |
 *                                                                     |
-* versión 1.0.0 13-09-2005                                            |
+* versión 2.0.0 06-11-2025                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
 */
@@ -291,7 +291,7 @@ public class buscarPaciente extends javax.swing.JFrame {
                 System.getLogger(buscarPaciente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
             buscarPaciente ventana = new buscarPaciente(controlador, ventanaMedico);
-            ventana.init();  // <-- Aquí inicializas todo correctamente
+            ventana.init();  // <-- Aquí inicializa todo correctamente
            
         });
     }

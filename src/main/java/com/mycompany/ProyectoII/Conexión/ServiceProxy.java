@@ -11,10 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author minar
- */
+
 public class ServiceProxy {
 
     private Socket socket;
