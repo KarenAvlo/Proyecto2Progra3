@@ -357,29 +357,12 @@ public class GestorHospital {
     }
 
     // Agregar indicación a una receta
-    public void agregarIndicacionReceta(String codReceta, Indicaciones i) {
-
-        Receta r = null;
+    public void agregarIndicacion(Receta receta, Indicaciones i) {
         try {
-            recetaDAO.findByCodigo(codReceta);
-        } catch (SQLException ex) {
-            ex.getMessage();
-        }
-        if (r != null) {
-            i.setReceta(r);
-            r.getIndicaciones().add(i);
-            try {
-                agregarIndicacion(i);
-            } catch (SQLException ex) {
-                ex.getMessage();
-            }
-
-            try {
-                recetaDAO.update(r);
-            } catch (SQLException ex) {
-                ex.getMessage();
-            }
-            // opcional, para reflejar la lista de indicaciones
+            i.setReceta(receta);
+            indicacionesDAO.add(i);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -410,6 +393,8 @@ public class GestorHospital {
         List<Receta> recetas = recetaDAO.findAll();
         return recetas.size();
     }
+    
+    
 
     // --------------------------
     // Funcionalidades específicas de Receta

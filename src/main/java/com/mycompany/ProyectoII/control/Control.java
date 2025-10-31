@@ -367,6 +367,13 @@ public class Control {
     public List<Receta> buscarRecetasPorMedico(String cedulaMedico) throws SQLException {
         return modelo.buscarRecetasPorMedico(cedulaMedico);
     }
+    
+    
+    public void agregarIndicacion(Receta receta, Indicaciones i) {
+        modelo.agregarIndicacion(receta, i);
+    }
+    
+    
 
     public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
         return modelo.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);
@@ -385,7 +392,6 @@ public class Control {
             ex.getMessage();
         }
         return re;
-
     }
 
     private Modelo modelo;

@@ -297,7 +297,6 @@ public class VentanaMedico extends javax.swing.JFrame {
     
     private void guardarPrescripcion() {
         try {
-            // Verificaciones iniciales
             if (recetaActual == null) {
                 JOptionPane.showMessageDialog(this, "No hay receta activa.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -314,42 +313,30 @@ public class VentanaMedico extends javax.swing.JFrame {
                 return;
             }
 
-            // Asignar datos a la receta
+            // Datos base de la receta
             recetaActual.setMedico(medicoActual);
             recetaActual.setCodReceta("R" + (control.cantidadRecetas() + 1));
-
-            // Fecha de emisión: hoy (java.sql.Date)
             recetaActual.setFechaEmision(java.sql.Date.valueOf(LocalDate.now()));
 
-            // Fecha de retiro: obtenida del spinner (java.util.Date -> java.sql.Date)
             java.util.Date fechaSeleccionada = (java.util.Date) SpinnerFechaRetiro.getValue();
-            java.sql.Date fechaRetiroSQL = new java.sql.Date(fechaSeleccionada.getTime());
-            recetaActual.setFechaRetiro(fechaRetiroSQL);
-
+            recetaActual.setFechaRetiro(new java.sql.Date(fechaSeleccionada.getTime()));
             recetaActual.setEstado("CONFECCIONADA");
 
-            // Guardar la receta en BD
+            // Guardar receta
             control.agregarReceta(recetaActual);
 
-            // Guardar todas las indicaciones temporales en BD asociadas a la receta
+            // Guardar indicaciones asociadas
             if (recetaActual.getInditemporal() != null && !recetaActual.getInditemporal().isEmpty()) {
                 for (Indicaciones ind : recetaActual.getInditemporal()) {
-                    // Guardar cada indicación en la base usando el método del controlador
+                    ind.setReceta(recetaActual); // Enlazar con la receta
                     control.agregarIndicacion(recetaActual, ind);
-                    // Moverla a la lista persistida
-                    if (recetaActual.getIndicaciones() == null) {
-                        recetaActual.setIndicaciones(new ArrayList<>());
-                    }
-                    recetaActual.getIndicaciones().add(ind);
                 }
-                // Limpiar la lista temporal
-                recetaActual.getInditemporal().clear();
+                recetaActual.getInditemporal().clear(); // Limpieza
             }
 
             JOptionPane.showMessageDialog(this, "Receta y sus indicaciones guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             cambiarModoVista();
             limpiarCampos();
-
             indicarCambios();
             actualizarControles();
 

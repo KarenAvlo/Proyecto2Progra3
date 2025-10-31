@@ -193,7 +193,9 @@ public class Modelo {
     }
     
     
-    
+    public void agregarIndicacion(Receta receta, Indicaciones i) {
+        gestor.agregarIndicacion(receta, i);
+    }
     
     
     
