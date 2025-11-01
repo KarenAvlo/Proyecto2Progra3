@@ -15,12 +15,13 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+create database if not exists bdhospital;
+use bdhospital;
+
 --
 -- Table structure for table `administrativo`
 --
-CREATE DATABASE IF NOT EXISTS bdhospital;
-USE bdhospital;
-
 
 DROP TABLE IF EXISTS `administrativo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -122,7 +123,7 @@ CREATE TABLE `medicamento` (
 
 LOCK TABLES `medicamento` WRITE;
 /*!40000 ALTER TABLE `medicamento` DISABLE KEYS */;
-INSERT  IGNORE INTO `medicamento` VALUES ('M001','Paracetamol','500 mg',1),('M002','Ibuprofeno','400 mg',1),('M003','Amoxicilina','250 mg cápsulas',1),('M004','Loratadina','10 mg tabletas',1),('M005','Omeprazol','20 mg cápsulas',1),('M006','Metformina','850 mg tabletas',1),('M007','Losartán','50 mg tabletas',1),('M008','Enalapril','10 mg tabletas',1),('M009','Claritromicina','500 mg tabletas',1),('M010','Diclofenaco','50 mg tabletas',1),('M011','Cefalexina','500 mg cápsulas',1),('M012','Azitromicina','500 mg tabletas',1),('M013','Prednisona','5 mg tabletas',1),('M014','Hidroclorotiazida','25 mg tabletas',1),('M015','Furosemida','40 mg tabletas',1),('M016','Salbutamol','Inhalador 100 mcg/dosis',1),('M017','Insulina Glargina','100 UI/ml solución inyectable',1),('M018','Ranitidina','150 mg tabletas',1),('M019','Clopidogrel','75 mg tabletas',1),('M020','Aspirina','100 mg tabletas',1),('M021','Atorvastatina','20 mg tabletas',1),('M022','Simvastatina','20 mg tabletas',1),('M023','Levotiroxina','50 mcg tabletas',1),('M024','Diazepam','10 mg tabletas',1),('M025','Alprazolam','0.5 mg tabletas',1),('M026','Sertralina','50 mg tabletas',1),('M027','Escitalopram','10 mg tabletas',1),('M028','Fluoxetina','20 mg cápsulas',1),('M029','Quetiapina','100 mg tabletas',1),('M030','Olanzapina','10 mg tabletas',1),('M031','Gabapentina','300 mg cápsulas',1),('M032','Tramadol','100 mg cápsulas',1),('M033','Morfina','10 mg/ml solución inyectable',1),('M034','Ketorolaco','10 mg tabletas',1),('M035','Morfina','50gm',1);
+INSERT  IGNORE INTO `medicamento` VALUES ('M001','Paracetamol','500 mg',1),('M002','Ibuprofeno','400 mg',1),('M003','Amoxicilina','250 mg cápsulas',1),('M004','Loratadina','10 mg tabletas',1),('M005','Omeprazol','20 mg cápsulas',1),('M006','Metformina','850 mg tabletas',1),('M007','Losartán','50 mg tabletas',1),('M008','Enalapril','10 mg tabletas',1),('M009','Claritromicina','500 mg tabletas',1),('M010','Diclofenaco','50 mg tabletas',1),('M011','Cefalexina','500 mg cápsulas',1),('M012','Azitromicina','500 mg tabletas',1),('M013','Prednisona','5 mg tabletas',1),('M014','Hidroclorotiazida','25 mg tabletas',1),('M015','Furosemida','40 mg tabletas',1),('M016','Salbutamol','Inhalador 100 mcg/dosis',1),('M017','Insulina Glargina','100 UI/ml solución inyectable',1),('M018','Ranitidina','150 mg tabletas',1),('M019','Clopidogrel','75 mg tabletas',1),('M020','Aspirina','100 mg tabletas',1),('M021','Atorvastatina','20 mg tabletas',1),('M022','Simvastatina','20 mg tabletas',1),('M023','Levotiroxina','50 mcg tabletas',1),('M024','Diazepam','10 mg tabletas',1),('M025','Alprazolam','0.5 mg tabletas',1),('M026','Sertralina','50 mg tabletas',1),('M027','Escitalopram','10 mg tabletas',1),('M028','Fluoxetina','20 mg cápsulas',1),('M029','Quetiapina','100 mg tabletas',1),('M030','Olanzapina','10 mg tabletas',1),('M031','Gabapentina','300 mg cápsulas',1),('M032','Tramadol','100 mg cápsulas',1),('M033','Morfina','10 mg/ml solución inyectable',1),('M034','Ketorolaco','10 mg tabletas',1),('M035','Morfina','50gm',1),('M036','Jesuciano','500ml',1);
 /*!40000 ALTER TABLE `medicamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,7 +210,7 @@ CREATE TABLE `receta` (
 
 LOCK TABLES `receta` WRITE;
 /*!40000 ALTER TABLE `receta` DISABLE KEYS */;
-INSERT  IGNORE INTO `receta` VALUES (4,'R01','CONFECCIONADA','2025-08-27','2025-08-30','5678','123'),(5,'R02','CONFECCIONADA','2025-08-28','2025-09-01','9101','M002'),(6,'R03','CONFECCIONADA','2025-09-01','2025-09-05','6548','M003'),(7,'R04','CONFECCIONADA','2025-09-02','2025-09-06','2222','M004'),(8,'R05','CONFECCIONADA','2025-09-03','2025-09-10','3333','M089'),(9,'R06','CONFECCIONADA','2025-09-04','2025-09-08','4444','123'),(10,'R07','CONFECCIONADA','2025-09-05','2025-09-15','5555','M002'),(11,'R08','CONFECCIONADA','2025-09-06','2025-09-20','6666','M003'),(12,'R09','CONFECCIONADA','2025-09-07','2025-09-14','7777','M004'),(13,'R10','CONFECCIONADA','2025-09-08','2025-09-12','8888','M089'),(14,'R11','CONFECCIONADA','2025-09-09','2025-09-24','9999','123'),(15,'R12','CONFECCIONADA','2025-09-10','2025-09-20','1010','M002'),(16,'R13','CONFECCIONADA','2025-09-11','2025-09-18','1212','M003'),(17,'R14','CONFECCIONADA','2025-09-12','2025-09-30','1313','M004'),(18,'R15','CONFECCIONADA','2025-09-13','2025-10-13','1414','M089'),(19,'R16','CONFECCIONADA','2025-09-11','2025-09-10','2222','123'),(20,'R17','CONFECCIONADA','2025-09-11','2025-09-11','4444','123'),(21,'R18','CONFECCIONADA','2025-09-14','2025-09-14','1818','123'),(22,'R19','CONFECCIONADA','2025-10-30','2025-10-30','1010','123'),(27,'R22','CONFECCIONADA','2025-10-30','2025-10-30','1212','123'),(28,'R23','LISTA','2025-10-30','2025-10-30','1313','123');
+INSERT  IGNORE INTO `receta` VALUES (4,'R01','LISTA','2025-11-06','2025-11-06','5678','123'),(5,'R02','CONFECCIONADA','2025-11-06','2025-11-06','9101','M002'),(6,'R03','PROCESO','2025-11-06','2025-11-06','6548','M003'),(7,'R04','CONFECCIONADA','2025-11-06','2025-11-06','2222','M004'),(8,'R05','LISTA','2025-11-06','2025-11-06','3333','M089'),(9,'R06','CONFECCIONADA','2025-11-06','2025-11-06','4444','123'),(10,'R07','CONFECCIONADA','2025-11-06','2025-11-06','5555','M002'),(11,'R08','PROCESO','2025-11-06','2025-11-06','6666','M003'),(12,'R09','LISTA','2025-11-06','2025-11-06','7777','M004'),(13,'R10','CONFECCIONADA','2025-11-06','2025-11-06','8888','M089'),(14,'R11','CONFECCIONADA','2025-11-06','2025-11-06','9999','123'),(15,'R12','PROCESO','2025-11-06','2025-11-06','1010','M002'),(16,'R13','LISTA','2025-11-06','2025-11-06','1212','M003'),(17,'R14','CONFECCIONADA','2025-11-06','2025-11-06','1313','M004'),(18,'R15','PROCESO','2025-11-06','2025-11-06','1414','M089'),(19,'R16','LISTA','2025-11-06','2025-11-06','2222','123'),(20,'R17','CONFECCIONADA','2025-11-06','2025-11-06','4444','123'),(21,'R18','LISTA','2025-11-06','2025-11-06','1818','123'),(22,'R19','PROCESO','2025-11-06','2025-11-06','1010','123'),(27,'R22','LISTA','2025-11-06','2025-11-06','1212','123'),(28,'R23','ENTREGADA','2025-11-01','2025-11-01','1313','123');
 /*!40000 ALTER TABLE `receta` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -222,4 +223,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-30 22:10:15
+-- Dump completed on 2025-11-01 10:10:22
