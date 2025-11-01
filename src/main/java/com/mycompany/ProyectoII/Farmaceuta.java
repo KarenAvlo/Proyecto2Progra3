@@ -22,10 +22,5 @@ public class Farmaceuta extends Persona {
     public Farmaceuta(String cedula, String nombre, String clave) {
         super(cedula, nombre, clave);
         this.estado = true;
-    }
-
-
-//----------------------------------------
-
-    
+    }    
 }

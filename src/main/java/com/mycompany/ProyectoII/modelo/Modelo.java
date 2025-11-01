@@ -11,7 +11,6 @@ import com.mycompany.ProyectoII.Persona;
 import com.mycompany.ProyectoII.Receta;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import org.jfree.chart.JFreeChart;
@@ -196,14 +195,7 @@ public class Modelo {
     public void agregarIndicacion(Receta receta, Indicaciones i) {
         gestor.agregarIndicacion(receta, i);
     }
-    
-    
-    
-    
-    
-    
-    
-    
+  
 
    public JFreeChart crearGraficoPastelRecetasPorEstado(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException{
        return gestor.crearGraficoPastelRecetasPorEstado(fechaInicio, fechaFin);

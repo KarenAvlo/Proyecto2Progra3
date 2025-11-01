@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
 /* -------------------------------------------------------------------+
 *                                                                     |
 * (c) 2025                                                            |
@@ -29,7 +30,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 * versión 2.0.0 06-11-2025                                            |
 *                                                                     |
 * --------------------------------------------------------------------+
-*/
+ */
 public class ProyectoII {
 
     public static void main(String[] args) throws IOException, JAXBException, Exception {
@@ -53,7 +54,7 @@ public class ProyectoII {
             try {
                 mostrarInterfaz();
             } catch (Exception ex) {
-                
+
             }
         });
     }
@@ -63,7 +64,7 @@ public class ProyectoII {
             try {
                 Servidor.main(new String[]{}); // corre el servidor dentro del mismo proceso
             } catch (Exception e) {
-                
+
             }
         }).start();
 
@@ -74,8 +75,6 @@ public class ProyectoII {
         VentanaPrincipal ventana = new VentanaPrincipal(gestorPrincipal);
         ventana.setVisible(true);
     }
-        
+
 }
-
-
     
