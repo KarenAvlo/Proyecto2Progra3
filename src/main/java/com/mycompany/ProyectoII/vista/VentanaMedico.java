@@ -426,6 +426,31 @@ public class VentanaMedico extends javax.swing.JFrame {
     }
 //==================================== DashBoard ========================================
 
+    /**
+     * Convierte java.util.Date / java.sql.Date a java.time.LocalDate de forma
+     * segura
+     */
+    private static LocalDate toLocalDate(java.util.Date date) {
+        if (date == null) {
+            return null;
+        }
+        if (date instanceof java.sql.Date) {
+            return ((java.sql.Date) date).toLocalDate();
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    /**
+     * Convierte java.util.Date a java.sql.Date
+     */
+    private static java.sql.Date toSqlDate(java.util.Date date) {
+        if (date == null) {
+            return null;
+        }
+        return new java.sql.Date(date.getTime());
+    }
+ 
+    
     private void configurarSpinnersDashboard() {
         java.util.Date hoy = new java.util.Date();
 
@@ -450,26 +475,23 @@ public class VentanaMedico extends javax.swing.JFrame {
 
     private void confirmarSeleccionFechasPastel() {
         try {
-            // Capturar los valores de los Spinners
-            Date fechaAñoInicio = (Date) AñoInicio.getValue();
-            Date fechaAñoFin = (Date) AñoFin.getValue();
-            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
-            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
+            java.util.Date fechaAñoInicio = (java.util.Date) AñoInicio.getValue();
+            java.util.Date fechaAñoFin = (java.util.Date) AñoFin.getValue();
+            java.util.Date fechaDiaMesInicio = (java.util.Date) DiaMesInicio.getValue();
+            java.util.Date fechaDiaMesFin = (java.util.Date) DiaMesFin.getValue();
 
-            //  Convertir a LocalDate correctamente
             LocalDate inicio = LocalDate.of(
-                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+                    toLocalDate(fechaAñoInicio).getYear(),
+                    toLocalDate(fechaDiaMesInicio).getMonth(),
+                    toLocalDate(fechaDiaMesInicio).getDayOfMonth()
             );
 
             LocalDate fin = LocalDate.of(
-                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+                    toLocalDate(fechaAñoFin).getYear(),
+                    toLocalDate(fechaDiaMesFin).getMonth(),
+                    toLocalDate(fechaDiaMesFin).getDayOfMonth()
             );
 
-            // Validar rango
             if (inicio.isAfter(fin)) {
                 JOptionPane.showMessageDialog(this,
                         "La fecha de inicio no puede ser posterior a la fecha final.",
@@ -478,7 +500,6 @@ public class VentanaMedico extends javax.swing.JFrame {
                 return;
             }
 
-            // Llamar al método para generar el gráfico
             crearGraficoPastelRecetasPorEstado(inicio, fin);
 
         } catch (Exception e) {
@@ -614,14 +635,14 @@ public class VentanaMedico extends javax.swing.JFrame {
 
     private void refrescarTablaMedicamentos() throws SQLException {
         LocalDate inicio = LocalDate.of(
-                ((Date) AñoInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                ((Date) DiaMesInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
+                toLocalDate((java.util.Date) AñoInicio.getValue()).getYear(),
+                toLocalDate((java.util.Date) DiaMesInicio.getValue()).getMonth(),
                 1
         );
 
         LocalDate fin = LocalDate.of(
-                ((Date) AñoFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getYear(),
-                ((Date) DiaMesFin.getValue()).toInstant().atZone(ZoneId.systemDefault()).getMonth(),
+                toLocalDate((java.util.Date) AñoFin.getValue()).getYear(),
+                toLocalDate((java.util.Date) DiaMesFin.getValue()).getMonth(),
                 1
         );
 
@@ -636,7 +657,6 @@ public class VentanaMedico extends javax.swing.JFrame {
 
     private void generarGraficoMedicamentos() {
         try {
-            // Validar que haya medicamentos seleccionados
             if (medicamentosSeleccionados.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Debe agregar al menos un medicamento para generar el gráfico.",
@@ -645,25 +665,23 @@ public class VentanaMedico extends javax.swing.JFrame {
                 return;
             }
 
-            //  Capturar y convertir las fechas de los Spinners
-            Date fechaAñoInicio = (Date) AñoInicio.getValue();
-            Date fechaAñoFin = (Date) AñoFin.getValue();
-            Date fechaDiaMesInicio = (Date) DiaMesInicio.getValue();
-            Date fechaDiaMesFin = (Date) DiaMesFin.getValue();
+            java.util.Date fechaAñoInicio = (java.util.Date) AñoInicio.getValue();
+            java.util.Date fechaAñoFin = (java.util.Date) AñoFin.getValue();
+            java.util.Date fechaDiaMesInicio = (java.util.Date) DiaMesInicio.getValue();
+            java.util.Date fechaDiaMesFin = (java.util.Date) DiaMesFin.getValue();
 
             LocalDate inicio = LocalDate.of(
-                    fechaAñoInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+                    toLocalDate(fechaAñoInicio).getYear(),
+                    toLocalDate(fechaDiaMesInicio).getMonth(),
+                    1
             );
 
             LocalDate fin = LocalDate.of(
-                    fechaAñoFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth(),
-                    fechaDiaMesFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()
+                    toLocalDate(fechaAñoFin).getYear(),
+                    toLocalDate(fechaDiaMesFin).getMonth(),
+                    1
             );
 
-            //  Validar rango
             if (inicio.isAfter(fin)) {
                 JOptionPane.showMessageDialog(this,
                         "La fecha de inicio no puede ser posterior a la fecha final.",
@@ -672,7 +690,6 @@ public class VentanaMedico extends javax.swing.JFrame {
                 return;
             }
 
-            //  Llamar al controlador para generar el gráfico
             JFreeChart chart = control.crearGraficoLineaMedicamentos(
                     inicio,
                     fin,
@@ -680,7 +697,6 @@ public class VentanaMedico extends javax.swing.JFrame {
                     control.obtenerTodasRecetas()
             );
 
-            //  Mostrar el gráfico en el panel
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setPreferredSize(new java.awt.Dimension(
@@ -702,6 +718,7 @@ public class VentanaMedico extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+
 
 //====================Historico==================
     private void cargarRecetaDesdeTabla() {

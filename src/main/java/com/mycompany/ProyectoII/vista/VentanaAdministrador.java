@@ -578,6 +578,7 @@ public final class VentanaAdministrador extends javax.swing.JFrame {
             try {
                 control.eliminarMedico(medico.getCedula());
                 JOptionPane.showMessageDialog(this, "Médico eliminado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                limpiarCampos();
                 estado.setModel(null);
                 cambiarModoVista();
                 actualizarControles();
@@ -650,6 +651,7 @@ private void guardarFarmaceuta() {
             if (estado.isAdding()) {
                 control.agregarFarmaceuta(farma);
                 JOptionPane.showMessageDialog(this, "Farmaceuta agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                actualizarTablaFarmaceutas();
 
             } else if (estado.isEditing()) {
                 // eliminar el antiguo
@@ -755,7 +757,7 @@ private void guardarFarmaceuta() {
         }
     }
 
-    //=========Pacientes=========
+    //=========Pacientes=========    
     private void guardarPaciente() {
         try {
             String cedula = CedulaPtxt.getText().trim();
@@ -763,51 +765,56 @@ private void guardarFarmaceuta() {
             String numeroTel = TelefonoPtxt.getText().trim();
             String fechaNacStr = FechaNacPtxt.getText().trim();
 
-            // Verificación de campos vacíos
+            // Validación de campos obligatorios
             if (cedula.isEmpty() || nombre.isEmpty() || numeroTel.isEmpty() || fechaNacStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios");
+                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // Validar y convertir la fecha
+            // Validar formato de fecha
             java.sql.Date fechaNac;
             try {
-                // Verifica que tenga el formato yyyy-MM-dd
-                fechaNac = java.sql.Date.valueOf(fechaNacStr);
+                fechaNac = java.sql.Date.valueOf(fechaNacStr); // debe estar en formato yyyy-MM-dd
             } catch (IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(this, "La fecha debe tener el formato YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Crear objeto Paciente
-            Paciente pa = new Paciente(cedula, nombre, numeroTel, fechaNac);
+            Paciente paciente = new Paciente(cedula, nombre, numeroTel, fechaNac);
 
-            Paciente existente = control.buscarPaciente(cedula);
-            if (estado.isAdding() && existente != null) {
-                JOptionPane.showMessageDialog(this,
-                        "Ya existe un paciente con esa cédula",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+            // Verificar si el modo actual está configurado correctamente
+            if (estado == null) {
+                JOptionPane.showMessageDialog(this, "No se ha definido el estado de la operación (Agregar o Editar)", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Guardar paciente
+            // Buscar si ya existe un paciente con esa cédula
+            Paciente existente = control.buscarPaciente(cedula);
+
             if (estado.isAdding()) {
-                control.agregarPaciente(pa); // ajusta tu método para recibir Paciente si es necesario
+                if (existente != null) {
+                    JOptionPane.showMessageDialog(this, "Ya existe un paciente con esa cédula", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                control.agregarPaciente(paciente);
                 JOptionPane.showMessageDialog(this, "Paciente agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             } else if (estado.isEditing()) {
-
                 control.EliminarPaciente(((Paciente) estado.getModel()).getCedula());
-                control.agregarPaciente(pa);
+                control.agregarPaciente(paciente);
                 JOptionPane.showMessageDialog(this, "Paciente editado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
-                JOptionPane.showMessageDialog(this, "Modo desconocido", "Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Modo desconocido. Verifique el estado actual.", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
+            // Restaurar estado
             cambiarModoVista();
             estado.setModel(null);
             estado.changeToAddMode();
+
             limpiarCampos();
             actualizarComponentes();
             actualizarTablaPacientes();
@@ -816,6 +823,7 @@ private void guardarFarmaceuta() {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private void actualizarTablaPacientes() {
         try {
@@ -911,44 +919,47 @@ private void guardarFarmaceuta() {
             String nombre = NombreMedicamentotxt.getText().trim();
             String presentacion = PresentacionMedicamentotxt.getText().trim();
 
-            // Verificación de campos vacíos
+            // Validar campos obligatorios
             if (codigo.isEmpty() || nombre.isEmpty() || presentacion.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios");
+                JOptionPane.showMessageDialog(this, "Todos los datos son obligatorios", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
             // Crear objeto Medicamento
             Medicamento med = new Medicamento(codigo, nombre, presentacion);
 
-            // Verificar si ya existe el medicamento antes de agregar
+            // Verificar si el objeto estado está inicializado
+            if (estado == null) {
+                JOptionPane.showMessageDialog(this, "No se ha definido el modo de operación (Agregar o Editar)", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Verificar existencia previa del medicamento
             Medicamento existente = control.buscarMedicamento(codigo);
-            if (estado.isAdding() && existente != null) {
-                JOptionPane.showMessageDialog(this,
-                        "Ya existe un medicamento con ese código",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
 
-            // Guardar medicamento según el modo
             if (estado.isAdding()) {
+                if (existente != null) {
+                    JOptionPane.showMessageDialog(this, "Ya existe un medicamento con ese código", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 control.agregarMedicamento(med);
-                JOptionPane.showMessageDialog(this,
-                        "Medicamento agregado exitosamente",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Medicamento agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
             } else if (estado.isEditing()) {
-                control.EliminarMedicamento(((Medicamento) estado.getModel()).getCodigo());
+                // Reemplazar el medicamento existente
+                Medicamento anterior = (Medicamento) estado.getModel();
+                if (anterior != null) {
+                    control.EliminarMedicamento(anterior.getCodigo());
+                }
                 control.agregarMedicamento(med);
-                JOptionPane.showMessageDialog(this,
-                        "Medicamento editado exitosamente",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Medicamento editado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
-                JOptionPane.showMessageDialog(this,
-                        "Modo desconocido",
-                        "Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Modo desconocido. Verifique el estado actual.", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // Restablecer estado y actualizar interfaz
+            // Restaurar estado y actualizar interfaz
             cambiarModoVista();
             estado.setModel(null);
             estado.changeToAddMode();
@@ -957,11 +968,10 @@ private void guardarFarmaceuta() {
             actualizarTablaMedicamentos();
 
         } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private void EliminarMedicamento() {
         String codigo = CodigoMtxt.getText().trim(); // usar campo de búsqueda para eliminar
